@@ -3,7 +3,7 @@ require 'gosu'
 class MyWindow < Gosu::Window
   def initialize
     super(800, 600, false)
-    self.caption = 'Damnit!'
+    self.caption = 'Asteroids!'
 
     @background = Background.new(self.width, self.height)
   end
@@ -20,7 +20,7 @@ end
 class Background
   def initialize(width, height)
     @background_image = Gosu::Image.new("media/Backgrounds/purple.png", :tileable => true)
-  
+
     @x_num = (width/@background_image.width).to_i
     @y_num = (height/@background_image.height).to_i
 
@@ -31,7 +31,7 @@ class Background
     @cycle -= 1
   end
 
-  def draw 
+  def draw
     for i in -1..@x_num
       for j in -1..@y_num
         @background_image.draw(i*@background_image.width + @cycle % @background_image.width, j*@background_image.height + @cycle % @background_image.height, 0)
@@ -45,7 +45,7 @@ class Player
 
   end
 
-  def update 
+  def update
 
   end
 
