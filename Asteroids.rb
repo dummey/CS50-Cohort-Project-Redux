@@ -13,16 +13,19 @@ class MyWindow < Gosu::Window
     @background = Background.new(self.width, self.height)
     @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
     @ui = UI.new
+    @asteroid = Asteroid.new(self.width, self.height)
   end
 
   def update
     @bg_music.play(true) unless @bg_music.playing?
     @background.update
+    @asteroid.update
   end
 
   def draw
     @background.draw
     @ui.draw
+    @asteroid.draw
   end
 end
 
@@ -63,9 +66,22 @@ class Player
   end
 end
 
-class Astroids
-  def initialize
+class Asteroid
+  def initialize(width, height)
+    @asteroid_image = Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png", :tileable => true)
+    @x_velocity = rand(0...4)
+    @y_velocity = rand(0...4)
+    @x_position = 100
+    @y_position = 100
+  end
 
+  def update
+@x_position = @x_position + @x_velocity
+@y_position = @y_position + @y_velocity
+  end
+
+  def draw
+    @asteroid_image.draw(@x_position, @y_position, 1)
   end
 end
 
