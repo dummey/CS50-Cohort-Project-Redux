@@ -1,5 +1,4 @@
-require 'scenes/scene'
 
-class GameScene < Scene
+class GameScene
 
 end

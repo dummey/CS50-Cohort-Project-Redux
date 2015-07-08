@@ -12,6 +12,7 @@ class MyWindow < Gosu::Window
 
     @background = Background.new(self.width, self.height)
     @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
+    @ui = UI.new
   end
 
   def update
@@ -21,6 +22,7 @@ class MyWindow < Gosu::Window
 
   def draw
     @background.draw
+    @ui.draw
   end
 end
 
@@ -67,5 +69,44 @@ class Astroids
   end
 end
 
-window = MyWindow.new
-window.show
+class UI
+  def initialize
+    @lives = 3
+    @lives_icon = Gosu::Image.new($MEDIA_ROOT + "/PNG/UI/playerLife1_blue.png")
+    @score = 0
+    @font = Gosu::Font.new(25)
+
+  end
+
+  def update
+
+  end
+
+  def add_score
+
+  end
+
+  def lose_life
+    @lives -= 1
+  end
+
+  def _draw_lives
+    @lives.times do |i|
+      @lives_icon.draw(10 + 40 * i, 10, 1)
+    end
+  end
+
+  def _draw_score
+
+  end
+
+  def draw
+    # @font.draw("Lives: #{@lives}", 10,10,1)
+    self._draw_lives
+    @font.draw("Score: #{@score}", 10,40,1)
+  end
+end
+
+
+$WINDOW = MyWindow.new
+$WINDOW.show
