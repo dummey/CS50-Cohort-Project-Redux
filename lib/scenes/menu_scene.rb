@@ -1,0 +1,3 @@
+class MenuScene < Scene
+
+end

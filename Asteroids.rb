@@ -1,9 +1,13 @@
+$LOAD_PATH.unshift(File.dirname(__FILE__) + '/lib')
+
 require 'gosu'
+require 'scenes/game_scene'
 
 class MyWindow < Gosu::Window
   def initialize
     super(800, 600, false)
     self.caption = 'Asteroids!'
+
 
     @background = Background.new(self.width, self.height)
   end
