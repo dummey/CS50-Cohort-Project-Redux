@@ -35,7 +35,7 @@ class Background
   end
 
   def update
-    @cycle -= 1
+    @cycle -= 0.1
   end
 
   def draw
