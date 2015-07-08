@@ -13,16 +13,19 @@ class MyWindow < Gosu::Window
     @background = Background.new(self.width, self.height)
     @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
     @ui = UI.new
+    @player = Player.new(self.width, self.height)
   end
 
   def update
     @bg_music.play(true) unless @bg_music.playing?
     @background.update
+    @player.update
   end
 
   def draw
     @background.draw
     @ui.draw
+    @player.draw
   end
 end
 
@@ -50,8 +53,9 @@ class Background
 end
 
 class Player
-  def initialize
-
+  def initialize(width, height)
+    #scale ship
+    @player = Gosu::Image.new("media/PNG/playerShip3_green.png")
   end
 
   def update
@@ -59,7 +63,7 @@ class Player
   end
 
   def draw
-
+    @player.draw(69, 69, 1)
   end
 end
 
