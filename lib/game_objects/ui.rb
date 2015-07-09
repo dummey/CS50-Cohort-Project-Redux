@@ -1,7 +1,7 @@
 class UI
   def initialize
     @lives = 3
-    @lives_icon = Gosu::Image.new($MEDIA_ROOT + "/PNG/UI/playerLife1_blue.png")
+    @lives_icon = Gosu::Image.new($MEDIA_ROOT + "/PNG/UI/playerLife3_green.png")
     @score = 0
     @font = Gosu::Font.new(25)
 
