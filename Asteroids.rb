@@ -3,6 +3,7 @@ $MEDIA_ROOT = File.dirname(__FILE__) + '/media'
 
 require 'gosu'
 require 'scenes/game_scene'
+require 'game_objects/background'
 
 class MyWindow < Gosu::Window
   def initialize
@@ -11,47 +12,21 @@ class MyWindow < Gosu::Window
 
 
     @background = Background.new(self.width, self.height)
-    @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
+    #@bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
     @ui = UI.new
-    @asteroid = Asteroid.new(self.width, self.height)
     @player = Player.new(self.width, self.height)
   end
 
   def update
-    @bg_music.play(true) unless @bg_music.playing?
+    #@bg_music.play(true) unless @bg_music.playing?
     @background.update
-    @asteroid.update
     @player.update
   end
 
   def draw
     @background.draw
     @ui.draw
-    @asteroid.draw
     @player.draw
-  end
-end
-
-class Background
-  def initialize(width, height)
-    @background_image = Gosu::Image.new($MEDIA_ROOT + "/Backgrounds/purple.png", :tileable => true)
-
-    @x_num = (width/@background_image.width).to_i
-    @y_num = (height/@background_image.height).to_i
-
-    @cycle = 0
-  end
-
-  def update
-    @cycle -= 0.1
-  end
-
-  def draw
-    for i in -1..@x_num
-      for j in -1..@y_num
-        @background_image.draw(i*@background_image.width + @cycle % @background_image.width, j*@background_image.height + @cycle % @background_image.height, 0)
-      end
-    end
   end
 end
 
@@ -70,22 +45,9 @@ class Player
   end
 end
 
-class Asteroid
-  def initialize(width, height)
-    @asteroid_image = Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png", :tileable => true)
-    @x_velocity = rand(0...4)
-    @y_velocity = rand(0...4)
-    @x_position = 100
-    @y_position = 100
-  end
+class Astroids
+  def initialize
 
-  def update
-@x_position = @x_position + @x_velocity
-@y_position = @y_position + @y_velocity
-  end
-
-  def draw
-    @asteroid_image.draw(@x_position, @y_position, 1)
   end
 end
 
