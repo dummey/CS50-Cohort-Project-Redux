@@ -2,7 +2,11 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + '/lib')
 $MEDIA_ROOT = File.dirname(__FILE__) + '/media'
 
 require 'gosu'
+
+require_relative 'config/config'
+
 require 'scenes/game_scene'
+
 require 'game_objects/asteroid'
 require 'game_objects/background'
 require 'game_objects/player'
@@ -10,7 +14,9 @@ require 'game_objects/ui'
 
 class MyWindow < Gosu::Window
   def initialize
-    super(1024, 768, false)
+    super($CONFIG[:window_size_x],
+          $CONFIG[:window_size_y],
+          $CONFIG[:window_full_screen])
     self.caption = 'Asteroids!'
 
 
