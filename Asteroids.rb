@@ -15,14 +15,14 @@ class MyWindow < Gosu::Window
 
 
     @background = Background.new(self.width, self.height)
-    @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
+    #@bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
     @ui = UI.new
     @asteroid = Asteroid.new(self.width, self.height)
     @player = Player.new(self.width, self.height)
   end
 
   def update
-    @bg_music.play(true) unless @bg_music.playing?
+    #@bg_music.play(true) unless @bg_music.playing?
     @background.update
     @asteroid.update
     @player.update
