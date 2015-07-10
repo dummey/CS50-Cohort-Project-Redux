@@ -21,7 +21,7 @@ class MyWindow < Gosu::Window
 
 
     @background = Background.new(self.width, self.height)
-    @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
+    @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg")
     @ui = UI.new
     @asteroid = Asteroid.new(self.width, self.height)
     @player = Player.new(self.width, self.height)
