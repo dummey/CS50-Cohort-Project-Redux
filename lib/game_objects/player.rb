@@ -4,15 +4,22 @@ class Player
     @player = Gosu::Image.new("media/PNG/playerShip3_green.png")
     @x_velocity = 0
     @y_velocity = 0
-    @x_position = width/2 - @player.width/2
-    @y_position = height/2 - @player.height/2
+    @x_position = width/2
+    @y_position = height/2
+    @angle = 0
+  end
+
+  def rotate(degrees)
+    @angle = @angle + 5 * degrees
   end
 
   def update
-
+    # constant negative velocity
   end
 
   def draw
-    @player.draw(@x_position, @y_position, 1)
+    # (x, y, z, angle, center_x, center_y, scale_x, scale_y)
+    @player.draw_rot(@x_position, @y_position, 1, @angle)
+
   end
 end
