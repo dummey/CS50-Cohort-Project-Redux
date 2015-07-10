@@ -21,16 +21,24 @@ class MyWindow < Gosu::Window
 
 
     @background = Background.new(self.width, self.height)
-    #@bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.mp3")
+    @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg")
     @ui = UI.new
     @asteroid = Asteroid.new(self.width, self.height)
     @player = Player.new(self.width, self.height)
+    @right_is_pressed = false
+    @left_is_pressed = false
   end
 
   def update
-    #@bg_music.play(true) unless @bg_music.playing?
+    @bg_music.play(true) unless @bg_music.playing?
     @background.update
     @asteroid.update
+    if @right_is_pressed
+      @player.rotate(1)
+    end
+    if @left_is_pressed
+      @player.rotate(-1)
+    end
     @player.update
   end
 
@@ -39,6 +47,25 @@ class MyWindow < Gosu::Window
     @ui.draw
     @asteroid.draw
     @player.draw
+  end
+
+  def button_down(id)
+    case id
+    when Gosu::KbRight
+      @right_is_pressed = true
+    when Gosu::KbLeft
+      @left_is_pressed = true
+    end
+  end
+
+  def button_up(id)
+    case id
+    when Gosu::KbRight
+      @right_is_pressed = false
+    when Gosu::KbLeft
+      @left_is_pressed = false
+    end
+
   end
 end
 
