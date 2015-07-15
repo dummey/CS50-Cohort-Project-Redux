@@ -11,7 +11,7 @@ require 'scenes/game_scene'
 require 'game_objects/asteroid'
 require 'game_objects/background'
 require 'game_objects/player'
-require 'game_objects/ui'
+require 'game_objects/game_hud'
 
 class MyWindow < Gosu::Window
   def initialize
@@ -23,7 +23,7 @@ class MyWindow < Gosu::Window
 
     @background = Background.new(self, {:image => $MEDIA_ROOT + "/Backgrounds/purple.png"})
     @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg")
-    @ui = UI.new
+    @ui = GameHUD.new(self)
     @asteroid = Asteroid.new(self.width, self.height)
     @player = Player.new(self.width, self.height)
     @right_is_pressed = false

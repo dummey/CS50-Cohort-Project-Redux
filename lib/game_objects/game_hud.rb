@@ -1,5 +1,7 @@
-class UI
-  def initialize
+class GameHUD
+  def initialize(window)
+    @window = window
+
     @lives = 3
     @lives_icon = Gosu::Image.new($MEDIA_ROOT + "/PNG/UI/playerLife3_green.png")
     @score = 0
