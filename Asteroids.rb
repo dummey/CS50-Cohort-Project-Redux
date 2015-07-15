@@ -21,7 +21,7 @@ class MyWindow < Gosu::Window
     self.caption = 'Asteroids!'
 
 
-    @background = Background.new(self.width, self.height)
+    @background = Background.new(self, {:image => $MEDIA_ROOT + "/Backgrounds/purple.png"})
     @bg_music = Gosu::Song.new($MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg")
     @ui = UI.new
     @asteroid = Asteroid.new(self.width, self.height)
