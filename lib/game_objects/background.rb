@@ -31,6 +31,8 @@ class Background < GameObject
     @music.play(true) unless @music.playing?
 
     @cycle -= 0.1
+
+    return self
   end
 
   def draw
@@ -46,5 +48,7 @@ class Background < GameObject
         )
       end
     end
+
+    return self
   end
 end

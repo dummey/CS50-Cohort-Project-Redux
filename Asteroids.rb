@@ -1,6 +1,5 @@
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/lib')
 $LOAD_PATH.unshift(File.dirname(__FILE__) + '/config')
-$MEDIA_ROOT = File.dirname(__FILE__) + '/media'
 
 require 'gosu'
 require 'chipmunk'

@@ -3,8 +3,7 @@ class Scene
 
   def initialize(window)
     @window = window
-    @updatable = []
-    @drawable = []
+    @game_objects = []
   end
 
   def width
@@ -15,12 +14,22 @@ class Scene
     @window.height
   end
 
+  def update_interval
+    @window.update_interval
+  end
+
+  def _cleanup 
+    @game_objects.delete_if {|o| o.demolish?}
+  end
+
   def update
-    @updatable.each {|o| o.update}
+    _cleanup()
+    
+    @game_objects.each {|o| o.update}
   end
 
   def draw
-    @drawable.each {|o| o.draw}
+    @game_objects.each {|o| o.draw}
   end
 
   def button_down(id)

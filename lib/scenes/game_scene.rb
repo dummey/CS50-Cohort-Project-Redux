@@ -8,7 +8,7 @@ require 'game_objects/game_hud'
 class GameScene < Scene
   attr_accessor :window, :lives, :score
   def initialize(window)
-    super(window)
+    @window = window
 
     self.lives = $CONFIG[:initialize_lives]
     self.score = $CONFIG[:initialize_score]
