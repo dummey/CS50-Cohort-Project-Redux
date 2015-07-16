@@ -7,11 +7,14 @@ class Background
   #   * :image => 
   def initialize(window, params = {})
     params[:velocity] ||= [0,0]
-    params[:image] ||= nil
 
     @window = window
 
     @background_image = Gosu::Image.new(params[:image], :tileable => true)
+
+    if params[:music]
+      @music = Gosu::Song.new(params[:music])
+    end
 
     @x_num = (@window.width/@background_image.width).to_i
     @y_num = (@window.height/@background_image.height).to_i
@@ -22,6 +25,8 @@ class Background
   end
 
   def update
+    @music.play(true) unless @music.playing?
+    
     @cycle -= 0.1
   end
 
