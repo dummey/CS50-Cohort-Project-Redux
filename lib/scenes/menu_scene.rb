@@ -1,10 +1,10 @@
 require 'scene'
-
+require 'scene/game_scene'
 require 'game_objects/background'
 
-class MenuScene
+class MenuScene < Scene
   def initialize(window)
-    @window = window
+    super(window)
 
     @background = Background.new(MENU_BACKGROUND, :tileable => true)
     @bg_music = Gosu::Song.new(MENU_BG_MUSIC)
@@ -12,18 +12,10 @@ class MenuScene
 
   def update
     @bg_music.play(true) unless @bg_music.playing?
-  end
 
-  def _draw_background 
-    #draw the background centered on screen
-    x, y = @window_dimensions
-    x = x/2
-    y = y/2
-
-    x2 = @background.width/2
-    y2 = @background.height/2
-
-    @background.draw(x - x2, y - y2, 0) 
+    if Gosu::KbSpace
+      @window.scenes.push(GameScene.new(@window))
+    end
   end
 
   def draw

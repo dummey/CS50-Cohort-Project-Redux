@@ -7,7 +7,7 @@ require 'chipmunk'
 
 require 'config'
 
-require 'scenes/game_scene'
+require 'scenes/menu_scene'
 
 class MyWindow < Gosu::Window
   attr_accessor :scenes
@@ -18,7 +18,7 @@ class MyWindow < Gosu::Window
           $CONFIG[:window_full_screen])
     self.caption = 'Asteroids!'
 
-    @scenes = [GameScene.new(self)]
+    @scenes = [MenuScene.new(self)]
   end
 
   def update
