@@ -45,4 +45,22 @@ class GameScene < Scene
     @player.draw
   end
 
+def button_down(id)
+    case id
+    when Gosu::KbRight
+      @right_is_pressed = true
+    when Gosu::KbLeft
+      @left_is_pressed = true
+    end
+  end
+
+  def button_up(id)
+    case id
+    when Gosu::KbRight
+      @right_is_pressed = false
+    when Gosu::KbLeft
+      @left_is_pressed = false
+    end
+
+  end
 end

@@ -9,11 +9,6 @@ require 'config'
 
 require 'scenes/game_scene'
 
-require 'game_objects/asteroid'
-require 'game_objects/background'
-require 'game_objects/player'
-require 'game_objects/game_hud'
-
 class MyWindow < Gosu::Window
   def initialize
     super($CONFIG[:window_size_x],
@@ -36,22 +31,9 @@ class MyWindow < Gosu::Window
   end
 
   def button_down(id)
-    case id
-    when Gosu::KbRight
-      @right_is_pressed = true
-    when Gosu::KbLeft
-      @left_is_pressed = true
+    if id == Gosu::KbEscape
+      close
     end
-  end
-
-  def button_up(id)
-    case id
-    when Gosu::KbRight
-      @right_is_pressed = false
-    when Gosu::KbLeft
-      @left_is_pressed = false
-    end
-
   end
 end
 
