@@ -4,6 +4,8 @@ $MEDIA_ROOT = File.dirname(__FILE__) + '/media'
 
 require 'gosu'
 
+require 'chipmunk'
+
 require 'config'
 
 require 'scenes/game_scene'
