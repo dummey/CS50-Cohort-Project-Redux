@@ -1,11 +1,14 @@
-class Player
-  def initialize(width, height)
+require 'game_object'
+
+class Player < GameObject
+  def initialize(scene)
+    super(scene)
     #scale ship
     @player = Gosu::Image.new("media/PNG/playerShip3_green.png")
     @x_velocity = 0
     @y_velocity = 0
-    @x_position = width/2
-    @y_position = height/2
+    @x_position = @scene.width/2
+    @y_position = @scene.height/2
     @angle = 0
   end
 

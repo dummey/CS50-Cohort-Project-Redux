@@ -1,15 +1,17 @@
-class Background
+require 'game_object'
+
+class Background < GameObject
   ##
   # <b>Parameters</b>
-  # * window (Gosu::Window) -- object that this background will be drawn in.
+  # * scene (Gosu::Window) -- object that this background will be drawn in.
   # * params (Hash)
   #   * :velocity => [x,y]
   #   * :image =>
   #   * :music =>
-  def initialize(window, params = {})
+  def initialize(scene, params = {})
+    super(scene)
+    
     params[:velocity] ||= [0,0]
-
-    @window = window
 
     @background_image = Gosu::Image.new(params[:image], :tileable => true)
 
@@ -17,8 +19,8 @@ class Background
       @music = Gosu::Song.new(params[:music])
     end
 
-    @x_num = (@window.width / @background_image.width).to_i
-    @y_num = (@window.height / @background_image.height).to_i
+    @x_num = (@scene.width / @background_image.width).to_i
+    @y_num = (@scene.height / @background_image.height).to_i
 
     @x_vel, @y_vel = params[:velocity]
 
