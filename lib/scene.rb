@@ -1,9 +1,13 @@
 class Scene
+  attr_accessor :updatable, :drawable
+
   def initialize(window)
     @window = window
+    @updatable = []
+    @drawable = []
   end
 
-  def width 
+  def width
     @window.width
   end
 
@@ -12,10 +16,18 @@ class Scene
   end
 
   def update
-    raise NotImplementedError
+    @updatable.each {|o| o.update}
   end
 
   def draw
-    raise NotImplementedError
+    @drawable.each {|o| o.draw}
+  end
+
+  def button_down(id)
+
+  end
+
+  def button_up(id)
+
   end
 end
