@@ -3,7 +3,6 @@ $LOAD_PATH.unshift(File.dirname(__FILE__) + '/config')
 $MEDIA_ROOT = File.dirname(__FILE__) + '/media'
 
 require 'gosu'
-
 require 'chipmunk'
 
 require 'config'
@@ -22,36 +21,18 @@ class MyWindow < Gosu::Window
           $CONFIG[:window_full_screen])
     self.caption = 'Asteroids!'
 
-    @background = Background.new(self, {
-      :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-      :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
-    })
-
-    @ui = GameHUD.new(self)
-    @asteroid = Asteroid.new(self.width, self.height)
-    @player = Player.new(self.width, self.height)
+    @scenes = [GameScene.new(self)]
+    
     @right_is_pressed = false
     @left_is_pressed = false
   end
 
   def update
-    @background.update
-    @asteroid.update
-
-    if @right_is_pressed
-      @player.rotate(1)
-    end
-    if @left_is_pressed
-      @player.rotate(-1)
-    end
-    @player.update
+    @scenes.last.update
   end
 
   def draw
-    @background.draw
-    @ui.draw
-    @asteroid.draw
-    @player.draw
+    @scenes.last.draw
   end
 
   def button_down(id)

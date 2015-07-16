@@ -4,7 +4,8 @@ class Background
   # * window (Gosu::Window) -- object that this background will be drawn in.
   # * params (Hash)
   #   * :velocity => [x,y]
-  #   * :image => 
+  #   * :image =>
+  #   * :music =>
   def initialize(window, params = {})
     params[:velocity] ||= [0,0]
 
@@ -16,8 +17,8 @@ class Background
       @music = Gosu::Song.new(params[:music])
     end
 
-    @x_num = (@window.width/@background_image.width).to_i
-    @y_num = (@window.height/@background_image.height).to_i
+    @x_num = (@window.width / @background_image.width).to_i
+    @y_num = (@window.height / @background_image.height).to_i
 
     @x_vel, @y_vel = params[:velocity]
 
@@ -26,7 +27,7 @@ class Background
 
   def update
     @music.play(true) unless @music.playing?
-    
+
     @cycle -= 0.1
   end
 
@@ -37,8 +38,8 @@ class Background
     for i in -1..@x_num
       for j in -1..@y_num
         @background_image.draw(
-          i * @background_image.width + x_shift % @background_image.width, 
-          j * @background_image.height + y_shift % @background_image.height, 
+          i * @background_image.width + x_shift % @background_image.width,
+          j * @background_image.height + y_shift % @background_image.height,
           0
         )
       end
