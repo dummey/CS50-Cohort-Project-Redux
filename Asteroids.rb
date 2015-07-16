@@ -24,7 +24,7 @@ class MyWindow < Gosu::Window
 
     @background = Background.new(self, {
       :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-      :music => $MEDIA_ROOT + "/music/80s-Space-Game-Loop_v001.ogg"
+      :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
     @ui = GameHUD.new(self)
