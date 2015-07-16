@@ -10,6 +10,8 @@ require 'config'
 require 'scenes/game_scene'
 
 class MyWindow < Gosu::Window
+  attr_accessor :scenes
+
   def initialize
     super($CONFIG[:window_size_x],
           $CONFIG[:window_size_y],
@@ -17,9 +19,6 @@ class MyWindow < Gosu::Window
     self.caption = 'Asteroids!'
 
     @scenes = [GameScene.new(self)]
-    
-    @right_is_pressed = false
-    @left_is_pressed = false
   end
 
   def update
@@ -33,7 +32,13 @@ class MyWindow < Gosu::Window
   def button_down(id)
     if id == Gosu::KbEscape
       close
+    else
+      @scenes.last.button_down(id)
     end
+  end
+
+  def button_up(id)
+    @scenes.last.button_up(id)
   end
 end
 

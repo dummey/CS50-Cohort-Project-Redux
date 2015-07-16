@@ -1,9 +1,7 @@
-MENU_BACKGROUND
-MENU_BG_MUSIC
-
 class MenuScene
-  def initialize(width, height)
-    @window_dimensions = [width, height]
+  def initialize(window)
+    @window = window
+    
     @background = Gosu::Image.new(MENU_BACKGROUND, :tileable => true)
     @bg_music = Gosu::Song.new(MENU_BG_MUSIC)
   end

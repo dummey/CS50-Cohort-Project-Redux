@@ -45,7 +45,7 @@ class GameScene < Scene
     @player.draw
   end
 
-def button_down(id)
+  def button_down(id)
     case id
     when Gosu::KbRight
       @right_is_pressed = true
