@@ -19,13 +19,15 @@ class Scene
   end
 
   def _cleanup 
-    @game_objects.delete_if {|o| o.demolish?}
+    # @game_objects.delete_if {|o| o.demolish?}
   end
 
   def update
     _cleanup()
     
-    @game_objects.each {|o| o.update}
+    @game_objects.map! {|o| o.update}
+    @game_objects.flatten!
+    @game_objects.compact!
   end
 
   def draw
