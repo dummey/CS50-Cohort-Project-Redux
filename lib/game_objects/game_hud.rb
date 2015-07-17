@@ -2,9 +2,7 @@ class GameHUD
   def initialize(scene)
     @scene = scene
 
-    @lives = 3
     @lives_icon = Gosu::Image.new($MEDIA_ROOT + "/PNG/UI/playerLife3_green.png")
-    @score = 0
     @score_font = Gosu::Font.new(25)
 
   end
