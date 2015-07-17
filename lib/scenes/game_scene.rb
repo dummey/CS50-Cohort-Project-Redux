@@ -3,6 +3,7 @@ require 'scene'
 require 'game_objects/asteroid'
 require 'game_objects/background'
 require 'game_objects/player'
+require 'game_objects/ufo'
 require 'game_objects/game_hud'
 
 class GameScene < Scene
@@ -22,6 +23,7 @@ class GameScene < Scene
     @ui = GameHUD.new(self)
     @asteroid = Asteroid.new(self)
     @player = Player.new(self)
+    @ufo = UFO.new(self)
     @right_is_pressed = false
     @left_is_pressed = false
   end
@@ -41,6 +43,8 @@ class GameScene < Scene
     end
     @player.update
 
+    @ufo.update
+
     self
   end
 
@@ -49,6 +53,7 @@ class GameScene < Scene
     @ui.draw
     @asteroid.draw
     @player.draw
+    @ufo.draw
 
     self
   end

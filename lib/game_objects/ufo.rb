@@ -1,0 +1,28 @@
+require 'game_object'
+
+class UFO < GameObject
+  def initialize(scene)
+    super(scene)
+    #scale ship
+    @player = Gosu::Image.new("media/PNG/ufoBlue.png")
+    @x_velocity = 0
+    @y_velocity = 0
+    @x_position = @scene.width/2
+    @y_position = @scene.height/2 + 100
+    @angle = 0
+  end
+
+  def rotate(degrees)
+    @angle = @angle + 5 * degrees
+  end
+
+  def update
+    # constant negative velocity
+  end
+
+  def draw
+    # (x, y, z, angle, center_x, center_y, scale_x, scale_y)
+    @player.draw_rot(@x_position, @y_position, 1, @angle)
+
+  end
+end

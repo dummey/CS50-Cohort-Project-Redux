@@ -10,5 +10,6 @@ $CONFIG = {
 
   game_background_drift: {x: 10, y: 0},
 
-  sprite_star: ['star1.png', 'star2.png', 'star3.png'].map{|f| "#{$MEDIA_ROOT}/PNG/Effects/#{f}"}
+  sprite_star: ['star1.png', 'star2.png', 'star3.png'].map{|f| "#{$MEDIA_ROOT}/PNG/Effects/#{f}"},
+  sprite_ufo: ['ufoGreen.png', 'ufoBlue.png', 'ufoRed.png', 'ufoYellow.png'].map{|f| "#{$MEDIA_ROOT}/PNG/#{f}"},
 }
