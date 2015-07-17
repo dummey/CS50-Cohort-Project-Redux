@@ -1,6 +1,15 @@
 require 'game_object'
+require 'gosu'
 
 class Background < GameObject
+  def _defaults(params)
+    {
+      :x_velocity => Gosu::random(-1.0, 1.0),
+      :y_velocity => Gosu::random(-1.0, 1.0),
+      :color => Gosu::Color.argb(0, rand(200..255), rand(200..255), rand(200..255))
+    }.merge(params)
+  end
+
   ##
   # <b>Parameters</b>
   # * scene (Gosu::Window) -- object that this background will be drawn in.
@@ -11,18 +20,16 @@ class Background < GameObject
   def initialize(scene, params = {})
     super(scene)
     
-    params[:velocity] ||= [0,0]
+    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    @background_image = Gosu::Image.new(params[:image], :tileable => true)
+    @background_image = Gosu::Image.new(@image, :tileable => true)
 
-    if params[:music]
-      @music = Gosu::Song.new(params[:music])
+    if @music
+      @music = Gosu::Song.new(@music) 
     end
 
     @x_num = (@scene.width / @background_image.width).to_i
     @y_num = (@scene.height / @background_image.height).to_i
-
-    @x_vel, @y_vel = params[:velocity]
 
     @cycle = 0
   end
@@ -30,14 +37,14 @@ class Background < GameObject
   def update
     @music.play(true) unless @music.playing?
 
-    @cycle -= 0.1
+    @cycle -= @scene.update_interval
 
     return self
   end
 
   def draw
-    x_shift = @cycle * @x_vel
-    y_shift = @cycle * @y_vel
+    x_shift = @cycle * @x_velocity / 100
+    y_shift = @cycle * @y_velocity / 100
 
     for i in -1..@x_num
       for j in -1..@y_num
