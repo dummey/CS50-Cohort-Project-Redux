@@ -4,8 +4,8 @@ require 'gosu'
 class Background < GameObject
   def _defaults(params)
     {
-      :x_velocity => Gosu::random(-1.0, 1.0),
-      :y_velocity => Gosu::random(-1.0, 1.0),
+      :x_velocity => $CONFIG[:game_background_drift][:x],
+      :y_velocity => $CONFIG[:game_background_drift][:x],
       :color => Gosu::Color.argb(0, rand(200..255), rand(200..255), rand(200..255))
     }.merge(params)
   end
