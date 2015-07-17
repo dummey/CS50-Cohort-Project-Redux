@@ -5,8 +5,7 @@ class Background < GameObject
   def _defaults(params)
     {
       :x_velocity => $CONFIG[:game_background_drift][:x],
-      :y_velocity => $CONFIG[:game_background_drift][:x],
-      :color => Gosu::Color.argb(0, rand(200..255), rand(200..255), rand(200..255))
+      :y_velocity => $CONFIG[:game_background_drift][:y],
     }.merge(params)
   end
 
@@ -19,13 +18,13 @@ class Background < GameObject
   #   * :music =>
   def initialize(scene, params = {})
     super(scene)
-    
+
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
     @background_image = Gosu::Image.new(@image, :tileable => true)
 
     if @music
-      @music = Gosu::Song.new(@music) 
+      @music = Gosu::Song.new(@music)
     end
 
     @x_num = (@scene.width / @background_image.width).to_i
