@@ -10,8 +10,9 @@ class GameScene < Scene
   def initialize(window)
     @window = window
 
-    self.lives = $CONFIG[:initialize_lives]
-    self.score = $CONFIG[:initialize_score]
+    @lives = $CONFIG[:initialize_lives]
+    @score = $CONFIG[:initialize_score]
+    @game_duration = 0.0
 
     @background = Background.new(self, {
                                    :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
@@ -26,6 +27,9 @@ class GameScene < Scene
   end
 
   def update
+    @game_duration += self.update_interval
+    @score = @game_duration.to_i / 1000
+
     @background.update
     @asteroid.update
 
@@ -36,6 +40,8 @@ class GameScene < Scene
       @player.rotate(-1)
     end
     @player.update
+
+    self
   end
 
   def draw
@@ -43,6 +49,8 @@ class GameScene < Scene
     @ui.draw
     @asteroid.draw
     @player.draw
+
+    self
   end
 
   def button_down(id)

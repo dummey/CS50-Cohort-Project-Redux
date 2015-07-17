@@ -24,18 +24,22 @@ class MenuScene < Scene
     super
 
     if (@window.button_down?(Gosu::KbSpace))
-      @window.scenes.push(GameScene.new(@window))
+      return [self, GameScene.new(@window)]
     end
 
     if (@game_objects.count{|o| o.is_a?(PulsingStar)} < MAX_STARS)
       @game_objects.push(PulsingStar.new(self))
     end
+
+    self
   end
 
   def draw
     super
 
     @text.draw_rel("Press 'Space' to Start", @window.width / 2, @window.height / 2, 5, 0.5, 0.5)
+
+    self
   end
 
 end
