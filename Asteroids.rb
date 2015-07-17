@@ -21,7 +21,11 @@ class MyWindow < Gosu::Window
   end
 
   def update
-    @scenes.last.update
+    @current_scene = @scenes.pop
+    @current_scene = @current_scene.update
+    @scenes.push(@current_scene)
+    @scenes.flatten!
+    @scenes.compact!
   end
 
   def draw
