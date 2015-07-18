@@ -1,6 +1,8 @@
 require 'game_object'
 
 class UFO < GameObject
+  attr_reader :x_pos, :y_pos
+
   def _defaults(params)
     {
       :image_path => $CONFIG[:sprite_ufo].sample,
@@ -13,11 +15,13 @@ class UFO < GameObject
       :dampening => 0.5,
       # :level => 1,
       :scale => 0.5,
+      :spin_rate => 50,
       :ai_interval => 1000,
       :angle => 0,
       :z_index => 5, #$CONIFG[:z_index_ufo]
       :max_velocity => 50.0,
       :max_acceleration => 50.0,
+      :num_mini_me => 3,
     }.merge(params)
   end
 
@@ -25,12 +29,21 @@ class UFO < GameObject
     super(scene)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    #scale ship
     @image = Gosu::Image.new(@image_path)
 
     @time_alive = 0
     @last_ai_update = -1 * Float::INFINITY
 
+    @mini_mes = []
+    @num_mini_me.times {
+      @mini_mes.push(UFO.new(@scene,
+                             :scale => @scale / 2,
+                             :num_mini_me => 0,
+                             :ai_interval => Float::INFINITY,
+                             :max_velocity => 25,
+                             :max_acceleration => 25,
+                             ))
+    }
   end
 
   def accelerate(x, y)
@@ -41,18 +54,65 @@ class UFO < GameObject
     @y_acc = [-1 * @max_acceleration, @y_acc, @max_acceleration].sort[1]
   end
 
+  #deals with wrap around logic
+  def accelerate_towards(x, y)
+    # horizontal
+    right_distance = 0
+    left_distance = 0
+    if (@x_pos < x)
+      right_distance = x - @x_pos
+      left_distance =  @scene.width - x + x_pos
+    else
+      right_distance = @scene.width - @x_pos + x
+      left_distance = @x_pos - x
+    end
+
+    if (right_distance < left_distance)
+      self.accelerate(10, 0)
+    else
+      self.accelerate(-10, 0)
+    end
+
+    if (right_distance < left_distance)
+      self.accelerate(10, 0)
+    else
+      self.accelerate(-10, 0)
+    end
+
+
+    #vertical
+    bottom_distance = 0
+    top_distance = 0
+    if (@y_pos < y)
+      bottom_distance = y - @y_pos
+      top_distance =  @scene.height - y + y_pos
+    else
+      bottom_distance = @scene.height - @y_pos + y
+      top_distance = @y_pos - y
+    end
+
+    if (bottom_distance < top_distance)
+      self.accelerate(0, 10)
+    else
+      self.accelerate(0, -10)
+    end
+  end
+
   def _ai
-    self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration), 
-      Gosu::random(-@max_acceleration, @max_acceleration))
+    self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
+                    Gosu::random(-@max_acceleration, @max_acceleration))
   end
 
   def update
-    #Figure out when to call the AI code 
+    #Figure out when to call the AI code
     @time_alive += @scene.update_interval
     if (@time_alive - @last_ai_update > @ai_interval)
-      self._ai 
+      self._ai
       @last_ai_update = @time_alive
     end
+
+    #Spinnnn!
+    @angle += @spin_rate * @scene.update_interval / 1000.0
 
     #Dampening
     @x_vel *= 1 - @dampening * @scene.update_interval / 1000.0
@@ -70,14 +130,22 @@ class UFO < GameObject
     @x_pos = @x_pos % @scene.width
     @y_pos = @y_pos % @scene.height
 
+    #Update children
+    @mini_mes.map! {|o|
+      o.accelerate_towards(@x_pos, @y_pos)
+      o.update
+    }
+    @mini_mes.flatten!
+    @mini_mes.compact!
+
     self
   end
 
   def draw
     #Draw main
     @image.draw_rot(@x_pos, @y_pos, @z_index, @angle, 0.5, 0.5, @scale, @scale)
-    
-    #Draw wrap-around 
+
+    #Draw wrap-around
     if (@x_pos < @image.width / 2)
       @image.draw_rot(@scene.width + @x_pos, @y_pos, @z_index, @angle, 0.5, 0.5, @scale, @scale)
     elsif (@x_pos > @scene.width + @image.width / 2)
@@ -87,6 +155,9 @@ class UFO < GameObject
     elsif (@y_pos > @scene.height + @image.height / 2)
       @image.draw_rot(@x_pos, @y_pos - @scene.height, @z_index, @angle, 0.5, 0.5, @scale, @scale)
     end
+
+    #Draw children
+    @mini_mes.each {|o| o.draw}
 
     self
   end
