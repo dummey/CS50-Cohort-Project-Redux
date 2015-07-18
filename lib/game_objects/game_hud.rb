@@ -14,7 +14,6 @@ class GameHUD
   end
 
   def _draw_score
-    @scene.score
     @score_font.draw("Score: #{@scene.score}", 10,40,1)
   end
 
