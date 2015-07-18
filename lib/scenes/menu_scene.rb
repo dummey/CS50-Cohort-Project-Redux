@@ -16,6 +16,7 @@ class MenuScene < Scene
                                    :music => $MEDIA_ROOT + "/Music/Digital-Fallout_v001.ogg"
     })
     @game_objects.push(@background)
+    @cursor = Gosu::Image.new($MEDIA_ROOT + "/PNG/UI/cursor.png")
 
     @text = Gosu::Font.new(50, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
   end
@@ -36,7 +37,7 @@ class MenuScene < Scene
 
   def draw
     super
-
+    @cursor.draw(@window.mouse_x, @window.mouse_y, 100)
     @text.draw_rel("Press 'Space' to Start", @window.width / 2, @window.height * 2/3, 5, 0.5, 0.5)
 
     self
