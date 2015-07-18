@@ -1,4 +1,5 @@
 require 'game_object'
+require 'game_objects/ui_components/character_dialog'
 
 class UFO < GameObject
   attr_reader :x_pos, :y_pos, :image, :scale
@@ -45,6 +46,8 @@ class UFO < GameObject
                              :image_path => @image_path,
                              ))
     }
+
+    @dialog = CharacterDialog.new(@scene)
   end
 
   def accelerate(x, y)
@@ -137,6 +140,10 @@ class UFO < GameObject
     @mini_mes.flatten!
     @mini_mes.compact!
 
+    if @time_alive > 2000.0 && @dialog.duration <= 0.0
+      @dialog.show_for(10000)
+    end
+
     self
   end
 
@@ -157,6 +164,9 @@ class UFO < GameObject
 
     #Draw children
     @mini_mes.each {|o| o.draw}
+
+    #Draw dialog
+    @dialog.draw
 
     self
   end
