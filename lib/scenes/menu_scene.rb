@@ -17,7 +17,7 @@ class MenuScene < Scene
     })
     @game_objects.push(@background)
 
-    @text = Gosu::Font.new(50)
+    @text = Gosu::Font.new(50, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
   end
 
   def update
