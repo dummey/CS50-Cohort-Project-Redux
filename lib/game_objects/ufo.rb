@@ -15,7 +15,7 @@ class UFO < GameObject
       :dampening => 0.5,
       # :level => 1,
       :scale => 0.5,
-      :spin_rate => 50,
+      :spin_rate => 100,
       :ai_interval => 1000,
       :angle => 0,
       :z_index => 5, #$CONIFG[:z_index_ufo]
