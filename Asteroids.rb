@@ -43,6 +43,10 @@ class MyWindow < Gosu::Window
   def button_up(id)
     @scenes.last.button_up(id)
   end
+
+  def needs_cursor
+    $CONFIG[:window_show_cursor]
+  end
 end
 
 $WINDOW = MyWindow.new

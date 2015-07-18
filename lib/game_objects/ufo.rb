@@ -1,7 +1,7 @@
 require 'game_object'
 
 class UFO < GameObject
-  attr_reader :x_pos, :y_pos
+  attr_reader :x_pos, :y_pos, :image, :scale
 
   def _defaults(params)
     {
@@ -42,6 +42,7 @@ class UFO < GameObject
                              :ai_interval => Float::INFINITY,
                              :max_velocity => 25,
                              :max_acceleration => 25,
+                             :image_path => @image_path,
                              ))
     }
   end
@@ -55,7 +56,7 @@ class UFO < GameObject
   end
 
   #deals with wrap around logic
-  def accelerate_towards(x, y)
+  def accelerate_towards(x, y, magnitude = @max_acceleration / 2)
     # horizontal
     right_distance = 0
     left_distance = 0
@@ -68,17 +69,10 @@ class UFO < GameObject
     end
 
     if (right_distance < left_distance)
-      self.accelerate(10, 0)
+      self.accelerate(magnitude, 0)
     else
-      self.accelerate(-10, 0)
+      self.accelerate(-magnitude, 0)
     end
-
-    if (right_distance < left_distance)
-      self.accelerate(10, 0)
-    else
-      self.accelerate(-10, 0)
-    end
-
 
     #vertical
     bottom_distance = 0
@@ -92,9 +86,9 @@ class UFO < GameObject
     end
 
     if (bottom_distance < top_distance)
-      self.accelerate(0, 10)
+      self.accelerate(0, magnitude)
     else
-      self.accelerate(0, -10)
+      self.accelerate(0, -magnitude)
     end
   end
 
@@ -132,7 +126,12 @@ class UFO < GameObject
 
     #Update children
     @mini_mes.map! {|o|
-      o.accelerate_towards(@x_pos, @y_pos)
+      o.accelerate_towards(@x_pos, @y_pos, 20)
+      @mini_mes.each {|oo|
+        next if oo == o
+        next unless Gosu::distance(o.x_pos, o.y_pos, oo.x_pos, oo.y_pos) < o.image.width * o.scale * 2
+        o.accelerate_towards(oo.x_pos, oo.y_pos, -@max_acceleration)
+      }
       o.update
     }
     @mini_mes.flatten!

@@ -23,7 +23,9 @@ class GameScene < Scene
     @ui = GameHUD.new(self)
     @asteroid = Asteroid.new(self)
     @player = Player.new(self)
-    @ufo = UFO.new(self)
+    @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
+    @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
+    @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
     @right_is_pressed = false
     @left_is_pressed = false
   end
@@ -44,6 +46,8 @@ class GameScene < Scene
     @player.update
 
     @ufo.update
+    @ufo2.update
+    @ufo3.update
 
     self
   end
@@ -54,6 +58,8 @@ class GameScene < Scene
     @asteroid.draw
     @player.draw
     @ufo.draw
+    @ufo2.draw
+    @ufo3.draw
 
     self
   end

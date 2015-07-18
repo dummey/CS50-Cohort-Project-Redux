@@ -37,7 +37,7 @@ class MenuScene < Scene
   def draw
     super
 
-    @text.draw_rel("Press 'Space' to Start", @window.width / 2, @window.height / 2, 5, 0.5, 0.5)
+    @text.draw_rel("Press 'Space' to Start", @window.width / 2, @window.height * 2/3, 5, 0.5, 0.5)
 
     self
   end
