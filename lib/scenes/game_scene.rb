@@ -35,6 +35,7 @@ class GameScene < Scene
     @score = @game_duration.to_i / 1000
 
     @background.update
+    @ui.update
     @asteroid.update
 
     if @right_is_pressed

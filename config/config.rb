@@ -13,4 +13,8 @@ $CONFIG = {
 
   sprite_star: ['star1.png', 'star2.png', 'star3.png'].map{|f| "#{$MEDIA_ROOT}/PNG/Effects/#{f}"},
   sprite_ufo: ['ufoGreen.png', 'ufoBlue.png', 'ufoRed.png', 'ufoYellow.png'].map{|f| "#{$MEDIA_ROOT}/PNG/#{f}"},
+  sprite_score: ['numeral0.png', 'numeral1.png', 'numeral2.png', 
+    'numeral3.png', 'numeral4.png', 'numeral5.png', 
+    'numeral6.png', 'numeral7.png', 'numeral8.png', 
+    'numeral9.png', ].map{|f| "#{$MEDIA_ROOT}/PNG/UI/#{f}"},
 }
