@@ -42,13 +42,23 @@ class CharacterDialog < GameObject
     @duration -= @scene.update_interval
   end
 
+  def _draw_text_box
+        @text_box_bg.draw_rot(@x_pos, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x0F) << 24) + 0xFFFFFF)
+  end
+
+  def _draw_portrait
+
+  end
+
+  def _draw_text
+
+  end
+
   def draw
     return unless @duration > 0.0
-
-    @text_box_bg.draw_rot(@x_pos, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x0F) << 24) + 0xFFFFFF)
+    self._draw_text_box
 
     @offset = @character_image.width * 2/3
-
     if @text_image
       @text_image.draw_rot(@x_pos + @offset, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x8F) << 24) + 0xFFFFFF)
       @text_image.draw_rot(@x_pos+2 + @offset, @y_pos+2, 10, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x0F) << 24) + 0xAAAAAA)
