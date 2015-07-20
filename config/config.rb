@@ -6,6 +6,8 @@ $CONFIG = {
   window_full_screen: false,
   window_show_cursor: false,
 
+  font: $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf",
+
   initialize_lives: 3,
   initialize_score: 0,
 
@@ -17,4 +19,5 @@ $CONFIG = {
     'numeral3.png', 'numeral4.png', 'numeral5.png', 
     'numeral6.png', 'numeral7.png', 'numeral8.png', 
     'numeral9.png', ].map{|f| "#{$MEDIA_ROOT}/PNG/UI/#{f}"},
+  sprite_button: ['buttonBlue.png'].map {|f| "#{$MEDIA_ROOT}/PNG/UI/#{f}"}
 }
