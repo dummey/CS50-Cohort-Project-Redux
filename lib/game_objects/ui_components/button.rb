@@ -12,7 +12,7 @@ class Button < GameObject
       :text => "Start!",
       :text_color => 0xFF_FFFFFF,
       :text_size => 36,
-      
+
       :button_image_path => "#{$MEDIA_ROOT}/custom/blue_button.png",
 
     }.merge(params)
@@ -23,7 +23,7 @@ class Button < GameObject
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
     @button_text = Gosu::Font.new(@text_size, :name => $CONFIG[:font])
-    @button_image = Gosu::Image.new(@sprite_image_path)
+    @button_image = Gosu::Image.new(@button_image_path)
   end
 
   def intersect?(x, y)
