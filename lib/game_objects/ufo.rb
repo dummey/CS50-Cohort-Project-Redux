@@ -14,7 +14,6 @@ class UFO < GameObject
       :x_acc => 0.0,
       :y_acc => 0.0,
       :dampening => 0.5,
-      # :level => 1,
       :scale => 0.5,
       :spin_rate => 100,
       :ai_interval => 1000,
