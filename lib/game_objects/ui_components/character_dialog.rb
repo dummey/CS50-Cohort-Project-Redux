@@ -65,6 +65,6 @@ class CharacterDialog < GameObject
     end
 
     @character_image.draw_rot(@scene.width / 2 - @text_box_bg.width / 2 + @offset,
-                              @y_pos, 12, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x20) << 24) + 0xFFFFFF)
+                              @y_pos, 12, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x80) << 24) + 0xFFFFFF)
   end
 end

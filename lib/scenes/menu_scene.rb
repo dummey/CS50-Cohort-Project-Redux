@@ -34,7 +34,9 @@ class MenuScene < Scene
   def update
     super
 
-    if (@window.button_down?(Gosu::KbSpace))
+    if (@window.button_down?(Gosu::KbSpace) || 
+       (@window.button_down?(Gosu::MsLeft) && @start_button.intersect?(@window.mouse_x, @window.mouse_y))
+      )
       return [self, GameScene.new(@window)]
     end
 

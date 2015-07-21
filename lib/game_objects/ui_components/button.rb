@@ -10,11 +10,11 @@ class Button < GameObject
       :scale => 1,
 
       :text => "Start!",
-      :text_color => 0xFF_FFFFFF,
+      :text_color => 0xFF_000000,
       :text_size => 36,
 
-      :button_image_path => "#{$MEDIA_ROOT}/custom/blue_button.png",
-
+      # :button_image_path => "#{$MEDIA_ROOT}/custom/blue_button.png",
+      :button_image_path => "#{$MEDIA_ROOT}/PNG/UI/buttonBlue.png",
     }.merge(params)
   end
 
@@ -27,7 +27,19 @@ class Button < GameObject
   end
 
   def intersect?(x, y)
+    if (x < (@x_pos - @button_image.width / 2))
+      return false
+    elsif (x > (@x_pos + @button_image.width / 2))
+      return false
+    end
 
+    if (y < (@y_pos - @button_image.height / 2))
+      return false
+    elsif (y > (@y_pos + @button_image.height / 2))
+      return false
+    end
+
+    return true
   end
 
   def update
@@ -43,7 +55,7 @@ class Button < GameObject
     @button_text.draw_rel(@text, *self._text_pos_centered(2, -2), @text_color)
 
     #shadow
-    @button_text.draw_rel(@text, *self._text_pos_centered(2 + 2, -2 + 2), 0x0F_000000)
+    @button_text.draw_rel(@text, *self._text_pos_centered(2 + 2, -2 + 2), 0x0F_FFFFFF)
 
     self
   end
