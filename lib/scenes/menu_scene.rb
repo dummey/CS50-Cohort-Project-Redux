@@ -5,6 +5,7 @@ require 'scenes/game_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/ui_components/button'
+require 'game_objects/ui_components/cursor'
 
 class MenuScene < Scene
   def _defaults(params)
@@ -18,8 +19,9 @@ class MenuScene < Scene
     }.merge(params)
   end
 
-  def initialize(window)
+  def initialize(window, params={})
     super(window)
+    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
     @background = Background.new(self, {
                                    :image => @background_image_path,
@@ -27,7 +29,8 @@ class MenuScene < Scene
     })
     @game_objects.push(@background)
 
-    @cursor = Gosu::Image.new(@cursor_image_path)
+    @cursor = Cursor.new(self, cursor_image_path: @cursor_image_path)
+    @game_objects.push(@cursor)
 
     @start_button = Button.new(self)
     @game_objects.push(@start_button)
@@ -57,8 +60,6 @@ class MenuScene < Scene
     super
     @title.draw_rel(@title_text, @window.width / 2 + 2, @window.height * 1/3 + 2, 10, 0.5, 0.5, @scale, @scale, 0x40_000000)
     @title.draw_rel(@title_text, @window.width / 2, @window.height * 1/3, 10, 0.5, 0.5)
-
-    @cursor.draw(@window.mouse_x, @window.mouse_y, 100)
     self
   end
 

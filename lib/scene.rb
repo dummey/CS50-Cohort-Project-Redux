@@ -14,6 +14,14 @@ class Scene
     @window.height
   end
 
+  def mouse_x
+    @window.mouse_x
+  end
+
+  def mouse_y
+    @window.mouse_y
+  end
+
   def update_interval
     @window.update_interval
   end

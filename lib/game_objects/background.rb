@@ -18,8 +18,8 @@ class Background < GameObject
   #   * :music =>
   def initialize(scene, params = {})
     super(scene)
-
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+
 
     @background_image = Gosu::Image.new(@image, :tileable => true)
 
