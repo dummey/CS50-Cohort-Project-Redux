@@ -18,13 +18,7 @@ class Scene
     @window.update_interval
   end
 
-  def _cleanup 
-    # @game_objects.delete_if {|o| o.demolish?}
-  end
-
   def update
-    _cleanup()
-    
     @game_objects.map! {|o| o.update}
     @game_objects.flatten!
     @game_objects.compact!
