@@ -16,8 +16,8 @@ class GameScene < Scene
     @game_duration = 0.0
 
     @background = Background.new(self, {
-                                   :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-                                   :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
+       :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
+       :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
     @ui = GameHUD.new(self)
@@ -26,8 +26,6 @@ class GameScene < Scene
     @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
     @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
-    @right_is_pressed = false
-    @left_is_pressed = false
   end
 
   def update
@@ -38,10 +36,10 @@ class GameScene < Scene
     @ui.update
     @asteroid.update
 
-    if @right_is_pressed
+    if Gosu::button_down? Gosu::KbRight
       @player.rotate(1)
     end
-    if @left_is_pressed
+    if Gosu::button_down? Gosu::KbLeft
       @player.rotate(-1)
     end
     @player.update
@@ -66,21 +64,10 @@ class GameScene < Scene
   end
 
   def button_down(id)
-    case id
-    when Gosu::KbRight
-      @right_is_pressed = true
-    when Gosu::KbLeft
-      @left_is_pressed = true
-    end
+    
   end
 
   def button_up(id)
-    case id
-    when Gosu::KbRight
-      @right_is_pressed = false
-    when Gosu::KbLeft
-      @left_is_pressed = false
-    end
-
+  
   end
 end
