@@ -29,10 +29,10 @@ class Scene
   end
 
   def button_down(id)
-
+    @game_objects.each {|o| o.button_down(id)}
   end
 
   def button_up(id)
-
+    @game_objects.each {|o| o.button_up(id)}
   end
 end

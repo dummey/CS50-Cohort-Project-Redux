@@ -22,4 +22,12 @@ class GameObject
   def _text_pos_centered(x_off = 0, y_off = 0)
     return [@x_pos + x_off, @y_pos + y_off, @z_index, *self._centered]
   end
+
+  def button_down(id)
+
+  end
+
+  def button_up(id)
+
+  end
 end
