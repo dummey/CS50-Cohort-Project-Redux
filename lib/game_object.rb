@@ -3,12 +3,6 @@ class GameObject
 
   def initialize(scene)
     @scene = scene
-
-    @demolish = false
-  end
-
-  def demolish? 
-    @demolish
   end
 
   def _centered
