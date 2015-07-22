@@ -6,6 +6,7 @@ require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/cursor'
+require 'game_objects/ui_components/title'
 
 class MenuScene < Scene
   def _defaults(params)
@@ -15,7 +16,6 @@ class MenuScene < Scene
       :background_image_path => $MEDIA_ROOT + "/Backgrounds/purple.png",
       :background_music_path => $MEDIA_ROOT + "/Music/Digital-Fallout_v001.ogg",
       :cursor_image_path => $MEDIA_ROOT + "/PNG/UI/cursor.png",
-      :title_text => "ASTEROIDSSS!",
     }.merge(params)
   end
 
@@ -35,7 +35,9 @@ class MenuScene < Scene
     @start_button = Button.new(self)
     @game_objects.push(@start_button)
 
-    @title = Gosu::Font.new(128, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
+    # @title = 
+    @title = Title.new(self, text: "ASTEROIDSSS!")
+    @game_objects.push(@title)
   end
 
   def update
@@ -58,8 +60,7 @@ class MenuScene < Scene
 
   def draw
     super
-    @title.draw_rel(@title_text, @window.width / 2 + 2, @window.height * 1/3 + 2, 10, 0.5, 0.5, @scale, @scale, 0x40_000000)
-    @title.draw_rel(@title_text, @window.width / 2, @window.height * 1/3, 10, 0.5, 0.5)
+    
     self
   end
 
