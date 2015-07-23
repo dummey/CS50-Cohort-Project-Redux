@@ -7,9 +7,11 @@ require 'game_objects/ufo'
 require 'game_objects/game_hud'
 
 class GameScene < Scene
-  attr_accessor :window, :lives, :score
+  attr_accessor :window, :lives, :score, :space
   def initialize(window)
     @window = window
+    
+    @space = CP::Space.new()
 
     @lives = $CONFIG[:initialize_lives]
     @score = $CONFIG[:initialize_score]
@@ -29,6 +31,7 @@ class GameScene < Scene
   end
 
   def update
+    @space.step(1)
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
