@@ -4,17 +4,14 @@ class Player < GameObject
   def initialize(scene)
     super(scene)
     @body = CP::Body.new(10.0, 150.0)
+    @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
+    @body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
     @player = Gosu::Image.new("media/PNG/playerShip3_green.png")
-    @x_velocity = 0
-    @y_velocity = 0
-    @x_position = @scene.width/2
-    @y_position = @scene.height/2
-    @angle = 0
   end
 
   def rotate(degrees)
-    @angle = @angle + 5 * degrees
+    @body.a += degrees.degrees_to_radians
   end
 
   def update
@@ -23,7 +20,7 @@ class Player < GameObject
 
   def draw
     # (x, y, z, angle, center_x, center_y, scale_x, scale_y)
-    @player.draw_rot(@x_position, @y_position, 1, @angle)
+    @player.draw_rot(@body.p.x, @body.p.y, 1, @body.a.radians_to_gosu)
 
   end
 end

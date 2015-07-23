@@ -12,6 +12,7 @@ class GameScene < Scene
     @window = window
     
     @space = CP::Space.new()
+    @space.damping = 0.8
 
     @lives = $CONFIG[:initialize_lives]
     @score = $CONFIG[:initialize_score]
@@ -33,7 +34,13 @@ class GameScene < Scene
   end
 
   def update
-    @space.step(1)
+    if Gosu::button_down? Gosu::KbRight
+      @player.rotate(3)
+    end
+    if Gosu::button_down? Gosu::KbLeft
+      @player.rotate(-3)
+    end
+    
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
@@ -43,18 +50,14 @@ class GameScene < Scene
     @asteroid2.update
     @asteroid3.update
 
-    if Gosu::button_down? Gosu::KbRight
-      @player.rotate(1)
-    end
-    if Gosu::button_down? Gosu::KbLeft
-      @player.rotate(-1)
-    end
     @player.update
 
     @ufo.update
     @ufo2.update
     @ufo3.update
 
+    @space.step(1.0/60.0)
+    
     self
   end
 
