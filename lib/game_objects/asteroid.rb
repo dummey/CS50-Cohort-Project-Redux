@@ -9,6 +9,8 @@ class Asteroid < GameObject
     @y_velocity = rand(-4...4)
     @x_position = rand(0...@scene.width)
     @y_position = rand(0...@scene.height)
+    @rotation_momentum = 5
+    @rotation_angular = 0
   end
 
   def update
@@ -16,9 +18,11 @@ class Asteroid < GameObject
     @y_position = @y_position + @y_velocity
     @x_position=@x_position.modulo(@scene.width)
     @y_position=@y_position.modulo(@scene.height)
+    @rotation_angular = (@rotation_angular + @rotation_momentum)
   end
 
   def draw
-    @asteroid_image.draw(@x_position, @y_position, 1)
+#    @asteroid_image.draw(@x_position, @y_position, 1)
+    @asteroid_image.draw_rot(@x_position, @y_position, 1, @rotation_angular)
   end
 end
