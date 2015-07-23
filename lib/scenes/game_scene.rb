@@ -40,6 +40,9 @@ class GameScene < Scene
     if Gosu::button_down? Gosu::KbLeft
       @player.rotate(-3)
     end
+    if Gosu::button_down? Gosu::KbUp
+      @player.thrust(50)
+    end
     
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
