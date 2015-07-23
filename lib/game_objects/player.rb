@@ -3,7 +3,8 @@ require 'game_object'
 class Player < GameObject
   def initialize(scene)
     super(scene)
-    #scale ship
+    @body = CP::Body.new(10.0, 150.0)
+    scene.space.add_body(@body)
     @player = Gosu::Image.new("media/PNG/playerShip3_green.png")
     @x_velocity = 0
     @y_velocity = 0

@@ -7,17 +7,19 @@ require 'game_objects/ufo'
 require 'game_objects/game_hud'
 
 class GameScene < Scene
-  attr_accessor :window, :lives, :score
+  attr_accessor :window, :lives, :score, :space
   def initialize(window)
     @window = window
+    
+    @space = CP::Space.new()
 
     @lives = $CONFIG[:initialize_lives]
     @score = $CONFIG[:initialize_score]
     @game_duration = 0.0
 
     @background = Background.new(self, {
-                                   :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-                                   :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
+       :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
+       :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
     @ui = GameHUD.new(self)
@@ -28,11 +30,10 @@ class GameScene < Scene
     @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
     @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
-    @right_is_pressed = false
-    @left_is_pressed = false
   end
 
   def update
+    @space.step(1)
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
@@ -42,10 +43,10 @@ class GameScene < Scene
     @asteroid2.update
     @asteroid3.update
 
-    if @right_is_pressed
+    if Gosu::button_down? Gosu::KbRight
       @player.rotate(1)
     end
-    if @left_is_pressed
+    if Gosu::button_down? Gosu::KbLeft
       @player.rotate(-1)
     end
     @player.update
@@ -72,21 +73,10 @@ class GameScene < Scene
   end
 
   def button_down(id)
-    case id
-    when Gosu::KbRight
-      @right_is_pressed = true
-    when Gosu::KbLeft
-      @left_is_pressed = true
-    end
+    
   end
 
   def button_up(id)
-    case id
-    when Gosu::KbRight
-      @right_is_pressed = false
-    when Gosu::KbLeft
-      @left_is_pressed = false
-    end
-
+  
   end
 end
