@@ -31,6 +31,8 @@ class GameScene < Scene
     @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
     @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
+
+    @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
 
   def update
@@ -60,6 +62,8 @@ class GameScene < Scene
     @ufo3.update
 
     @space.step(1.0/60.0)
+
+    @dialog.update
     
     self
   end
@@ -74,6 +78,8 @@ class GameScene < Scene
     @ufo.draw
     @ufo2.draw
     @ufo3.draw
+
+    @dialog.draw
 
     self
   end

@@ -25,14 +25,14 @@ class CharacterDialog < GameObject
 
   def initialize(scene, params = {})
     super(scene)
-    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)} 
 
     @text_image = Gosu::Image.from_text(@text, 32, :font => @font, :align => :center, :width => @scene.width - 250)
     @character_image = Gosu::Image.new(@character_image_path)
     @text_box_bg = Gosu::Image.new(@text_box_bg_path)
   end
 
-  def show_for(duration = 10000)
+  def show_for(duration = 1000)
     @duration = duration
   end
 
@@ -40,10 +40,12 @@ class CharacterDialog < GameObject
     return unless @duration > 0.0
 
     @duration -= @scene.update_interval
+
+    self
   end
 
   def _draw_text_box
-        @text_box_bg.draw_rot(@x_pos, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x0F) << 24) + 0xFFFFFF)
+        @text_box_bg.draw_rot(@x_pos, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0xFF) << 24) + 0xFFFFFF)
   end
 
   def _draw_portrait
@@ -56,15 +58,18 @@ class CharacterDialog < GameObject
 
   def draw
     return unless @duration > 0.0
+ 
     self._draw_text_box
 
     @offset = @character_image.width * 2/3
     if @text_image
-      @text_image.draw_rot(@x_pos + @offset, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x8F) << 24) + 0xFFFFFF)
-      @text_image.draw_rot(@x_pos+2 + @offset, @y_pos+2, 10, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x0F) << 24) + 0xAAAAAA)
+      @text_image.draw_rot(@x_pos + @offset, @y_pos, 11, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0xFF) << 24) + 0xFFFFFF)
+      @text_image.draw_rot(@x_pos+2 + @offset, @y_pos+2, 10, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0xFF) << 24) + 0xAAAAAA)
     end
 
     @character_image.draw_rot(@scene.width / 2 - @text_box_bg.width / 2 + @offset,
-                              @y_pos, 12, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0x80) << 24) + 0xFFFFFF)
+                              @y_pos, 12, @angle, 0.5, 0.5, @x_scale, @y_scale, ((0xFF) << 24) + 0xFFFFFF)
+
+    self
   end
 end
