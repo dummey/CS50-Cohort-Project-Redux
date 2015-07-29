@@ -25,9 +25,10 @@ class GameScene < Scene
     })
 
     @ui = GameHUD.new(self)
-    @asteroid1 = Asteroid.new(self)
-    @asteroid2 = Asteroid.new(self)
-    @asteroid3 = Asteroid.new(self)
+    @asteroids = []
+    @asteroids << Asteroid.new(self)
+    @asteroids << Asteroid.new(self)
+    @asteroids << Asteroid.new(self)
     @player = Player.new(self)
     @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
@@ -52,9 +53,9 @@ class GameScene < Scene
 
     @background.update
     @ui.update
-    @asteroid1.update
-    @asteroid2.update
-    @asteroid3.update
+    @asteroids.each do |asteroid|
+      asteroid.update
+    end
 
     @player.update
 
@@ -74,9 +75,9 @@ class GameScene < Scene
   def draw
     @background.draw
     @ui.draw
-    @asteroid1.draw
-    @asteroid2.draw
-    @asteroid3.draw
+    @asteroids.each do |asteroid|
+      asteroid.draw
+    end
     @player.draw
     @ufo.draw
     @ufo2.draw
