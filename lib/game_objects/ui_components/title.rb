@@ -7,6 +7,7 @@ class Title < GameObject
       :y_pos => 50,
       :z_index => 10,
       :scale => 1,
+      :text => 'PLACEHOLDER',
     }.merge(params)
   end
 

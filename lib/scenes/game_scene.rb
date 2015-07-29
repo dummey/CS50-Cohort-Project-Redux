@@ -5,6 +5,7 @@ require 'game_objects/background'
 require 'game_objects/player'
 require 'game_objects/ufo'
 require 'game_objects/game_hud'
+require 'game_objects/ui_components/title'
 
 class GameScene < Scene
   attr_accessor :window, :lives, :score, :space
@@ -64,6 +65,8 @@ class GameScene < Scene
     @space.step(1.0/60.0)
 
     @dialog.update
+
+    @title.update if @title
     
     self
   end
@@ -81,14 +84,22 @@ class GameScene < Scene
 
     @dialog.draw
 
+    @title.draw if @title
+
     self
   end
 
   def button_down(id)
-    
+    if id == Gosu::KbA
+      self.lose
+    end
   end
 
   def button_up(id)
   
+  end
+
+  def lose
+    @title = Title.new(self, text: "YOU LOSE FOOL!")
   end
 end
