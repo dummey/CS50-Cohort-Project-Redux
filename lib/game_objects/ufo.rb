@@ -10,12 +10,15 @@ class UFO < GameObject
       :init_x_pos => rand(0...@scene.width),
       :init_y_pos => rand(0...@scene.height),
       :scale => 0.5,
+      :mass => 4,
+      :moi => 150,
       :spin_rate => Math::PI/20.0,
       :ai_interval => 1000,
-      :angle => 0,
       :z_index => 5, #$CONIFG[:z_index_ufo]
+      # :max_velocity => 50.0,
       :max_acceleration => 100.0,
       :num_mini_me => 3,
+      :follow => nil
     }.merge(params)
   end
 
@@ -27,22 +30,12 @@ class UFO < GameObject
     body = CP::Body.new(10.0, 150.0)
     body.p.x = @init_x_pos
     body.p.y = @init_y_pos
-    @shape = CP::Shape::Circle.new(body, @image.width, CP::Vec2::ZERO)
+    # body.v_limit = @max_velocity
+    @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
+    @shape.e = 50.0
 
     @time_alive = 0
     @last_ai_update = -1 * Float::INFINITY
-
-    # @mini_mes = []
-    # @num_mini_me.times {
-    #   @mini_mes.push(UFO.new(@scene,
-    #                          :scale => @scale / 2,
-    #                          :num_mini_me => 0,
-    #                          :ai_interval => Float::INFINITY,
-    #                          :max_velocity => 25,
-    #                          :max_acceleration => 25,
-    #                          :image_path => @image_path,
-    #                          ))
-    # }
   end
 
   def accelerate(x, y)
@@ -89,10 +82,27 @@ class UFO < GameObject
   def _ai
     @time_alive += @scene.update_interval
     if (@time_alive - @last_ai_update > @ai_interval)
-      self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
-                      Gosu::random(-@max_acceleration, @max_acceleration))
+      if @follow
+        # x_pos = @follow.shape.body.p.x - @shape.body.p.x
+        # y_pos = @follow.shape.body.p.y - @shape.body.p.y
+        # self.accelerate(x_pos, y_pos)
+        # if x_pos.abs < 200
+        #   self.accelerate(200 - x_pos.abs * 1000, 0)
+        # end
+
+        # if y_pos.abs < 200
+        #   self.accelerate(0, 200 - y_pos.abs * 1000)
+        # end
+      else
+        self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
+                        Gosu::random(-@max_acceleration, @max_acceleration))
+      end
       @last_ai_update = @time_alive
     end
+  end
+
+  def spawn_baby
+    UFO.new(@scene, :scale => @scale / 2, :mase => @mass / 4)
   end
 
   def update
@@ -104,19 +114,6 @@ class UFO < GameObject
     #Wrap around the field
     @shape.body.p.x = @shape.body.p.x % @scene.width
     @shape.body.p.y = @shape.body.p.y % @scene.height
-
-    # #Update children
-    # @mini_mes.map! {|o|
-    #   o.accelerate_towards(@x_pos, @y_pos, 20)
-    #   @mini_mes.each {|oo|
-    #     next if oo == o
-    #     next unless Gosu::distance(o.x_pos, o.y_pos, oo.x_pos, oo.y_pos) < o.image.width * o.scale * 2
-    #     o.accelerate_towards(oo.x_pos, oo.y_pos, -@max_acceleration)
-    #   }
-    #   o.update
-    # }
-    # @mini_mes.flatten!
-    # @mini_mes.compact!
 
     self
   end
@@ -136,9 +133,6 @@ class UFO < GameObject
     elsif (@shape.body.p.y > @scene.height + @image.height / 2)
       @image.draw_rot(@shape.body.p.x, @shape.body.p.y - @scene.height, @z_index, @shape.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
     end
-
-    # #Draw children
-    # @mini_mes.each {|o| o.draw}
 
     self
   end

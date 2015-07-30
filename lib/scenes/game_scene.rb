@@ -39,10 +39,15 @@ class GameScene < Scene
     @player = Player.new(self)
 
 
-    @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
-    @space.add_body(@ufo.shape.body)
-    @space.add_shape(@ufo.shape)
-
+    @ufos = []
+    mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
+    @ufos << mother
+    @ufos << mother.spawn_baby
+    @ufos << mother.spawn_baby
+    @ufos.each {|ufo|
+      @space.add_body(ufo.shape.body)
+      @space.add_shape(ufo.shape)
+    }
 
     @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
@@ -71,7 +76,7 @@ class GameScene < Scene
     
     @test_player.update
 
-    @ufo.update
+    @ufos.each(&:update)
 
     @space.step(1.0/60.0)
 
@@ -90,7 +95,7 @@ class GameScene < Scene
     end
     @player.draw
     @test_player.draw
-    @ufo.draw
+    @ufos.each(&:draw)
 
     @dialog.draw
 
