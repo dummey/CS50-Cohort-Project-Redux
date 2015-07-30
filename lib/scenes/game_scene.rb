@@ -19,7 +19,7 @@ class GameScene < Scene
     
     @space.add_collision_handler(:ship, :ship) do |player, test_player|
       self.lose
-      puts "collided"
+      true
     end
 
     @lives = $CONFIG[:initialize_lives]
@@ -76,7 +76,7 @@ class GameScene < Scene
 
     @dialog.update
 
-    @title.update if @title
+    @lose.update if @lose
     
     self
   end
@@ -95,7 +95,7 @@ class GameScene < Scene
 
     @dialog.draw
 
-    @title.draw if @title
+    @lose.draw if @lose
 
     self
   end
@@ -118,7 +118,7 @@ class GameScene < Scene
   end
 
   def lose
-    @title = Title.new(self, text: "YOU LOSE FOOL!")
+    @lose ||= Title.new(self, text: "YOU LOSE FOOL!")
   end
 
 end
