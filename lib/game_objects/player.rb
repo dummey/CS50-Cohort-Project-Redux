@@ -9,6 +9,7 @@ class Player < GameObject
     @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
     @body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
+    scene.space.add_shape(@shape)
     @shape.collision_type = :ship
   end
 
