@@ -94,6 +94,13 @@ class GameScene < Scene
     if id == Gosu::KbA
       self.lose
     end
+    if id == Gosu::KbF
+      asteroids_add = []
+      @asteroids.each do |asteroid|
+        asteroids_add.push(*asteroid.die)
+      end
+      @asteroids.push(*asteroids_add)
+    end
   end
 
   def button_up(id)
@@ -103,4 +110,5 @@ class GameScene < Scene
   def lose
     @title = Title.new(self, text: "YOU LOSE FOOL!")
   end
+
 end

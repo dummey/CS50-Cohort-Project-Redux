@@ -28,5 +28,10 @@ class Asteroid < GameObject
   end
 
   def die
+    @asteroids_die = []
+    @asteroids_die << Asteroid.new(@scene)
+    @asteroids_die << Asteroid.new(@scene)
+    @asteroids_die << Asteroid.new(@scene)
+    return @asteroids_die
   end
 end
