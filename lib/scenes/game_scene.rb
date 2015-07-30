@@ -37,9 +37,12 @@ class GameScene < Scene
     @asteroids << Asteroid.new(self)
     @asteroids << Asteroid.new(self)
     @player = Player.new(self)
+
+
     @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
-    @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
-    @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
+    @space.add_body(@ufo.shape.body)
+    @space.add_shape(@ufo.shape)
+
 
     @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
@@ -69,8 +72,6 @@ class GameScene < Scene
     @test_player.update
 
     @ufo.update
-    @ufo2.update
-    @ufo3.update
 
     @space.step(1.0/60.0)
 
@@ -90,8 +91,6 @@ class GameScene < Scene
     @player.draw
     @test_player.draw
     @ufo.draw
-    @ufo2.draw
-    @ufo3.draw
 
     @dialog.draw
 
