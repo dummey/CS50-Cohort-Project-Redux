@@ -3,11 +3,13 @@ require 'game_object'
 class Player < GameObject
   def initialize(scene)
     super(scene)
+    @image = Gosu::Image.new("media/PNG/playerShip3_green.png")
     @body = CP::Body.new(10.0, 150.0)
+    @shape = CP::Shape::Circle.new(@body, @image.width, CP::Vec2::ZERO)
     @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
     @body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
-    @image = Gosu::Image.new("media/PNG/playerShip3_green.png")
+    @shape.collision_type = :ship
   end
 
   def thrust(scalar)

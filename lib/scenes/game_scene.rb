@@ -14,6 +14,13 @@ class GameScene < Scene
     
     @space = CP::Space.new()
     @space.damping = 0.8
+    
+    @test_player = Player.new(self)
+    
+    @space.add_collision_handler(:ship, :ship) do |player, test_player|
+      self.lose
+      puts "collided"
+    end
 
     @lives = $CONFIG[:initialize_lives]
     @score = $CONFIG[:initialize_score]
@@ -58,6 +65,8 @@ class GameScene < Scene
     end
 
     @player.update
+    
+    @test_player.update
 
     @ufo.update
     @ufo2.update
@@ -79,6 +88,7 @@ class GameScene < Scene
       asteroid.draw
     end
     @player.draw
+    @test_player.draw
     @ufo.draw
     @ufo2.draw
     @ufo3.draw
