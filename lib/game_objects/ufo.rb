@@ -15,7 +15,7 @@ class UFO < GameObject
       :spin_rate => Math::PI/20.0,
       :ai_interval => 1000,
       :z_index => 5, #$CONIFG[:z_index_ufo]
-      # :max_velocity => 50.0,
+      :max_velocity => 50.0,
       :max_acceleration => 100.0,
       :num_mini_me => 3,
       :follow => nil
@@ -30,7 +30,7 @@ class UFO < GameObject
     body = CP::Body.new(10.0, 150.0)
     body.p.x = @init_x_pos
     body.p.y = @init_y_pos
-    # body.v_limit = @max_velocity
+    body.v_limit = @max_velocity
     @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
     @shape.e = 50.0
 
