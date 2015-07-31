@@ -14,13 +14,6 @@ class GameScene < Scene
     
     @space = CP::Space.new()
     @space.damping = 0.8
-    
-    @test_player = Player.new(self)
-    
-    @space.add_collision_handler(:ship, :ship) do |player, test_player|
-      self.lose
-      puts "collided"
-    end
 
     @lives = $CONFIG[:initialize_lives]
     @score = $CONFIG[:initialize_score]
@@ -40,8 +33,53 @@ class GameScene < Scene
     @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
     @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
+    
+    self.create_universe_boundary
 
     @dialog = CharacterDialog.new(self, :duration => 5000) 
+  end
+  
+  def create_universe_boundary
+    edge = CP::Body.new_static()
+    up_left = vec2(0, 0)
+    up_right = vec2(self.width, 0)
+    down_left = vec2(0, self.height)
+    down_right = vec2(self.width, self.height)
+    @left = CP::Shape::Segment.new(edge, up_left, down_left, 1)
+    @left.collision_type = :left_edge
+    @left.sensor = true
+    @right = CP::Shape::Segment.new(edge, up_right, down_right, 1)
+    @right.collision_type = :right_edge
+    @right.sensor = true
+    @top = CP::Shape::Segment.new(edge, up_left, up_right, 1)
+    @top.collision_type = :top_edge
+    @top.sensor = true
+    @bottom = CP::Shape::Segment.new(edge, down_left, down_right, 1)
+    @bottom.collision_type = :bottom_edge
+    @bottom.sensor = true
+    @space.add_shape(@left)
+    @space.add_shape(@right)
+    @space.add_shape(@top)
+    @space.add_shape(@bottom)
+    handler = EdgeCollisionHandler.new(@player)
+    @space.add_collision_handler(:player, :left_edge, handler)
+    @space.add_collision_handler(:player, :right_edge, handler)
+    @space.add_collision_handler(:player, :top_edge, handler)
+    @space.add_collision_handler(:player, :bottom_edge, handler)
+  end
+
+  class EdgeCollisionHandler
+    def initialize(player)
+      @player = player
+    end
+    
+    def begin(a, b)
+      @player.display_ghost(b.collision_type, true)
+    end
+
+    def separate(a, b)
+      @player.display_ghost(b.collision_type, false)
+    end
   end
 
   def update
@@ -65,8 +103,6 @@ class GameScene < Scene
     end
 
     @player.update
-    
-    @test_player.update
 
     @ufo.update
     @ufo2.update
@@ -88,7 +124,6 @@ class GameScene < Scene
       asteroid.draw
     end
     @player.draw
-    @test_player.draw
     @ufo.draw
     @ufo2.draw
     @ufo3.draw

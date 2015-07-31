@@ -5,12 +5,17 @@ class Player < GameObject
     super(scene)
     @image = Gosu::Image.new("media/PNG/playerShip3_green.png")
     @body = CP::Body.new(10.0, 150.0)
-    @shape = CP::Shape::Circle.new(@body, @image.width, CP::Vec2::ZERO)
+    @shape = CP::Shape::Circle.new(@body, @image.width/2, CP::Vec2::ZERO)
     @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
     @body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
     scene.space.add_shape(@shape)
-    @shape.collision_type = :ship
+    @shape.collision_type = :player
+    @ghost = { left_edge: false, right_edge: false, top_edge: false, bottom_edge: false}
+  end
+
+  def display_ghost(edge, enabled)
+    @ghost[edge] = enabled
   end
 
   def thrust(scalar)
@@ -32,16 +37,19 @@ class Player < GameObject
     # draw main
     @image.draw_rot(@body.p.x, @body.p.y, 1, @body.a.radians_to_gosu)
     
-    # draw wrap around
-    if (@body.p.x < @image.width / 2)
+    # draw ghost
+    if @ghost[:left_edge]
       @image.draw_rot(@scene.width + @body.p.x, @body.p.y, 1, @body.a.radians_to_gosu)
-    elsif (@body.p.x > @scene.width + @image.width / 2)
+    end
+    if @ghost[:right_edge]
       @image.draw_rot(@body.p.x - @scene.width, @body.p.y, 1, @body.a.radians_to_gosu)
-    elsif (@body.p.y < @image.height / 2)
+    end
+    if @ghost[:top_edge]
       @image.draw_rot(@body.p.x, @scene.height + @body.p.y, 1, @body.a.radians_to_gosu)
-    elsif (@body.p.y > @scene.height + @image.height / 2)
+    end
+    if @ghost[:bottom_edge]
       @image.draw_rot(@body.p.x, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
     end
-
   end
+
 end
