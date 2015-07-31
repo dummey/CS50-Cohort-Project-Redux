@@ -30,12 +30,18 @@ class GameScene < Scene
     @asteroids << Asteroid.new(self)
     @asteroids << Asteroid.new(self)
     @player = Player.new(self)
-    @ufo = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
-    @ufo2 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][1])
-    @ufo3 = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][2])
-    
-    self.create_universe_boundary
 
+    @ufos = []
+    mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
+    @ufos << mother
+    @ufos << mother.spawn_baby
+    @ufos << mother.spawn_baby
+    @ufos.each {|ufo|
+      @space.add_body(ufo.shape.body)
+      @space.add_shape(ufo.shape)
+    }
+
+    self.create_universe_boundary
     @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
   
@@ -104,15 +110,13 @@ class GameScene < Scene
 
     @player.update
 
-    @ufo.update
-    @ufo2.update
-    @ufo3.update
+    @ufos.each(&:update)
 
     @space.step(1.0/60.0)
 
     @dialog.update
 
-    @title.update if @title
+    @lose.update if @lose
     
     self
   end
@@ -124,13 +128,11 @@ class GameScene < Scene
       asteroid.draw
     end
     @player.draw
-    @ufo.draw
-    @ufo2.draw
-    @ufo3.draw
-
+    @ufos.each(&:draw)
+    
     @dialog.draw
 
-    @title.draw if @title
+    @lose.draw if @lose
 
     self
   end
@@ -153,7 +155,7 @@ class GameScene < Scene
   end
 
   def lose
-    @title = Title.new(self, text: "YOU LOSE FOOL!")
+    @lose ||= Title.new(self, text: "YOU LOSE FOOL!")
   end
 
 end
