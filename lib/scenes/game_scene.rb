@@ -101,6 +101,9 @@ class GameScene < Scene
       end
       @asteroids.push(*asteroids_add)
     end
+    if id == Gosu::KbG
+      @asteroids.delete
+    end
   end
 
   def button_up(id)
