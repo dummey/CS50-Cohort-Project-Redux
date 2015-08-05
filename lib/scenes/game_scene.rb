@@ -149,7 +149,7 @@ class GameScene < Scene
       @asteroids.push(*asteroids_add)
     end
     if id == Gosu::KbG
-      @asteroids.delete
+      @asteroids.delete(@asteroid.new(self))
     end
   end
 
