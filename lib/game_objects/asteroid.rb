@@ -32,6 +32,7 @@ class Asteroid < GameObject
     @asteroids_die << Asteroid.new(@scene)
     @asteroids_die << Asteroid.new(@scene)
     @asteroids_die << Asteroid.new(@scene)
+    @asteroids.delete
     return @asteroids_die
   end
 end
