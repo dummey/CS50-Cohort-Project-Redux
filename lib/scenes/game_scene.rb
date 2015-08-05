@@ -142,14 +142,18 @@ class GameScene < Scene
       self.lose
     end
     if id == Gosu::KbF
-      asteroids_add = []
-      @asteroids.each do |asteroid|
-        asteroids_add.push(*asteroid.die)
+      dead_asteroids = []
+      baby_asteroids = []
+      @asteroids.each do |mother_asteroid|
+        new_baby_asteroids = mother_asteroid.die()
+        baby_asteroids.push(*new_baby_asteroids)
+        dead_asteroids << mother_asteroid
+        #remove mother asteroid from @asteroids
       end
-      @asteroids.push(*asteroids_add)
+      @asteroids = @asteroids - dead_asteroids
+      @asteroids.push(*baby_asteroids)
     end
     if id == Gosu::KbG
-      @asteroids.delete(@asteroid.new(self))
     end
   end
 
