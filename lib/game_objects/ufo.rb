@@ -38,6 +38,10 @@ class UFO < GameObject
     @last_ai_update = -1 * Float::INFINITY
   end
 
+  def body
+    @shape.body
+  end
+
   def accelerate(x, y)
     @shape.body.apply_force(CP::Vec2.new(x, y), CP::Vec2.new(0.0, 0.0))
   end
@@ -118,21 +122,30 @@ class UFO < GameObject
     self
   end
 
+  def _draw_vertical_wraparound
+    if (self.body.p.x < @image.width / 2)
+      @image.draw_rot(@scene.width + self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
+    elsif (self.body.p.x > @scene.width + @image.width / 2)
+      @image.draw_rot(self.body.p.x - @scene.width, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
+    end
+  end
+
+  def _draw_horizontal_wraparound
+    if (self.body.p.y < @image.height / 2)
+      @image.draw_rot(self.body.p.x, @scene.height + self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
+    elsif (self.body.p.y > @scene.height + @image.height / 2)
+      @image.draw_rot(self.body.p.x, self.body.p.y - @scene.height, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
+    end
+  end
+
   def draw
     #Draw main
 
-    @image.draw_rot(@shape.body.p.x, @shape.body.p.y, @z_index, @shape.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
+    @image.draw_rot(self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
 
     #Draw wrap-around
-    if (@shape.body.p.x < @image.width / 2)
-      @image.draw_rot(@scene.width + @shape.body.p.x, @shape.body.p.y, @z_index, @shape.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (@shape.body.p.x > @scene.width + @image.width / 2)
-      @image.draw_rot(@shape.body.p.x - @scene.width, @shape.body.p.y, @z_index, @shape.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (@shape.body.p.y < @image.height / 2)
-      @image.draw_rot(@shape.body.p.x, @scene.height + @shape.body.p.y, @z_index, @shape.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (@shape.body.p.y > @scene.height + @image.height / 2)
-      @image.draw_rot(@shape.body.p.x, @shape.body.p.y - @scene.height, @z_index, @shape.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    end
+    self._draw_vertical_wraparound
+    self._draw_horizontal_wraparound
 
     self
   end
