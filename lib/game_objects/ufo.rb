@@ -5,7 +5,6 @@ require 'game_objects/role/defaultable'
 
 class UFO < GameObject
   include DrawHelper
-  attr_reader :image
 
   include Defaultable
   def _defaults
@@ -25,21 +24,19 @@ class UFO < GameObject
       :follow => nil
     }
   end
-  
+
   attr_reader :shape
 
   def initialize(scene, params = {})
     super(scene)
     setup_defaults(params)
 
-    @image = Gosu::Image.new(@image_path)
-
     body = CP::Body.new(10.0, 150.0)
     body.p.x = @x_pos
     body.p.y = @y_pos
     body.v_limit = @max_velocity
 
-    @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
+    @shape = CP::Shape::Circle.new(body, image.width / 2 * @scale, CP::Vec2::ZERO)
     @shape.e = 0.5
     @shape.collision_type = :ufo
 
@@ -101,13 +98,13 @@ class UFO < GameObject
     #Draw main
     self.draw_centered(self.body.p.x, self.body.p.y)
 
-    if (self.body.p.y < @image.height / 2)
+    if (self.body.p.y < image.height / 2)
       self.draw_centered(self.body.p.x, @scene.height + self.body.p.y)
-    elsif (self.body.p.y > @scene.height + @image.height / 2)
+    elsif (self.body.p.y > @scene.height + image.height / 2)
       self.draw_centered(self.body.p.x, self.body.p.y - @scene.height)
-    elsif (self.body.p.x < @image.width / 2)
+    elsif (self.body.p.x < image.width / 2)
       self.draw_centered(@scene.width + self.body.p.x, self.body.p.y)
-    elsif (self.body.p.x > @scene.width + @image.width / 2)
+    elsif (self.body.p.x > @scene.width + image.width / 2)
       self.draw_centered(self.body.p.x - @scene.width, self.body.p.y)
     end
 
