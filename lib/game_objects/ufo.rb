@@ -2,6 +2,7 @@ require 'game_object'
 require 'game_objects/ui_components/character_dialog'
 require 'game_objects/role/draw_helper'
 require 'game_objects/role/defaultable'
+require 'game_objects/role/chipmunk_object'
 
 class UFO < GameObject
   include DrawHelper
@@ -9,21 +10,22 @@ class UFO < GameObject
   include Defaultable
   def _defaults
     {
-      :image_path => $CONFIG[:sprite_ufo].sample,
-      :x_pos => rand(0...@scene.width),
-      :y_pos => rand(0...@scene.height),
-      :scale => 0.5,
-      :mass => 4,
-      :moi => 150,
-      :spin_rate => Math::PI/20.0,
       :ai_interval => 100,
-      :z_index => 5, #$CONIFG[:z_index_ufo]
-      :max_velocity => 50.0,
-      :max_acceleration => 100.0,
-      :num_mini_me => 3,
       :follow => nil
+      :image_path => $CONFIG[:sprite_ufo].sample,
+      :init_x_pos => rand(0...@scene.width),
+      :init_y_pos => rand(0...@scene.height),
+      :mass => 4,
+      :max_acceleration => 100.0,
+      :max_velocity => 50.0,
+      :moment_of_inertia => 150,
+      :scale => 0.5,
+      :spin_rate => Math::PI/20.0,
+      :z_index => 5, #$CONIFG[:z_index_ufo]
     }
   end
+
+  include ChipmunkObject
 
   attr_reader :shape
 
@@ -31,21 +33,10 @@ class UFO < GameObject
     super(scene)
     setup_defaults(params)
 
-    body = CP::Body.new(10.0, 150.0)
-    body.p.x = @x_pos
-    body.p.y = @y_pos
-    body.v_limit = @max_velocity
-
-    @shape = CP::Shape::Circle.new(body, image.width / 2 * @scale, CP::Vec2::ZERO)
-    @shape.e = 0.5
-    @shape.collision_type = :ufo
+    setup_chipmunk
 
     @time_alive = 0
     @last_ai_update = -1 * Float::INFINITY
-  end
-
-  def body
-    @shape.body
   end
 
   def accelerate(x, y)
@@ -82,7 +73,7 @@ class UFO < GameObject
   end
 
   def update
-    self._ai
+    _ai
 
     #Spinnnn!
     @shape.body.a += @spin_rate
@@ -96,16 +87,16 @@ class UFO < GameObject
 
   def draw
     #Draw main
-    self.draw_centered(self.body.p.x, self.body.p.y)
+    draw_centered(self.body.p.x, self.body.p.y)
 
     if (self.body.p.y < image.height / 2)
-      self.draw_centered(self.body.p.x, @scene.height + self.body.p.y)
+      draw_centered(self.body.p.x, @scene.height + self.body.p.y)
     elsif (self.body.p.y > @scene.height + image.height / 2)
-      self.draw_centered(self.body.p.x, self.body.p.y - @scene.height)
+      draw_centered(self.body.p.x, self.body.p.y - @scene.height)
     elsif (self.body.p.x < image.width / 2)
-      self.draw_centered(@scene.width + self.body.p.x, self.body.p.y)
+      draw_centered(@scene.width + self.body.p.x, self.body.p.y)
     elsif (self.body.p.x > @scene.width + image.width / 2)
-      self.draw_centered(self.body.p.x - @scene.width, self.body.p.y)
+      draw_centered(self.body.p.x - @scene.width, self.body.p.y)
     end
 
     self
