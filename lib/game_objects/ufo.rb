@@ -48,7 +48,7 @@ class UFO < GameObject
   def accelerate(x, y)
     @shape.body.reset_forces
     @shape.body.apply_force(
-      CP::Vec2.new(x, y), 
+      CP::Vec2.new(x, y),
       CP::Vec2::ZERO
     )
   end
@@ -60,16 +60,6 @@ class UFO < GameObject
         x_pos = @follow.shape.body.p.x - @shape.body.p.x
         y_pos = @follow.shape.body.p.y - @shape.body.p.y
 
-        p x_pos, y_pos
-        # self.accelerate(x_pos, y_pos)
-        # if x_pos.abs < 200
-        #   self.accelerate(200 - x_pos.abs * 1000, 0)
-        # end
-
-        # if y_pos.abs < 200
-        #   self.accelerate(0, 200 - y_pos.abs * 1000)
-        # end
-
         self.accelerate(x_pos * 100, y_pos * 100)
       else
         self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
@@ -80,12 +70,12 @@ class UFO < GameObject
   end
 
   def spawn_baby
-    UFO.new(@scene, :scale => @scale / 2, 
-      :mase => @mass / 4, 
-      :init_x_pos => self.body.p.x, 
-      :init_y_pos => self.body.p.y,
-      :follow => self,
-      :max_velocity => @max_velocity * 10)
+    UFO.new(@scene, :scale => @scale / 2,
+            :mase => @mass / 4,
+            :init_x_pos => self.body.p.x,
+            :init_y_pos => self.body.p.y,
+            :follow => self,
+            :max_velocity => @max_velocity * 10)
   end
 
   def update
