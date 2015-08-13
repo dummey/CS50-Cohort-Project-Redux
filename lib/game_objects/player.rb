@@ -11,11 +11,11 @@ class Player < GameObject
     scene.space.add_body(@body)
     scene.space.add_shape(@shape)
     @shape.collision_type = :player
-    @ghost = { left_edge: false, right_edge: false, top_edge: false, bottom_edge: false}
+    @boundary = { left_edge: false, right_edge: false, top_edge: false, bottom_edge: false}
   end
 
   def display_ghost(edge, enabled)
-    @ghost[edge] = enabled
+    @boundary[edge] = enabled
   end
 
   def thrust(scalar)
@@ -38,17 +38,29 @@ class Player < GameObject
     @image.draw_rot(@body.p.x, @body.p.y, 1, @body.a.radians_to_gosu)
     
     # draw ghost
-    if @ghost[:left_edge]
-      @image.draw_rot(@scene.width + @body.p.x, @body.p.y, 1, @body.a.radians_to_gosu)
+    if @boundary[:left_edge]
+      @image.draw_rot(@body.p.x + @scene.width, @body.p.y, 1, @body.a.radians_to_gosu)
     end
-    if @ghost[:right_edge]
+    if @boundary[:right_edge]
       @image.draw_rot(@body.p.x - @scene.width, @body.p.y, 1, @body.a.radians_to_gosu)
     end
-    if @ghost[:top_edge]
-      @image.draw_rot(@body.p.x, @scene.height + @body.p.y, 1, @body.a.radians_to_gosu)
+    if @boundary[:top_edge]
+      @image.draw_rot(@body.p.x, @body.p.y + @scene.height, 1, @body.a.radians_to_gosu)
     end
-    if @ghost[:bottom_edge]
+    if @boundary[:bottom_edge]
       @image.draw_rot(@body.p.x, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
+    end
+    if @boundary[:top_edge] && @boundary[:left_edge]
+      @image.draw_rot(@body.p.x + @scene.width, @body.p.y + @scene.height, 1, @body.a.radians_to_gosu)
+    end
+    if @boundary[:top_edge] && @boundary[:right_edge]
+      @image.draw_rot(@body.p.x - @scene.width, @body.p.y + @scene.height, 1, @body.a.radians_to_gosu)
+    end
+    if @boundary[:bottom_edge] && @boundary[:right_edge]
+      @image.draw_rot(@body.p.x - @scene.width, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
+    end
+    if @boundary[:bottom_edge] && @boundary[:left_edge]
+      @image.draw_rot(@body.p.x + @scene.width, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
     end
   end
 
