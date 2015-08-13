@@ -1,17 +1,19 @@
 require 'game_object'
 require 'game_objects/ui_components/character_dialog'
 require 'game_objects/role/draw_helper'
+require 'game_objects/role/defaultable'
 
 class UFO < GameObject
   include DrawHelper
+  include Defaultable
 
   attr_reader :shape, :image
 
-  def _defaults(params)
+  def _defaults
     {
       :image_path => $CONFIG[:sprite_ufo].sample,
-      :init_x_pos => rand(0...@scene.width),
-      :init_y_pos => rand(0...@scene.height),
+      :x_pos => rand(0...@scene.width),
+      :y_pos => rand(0...@scene.height),
       :scale => 0.5,
       :mass => 4,
       :moi => 150,
@@ -22,18 +24,18 @@ class UFO < GameObject
       :max_acceleration => 100.0,
       :num_mini_me => 3,
       :follow => nil
-    }.merge(params)
+    }
   end
 
   def initialize(scene, params = {})
     super(scene)
-    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+    setup_defaults(params)
 
     @image = Gosu::Image.new(@image_path)
 
     body = CP::Body.new(10.0, 150.0)
-    body.p.x = @init_x_pos
-    body.p.y = @init_y_pos
+    body.p.x = @x_pos
+    body.p.y = @y_pos
     body.v_limit = @max_velocity
 
     @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
@@ -96,8 +98,6 @@ class UFO < GameObject
 
   def draw
     #Draw main
-
-
     self.draw_centered(self.body.p.x, self.body.p.y)
 
     if (self.body.p.y < @image.height / 2)
