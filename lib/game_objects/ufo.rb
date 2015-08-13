@@ -13,7 +13,7 @@ class UFO < GameObject
       :mass => 4,
       :moi => 150,
       :spin_rate => Math::PI/20.0,
-      :ai_interval => 1000,
+      :ai_interval => 100,
       :z_index => 5, #$CONIFG[:z_index_ufo]
       :max_velocity => 50.0,
       :max_acceleration => 100.0,
@@ -27,10 +27,12 @@ class UFO < GameObject
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
     @image = Gosu::Image.new(@image_path)
+
     body = CP::Body.new(10.0, 150.0)
     body.p.x = @init_x_pos
     body.p.y = @init_y_pos
     body.v_limit = @max_velocity
+
     @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
     @shape.e = 0.5
     @shape.collision_type = :ufo
@@ -44,52 +46,21 @@ class UFO < GameObject
   end
 
   def accelerate(x, y)
-    @shape.body.apply_force(CP::Vec2.new(x, y), CP::Vec2.new(0.0, 0.0))
+    @shape.body.reset_forces
+    @shape.body.apply_force(
+      CP::Vec2.new(x, y), 
+      CP::Vec2::ZERO
+    )
   end
-
-  #deals with wrap around logic
-  # def accelerate_towards(x, y, magnitude = @max_acceleration / 2)
-  #   # horizontal
-  #   right_distance = 0
-  #   left_distance = 0
-  #   if (@x_pos < x)
-  #     right_distance = x - @x_pos
-  #     left_distance =  @scene.width - x + x_pos
-  #   else
-  #     right_distance = @scene.width - @x_pos + x
-  #     left_distance = @x_pos - x
-  #   end
-
-  #   if (right_distance < left_distance)
-  #     self.accelerate(magnitude, 0)
-  #   else
-  #     self.accelerate(-magnitude, 0)
-  #   end
-
-  #   #vertical
-  #   bottom_distance = 0
-  #   top_distance = 0
-  #   if (@y_pos < y)
-  #     bottom_distance = y - @y_pos
-  #     top_distance =  @scene.height - y + y_pos
-  #   else
-  #     bottom_distance = @scene.height - @y_pos + y
-  #     top_distance = @y_pos - y
-  #   end
-
-  #   if (bottom_distance < top_distance)
-  #     self.accelerate(0, magnitude)
-  #   else
-  #     self.accelerate(0, -magnitude)
-  #   end
-  # end
 
   def _ai
     @time_alive += @scene.update_interval
     if (@time_alive - @last_ai_update > @ai_interval)
       if @follow
-        # x_pos = @follow.shape.body.p.x - @shape.body.p.x
-        # y_pos = @follow.shape.body.p.y - @shape.body.p.y
+        x_pos = @follow.shape.body.p.x - @shape.body.p.x
+        y_pos = @follow.shape.body.p.y - @shape.body.p.y
+
+        p x_pos, y_pos
         # self.accelerate(x_pos, y_pos)
         # if x_pos.abs < 200
         #   self.accelerate(200 - x_pos.abs * 1000, 0)
@@ -98,6 +69,8 @@ class UFO < GameObject
         # if y_pos.abs < 200
         #   self.accelerate(0, 200 - y_pos.abs * 1000)
         # end
+
+        self.accelerate(x_pos * 100, y_pos * 100)
       else
         self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
                         Gosu::random(-@max_acceleration, @max_acceleration))
@@ -107,7 +80,12 @@ class UFO < GameObject
   end
 
   def spawn_baby
-    UFO.new(@scene, :scale => @scale / 2, :mase => @mass / 4)
+    UFO.new(@scene, :scale => @scale / 2, 
+      :mase => @mass / 4, 
+      :init_x_pos => self.body.p.x, 
+      :init_y_pos => self.body.p.y,
+      :follow => self,
+      :max_velocity => @max_velocity * 10)
   end
 
   def update

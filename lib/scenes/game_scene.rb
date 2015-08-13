@@ -35,7 +35,7 @@ class GameScene < Scene
     mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufos << mother
     @ufos << mother.spawn_baby
-    @ufos << mother.spawn_baby
+    # @ufos << mother.spawn_baby
     @ufos.each {|ufo|
       @space.add_body(ufo.shape.body)
       @space.add_shape(ufo.shape)
