@@ -5,10 +5,9 @@ require 'game_objects/role/defaultable'
 
 class UFO < GameObject
   include DrawHelper
+  attr_reader :image
+
   include Defaultable
-
-  attr_reader :shape, :image
-
   def _defaults
     {
       :image_path => $CONFIG[:sprite_ufo].sample,
@@ -26,6 +25,8 @@ class UFO < GameObject
       :follow => nil
     }
   end
+  
+  attr_reader :shape
 
   def initialize(scene, params = {})
     super(scene)

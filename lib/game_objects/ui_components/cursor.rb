@@ -1,16 +1,19 @@
 require 'game_object'
+require 'game_objects/role/defaultable'
 
 class Cursor < GameObject
-  def _defaults(params)
+  include Defaultable
+
+  def _defaults
     {
       :cursor_image_path => $MEDIA_ROOT + "/PNG/UI/cursor.png",
       :z_index => 200,
-    }.merge(params)
+    }
   end
 
   def initialize(scene, params = {})
     super(scene)
-    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+    setup_defaults(params)
 
     @cursor_image = Gosu::Image.new(@cursor_image_path)
   end
