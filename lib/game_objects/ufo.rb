@@ -1,8 +1,11 @@
 require 'game_object'
 require 'game_objects/ui_components/character_dialog'
+require 'game_objects/role/draw_helper'
 
 class UFO < GameObject
-  attr_reader :shape
+  include DrawHelper
+
+  attr_reader :shape, :image
 
   def _defaults(params)
     {
@@ -94,7 +97,8 @@ class UFO < GameObject
   def draw
     #Draw main
 
-    @image.draw_rot(self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
+
+    self.draw_centered(self.body.p.x, self.body.p.y)
 
     if (self.body.p.y < @image.height / 2)
       @image.draw_rot(self.body.p.x, @scene.height + self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
