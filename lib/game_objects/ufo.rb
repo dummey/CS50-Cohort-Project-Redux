@@ -11,7 +11,7 @@ class UFO < GameObject
   def _defaults
     {
       :ai_interval => 100,
-      :follow => nil
+      :follow => nil,
       :image_path => $CONFIG[:sprite_ufo].sample,
       :init_x_pos => rand(0...@scene.width),
       :init_y_pos => rand(0...@scene.height),
