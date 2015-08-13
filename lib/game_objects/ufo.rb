@@ -123,22 +123,6 @@ class UFO < GameObject
     self
   end
 
-  def _draw_vertical_wraparound
-    if (self.body.p.x < @image.width / 2)
-      @image.draw_rot(@scene.width + self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (self.body.p.x > @scene.width + @image.width / 2)
-      @image.draw_rot(self.body.p.x - @scene.width, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    end
-  end
-
-  def _draw_horizontal_wraparound
-    if (self.body.p.y < @image.height / 2)
-      @image.draw_rot(self.body.p.x, @scene.height + self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (self.body.p.y > @scene.height + @image.height / 2)
-      @image.draw_rot(self.body.p.x, self.body.p.y - @scene.height, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    end
-  end
-
   def draw
     #Draw main
 
