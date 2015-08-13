@@ -61,7 +61,7 @@ class GameScene < Scene
     boundaries.each {|key, value| value.collision_type = key }
     boundaries.each_value {|value| @space.add_shape(value)} 
     handler = EdgeCollisionHandler.new(@player)
-    boundaries.each_key {|key| @space.add_collision_handler(:player, key, handler)}
+    boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, handler)}
   end
 
   class EdgeCollisionHandler
