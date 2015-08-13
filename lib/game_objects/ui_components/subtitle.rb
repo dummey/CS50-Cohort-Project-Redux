@@ -1,10 +1,10 @@
 require 'game_object'
 
-class Title < GameObject
+class Subtitle < GameObject
   def _defaults(params)
     {
-      :x_pos => @scene.width / 2,
-      :y_pos => @scene.height * 1/3,
+      :x_pos => @scene.width/2,
+      :y_pos => @scene.height/2,
       :z_index => 10,
       :scale => 1,
       :text => 'PLACEHOLDER',
@@ -15,7 +15,7 @@ class Title < GameObject
     super(scene)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    @font = Gosu::Font.new(128, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
+    @font = Gosu::Font.new(35, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
   end
 
   def update
