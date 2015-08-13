@@ -41,6 +41,7 @@ class GameScene < Scene
       @space.add_shape(ufo.shape)
     }
 
+    @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
     self.create_universe_boundary
     @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
@@ -76,6 +77,14 @@ class GameScene < Scene
     def separate(a, b)
       @player.display_ghost(b.collision_type, false)
     end
+  end
+
+  def decrease_lives
+    @lives -= 1
+    if @lives == 0
+      self.lose
+    end
+    @player.reset
   end
 
   def update

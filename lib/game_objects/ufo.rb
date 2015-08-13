@@ -33,6 +33,7 @@ class UFO < GameObject
     body.v_limit = @max_velocity
     @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
     @shape.e = 0.5
+    @shape.collision_type = :ufo
 
     @time_alive = 0
     @last_ai_update = -1 * Float::INFINITY
