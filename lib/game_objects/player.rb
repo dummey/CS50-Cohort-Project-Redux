@@ -1,4 +1,5 @@
 require 'game_object'
+require 'pp'
 
 class Player < GameObject
   def initialize(scene)
@@ -34,15 +35,21 @@ class Player < GameObject
     #wrap around the field
     @body.p.x = @body.p.x % @scene.width
     @body.p.y = @body.p.y % @scene.height
+
+    if @reset
+      @body.activate
+      @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
+      @body.a = 0.gosu_to_radians
+      @body.v = CP::Vec2::ZERO
+      @body.w = 0
+      @body.reset_forces
+
+      @reset = false
+    end 
   end
 
   def reset
-    @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-    @body.a = 0.gosu_to_radians
-    @body.v = CP::Vec2::ZERO
-    @body.w = 0
-    @body.reset_forces
-    #add invulnerability
+    @reset = true
   end
 
   def draw
