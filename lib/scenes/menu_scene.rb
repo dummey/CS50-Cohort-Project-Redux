@@ -40,13 +40,10 @@ class MenuScene < Scene
     @title = Title.new(self, text: "ASTEROIDSSS!")
     @game_objects.push(@title)
 
-    @subtitle_a = Subtitle.new(self, text: "Use the arrow keys to move your       ", y_pos: 350)
-    @game_objects.push(@subtitle_a)
+    @subtitle = Subtitle.new(self)
+    @game_objects.push(@subtitle)
 
-    @subtitle_b = Subtitle.new(self, text: "and the space bar to shoot lasers!", y_pos: 400)
-    @game_objects.push(@subtitle_b)
-
-    @spaceship = Gosu::Image.new("media/PNG/playerShip3_green.png")
+    #@spaceship = Gosu::Image.new("media/PNG/playerShip3_green.png")
 
   end
 
@@ -70,7 +67,7 @@ class MenuScene < Scene
 
   def draw
     super
-    @spaceship.draw(800, 325, 1, 0.5, 0.5)
+    #@spaceship.draw(800, 325, 1, 0.5, 0.5)
     self
   end
 
