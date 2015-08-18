@@ -35,12 +35,13 @@ class GameScene < Scene
     mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufos << mother
     @ufos << mother.spawn_baby
-    @ufos << mother.spawn_baby
+    # @ufos << mother.spawn_baby
     @ufos.each {|ufo|
       @space.add_body(ufo.shape.body)
       @space.add_shape(ufo.shape)
     }
 
+    @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
     self.create_universe_boundary
     @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
@@ -61,7 +62,7 @@ class GameScene < Scene
     boundaries.each {|key, value| value.collision_type = key }
     boundaries.each_value {|value| @space.add_shape(value)} 
     handler = EdgeCollisionHandler.new(@player)
-    boundaries.each_key {|key| @space.add_collision_handler(:player, key, handler)}
+    boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, handler)}
   end
 
   class EdgeCollisionHandler
@@ -76,6 +77,14 @@ class GameScene < Scene
     def separate(a, b)
       @player.display_ghost(b.collision_type, false)
     end
+  end
+
+  def decrease_lives
+    @lives -= 1
+    if @lives == 0
+      self.lose
+    end
+    @player.reset
   end
 
   def update

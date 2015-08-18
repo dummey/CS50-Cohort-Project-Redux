@@ -1,16 +1,21 @@
 require 'game_object'
+require 'pp'
 
 class Player < GameObject
   def initialize(scene)
     super(scene)
     @image = Gosu::Image.new("media/PNG/playerShip3_green.png")
     @body = CP::Body.new(10.0, 150.0)
-    @shape = CP::Shape::Circle.new(@body, @image.width/2, CP::Vec2::ZERO)
+    @shape_boundary = CP::Shape::Circle.new(@body, @image.width/2, CP::Vec2::ZERO)
+    @shape_boundary.sensor = true
+    @shape_boundary.collision_type = :player_sensor
+    @shape_collide = CP::Shape::Circle.new(@body, @image.width/4, CP::Vec2::ZERO)
+    @shape_collide.collision_type = :player
     @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
     @body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
-    scene.space.add_shape(@shape)
-    @shape.collision_type = :player
+    scene.space.add_shape(@shape_boundary)
+    scene.space.add_shape(@shape_collide)
     @boundary = { left_edge: false, right_edge: false, top_edge: false, bottom_edge: false}
   end
 
@@ -30,6 +35,21 @@ class Player < GameObject
     #wrap around the field
     @body.p.x = @body.p.x % @scene.width
     @body.p.y = @body.p.y % @scene.height
+
+    if @reset
+      @body.activate
+      @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
+      @body.a = 0.gosu_to_radians
+      @body.v = CP::Vec2::ZERO
+      @body.w = 0
+      @body.reset_forces
+
+      @reset = false
+    end 
+  end
+
+  def reset
+    @reset = true
   end
 
   def draw

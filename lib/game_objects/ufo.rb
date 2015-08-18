@@ -1,102 +1,60 @@
 require 'game_object'
 require 'game_objects/ui_components/character_dialog'
+require 'game_objects/role/draw_helper'
+require 'game_objects/role/defaultable'
+require 'game_objects/role/chipmunk_object'
 
 class UFO < GameObject
-  attr_reader :shape
+  include DrawHelper
 
-  def _defaults(params)
+  include Defaultable
+  def _defaults
     {
+      :ai_interval => 100,
+      :follow => nil,
       :image_path => $CONFIG[:sprite_ufo].sample,
       :init_x_pos => rand(0...@scene.width),
       :init_y_pos => rand(0...@scene.height),
-      :scale => 0.5,
       :mass => 4,
-      :moi => 150,
-      :spin_rate => Math::PI/20.0,
-      :ai_interval => 1000,
-      :z_index => 5, #$CONIFG[:z_index_ufo]
-      :max_velocity => 50.0,
       :max_acceleration => 100.0,
-      :num_mini_me => 3,
-      :follow => nil
-    }.merge(params)
+      :max_velocity => 50.0,
+      :moment_of_inertia => 150,
+      :scale => 0.5,
+      :spin_rate => Math::PI/20.0,
+      :z_index => 5, #$CONIFG[:z_index_ufo]
+    }
   end
+
+  include ChipmunkObject
+
+  attr_reader :shape
 
   def initialize(scene, params = {})
     super(scene)
-    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+    setup_defaults(params)
 
-    @image = Gosu::Image.new(@image_path)
-    body = CP::Body.new(10.0, 150.0)
-    body.p.x = @init_x_pos
-    body.p.y = @init_y_pos
-    body.v_limit = @max_velocity
-    @shape = CP::Shape::Circle.new(body, @image.width / 2 * @scale, CP::Vec2::ZERO)
-    @shape.e = 50.0
+    setup_chipmunk
 
     @time_alive = 0
     @last_ai_update = -1 * Float::INFINITY
   end
 
-  def body
-    @shape.body
-  end
-
   def accelerate(x, y)
-    @shape.body.apply_force(CP::Vec2.new(x, y), CP::Vec2.new(0.0, 0.0))
+    @shape.body.reset_forces
+    @shape.body.apply_force(
+      CP::Vec2.new(x, y),
+      CP::Vec2::ZERO
+    )
   end
-
-  #deals with wrap around logic
-  # def accelerate_towards(x, y, magnitude = @max_acceleration / 2)
-  #   # horizontal
-  #   right_distance = 0
-  #   left_distance = 0
-  #   if (@x_pos < x)
-  #     right_distance = x - @x_pos
-  #     left_distance =  @scene.width - x + x_pos
-  #   else
-  #     right_distance = @scene.width - @x_pos + x
-  #     left_distance = @x_pos - x
-  #   end
-
-  #   if (right_distance < left_distance)
-  #     self.accelerate(magnitude, 0)
-  #   else
-  #     self.accelerate(-magnitude, 0)
-  #   end
-
-  #   #vertical
-  #   bottom_distance = 0
-  #   top_distance = 0
-  #   if (@y_pos < y)
-  #     bottom_distance = y - @y_pos
-  #     top_distance =  @scene.height - y + y_pos
-  #   else
-  #     bottom_distance = @scene.height - @y_pos + y
-  #     top_distance = @y_pos - y
-  #   end
-
-  #   if (bottom_distance < top_distance)
-  #     self.accelerate(0, magnitude)
-  #   else
-  #     self.accelerate(0, -magnitude)
-  #   end
-  # end
 
   def _ai
     @time_alive += @scene.update_interval
     if (@time_alive - @last_ai_update > @ai_interval)
       if @follow
-        # x_pos = @follow.shape.body.p.x - @shape.body.p.x
-        # y_pos = @follow.shape.body.p.y - @shape.body.p.y
-        # self.accelerate(x_pos, y_pos)
-        # if x_pos.abs < 200
-        #   self.accelerate(200 - x_pos.abs * 1000, 0)
-        # end
+        x_pos = @follow.shape.body.p.x - @shape.body.p.x
+        y_pos = @follow.shape.body.p.y - @shape.body.p.y
 
-        # if y_pos.abs < 200
-        #   self.accelerate(0, 200 - y_pos.abs * 1000)
-        # end
+        self.accelerate(x_pos * 100, y_pos * 100)
       else
         self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
                         Gosu::random(-@max_acceleration, @max_acceleration))
@@ -106,11 +64,16 @@ class UFO < GameObject
   end
 
   def spawn_baby
-    UFO.new(@scene, :scale => @scale / 2, :mase => @mass / 4)
+    UFO.new(@scene, :scale => @scale / 2,
+            :mase => @mass / 4,
+            :init_x_pos => self.body.p.x,
+            :init_y_pos => self.body.p.y,
+            :follow => self,
+            :max_velocity => @max_velocity * 10)
   end
 
   def update
-    self._ai
+    _ai
 
     #Spinnnn!
     @shape.body.a += @spin_rate
@@ -122,30 +85,19 @@ class UFO < GameObject
     self
   end
 
-  def _draw_vertical_wraparound
-    if (self.body.p.x < @image.width / 2)
-      @image.draw_rot(@scene.width + self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (self.body.p.x > @scene.width + @image.width / 2)
-      @image.draw_rot(self.body.p.x - @scene.width, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    end
-  end
-
-  def _draw_horizontal_wraparound
-    if (self.body.p.y < @image.height / 2)
-      @image.draw_rot(self.body.p.x, @scene.height + self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    elsif (self.body.p.y > @scene.height + @image.height / 2)
-      @image.draw_rot(self.body.p.x, self.body.p.y - @scene.height, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-    end
-  end
-
   def draw
     #Draw main
+    draw_centered(self.body.p.x, self.body.p.y)
 
-    @image.draw_rot(self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
-
-    #Draw wrap-around
-    self._draw_vertical_wraparound
-    self._draw_horizontal_wraparound
+    if (self.body.p.y < image.height / 2)
+      draw_centered(self.body.p.x, @scene.height + self.body.p.y)
+    elsif (self.body.p.y > @scene.height + image.height / 2)
+      draw_centered(self.body.p.x, self.body.p.y - @scene.height)
+    elsif (self.body.p.x < image.width / 2)
+      draw_centered(@scene.width + self.body.p.x, self.body.p.y)
+    elsif (self.body.p.x > @scene.width + image.width / 2)
+      draw_centered(self.body.p.x - @scene.width, self.body.p.y)
+    end
 
     self
   end
