@@ -5,6 +5,7 @@ class Asteroid < GameObject
     super(scene)
 
     @asteroid_image = Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png", :tileable => true)
+    @baby_asteroids = Gosu::Image.new("media/PNG/Meteors/meteorGrey_small1.png", :tileable => true)
     @x_velocity = rand(-100...100)
     @y_velocity = rand(-100...100)
     if(x_position)
@@ -33,6 +34,7 @@ class Asteroid < GameObject
   def draw
 #    @asteroid_image.draw(@x_position, @y_position, 1)
     @asteroid_image.draw_rot(@x_position, @y_position, 1, @rotation_angular)
+    @baby_asteroids.draw_rot(@x_position, @y_position, 1, @rotation_angular)
   end
 
   def die
