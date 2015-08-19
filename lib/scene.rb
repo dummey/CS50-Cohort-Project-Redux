@@ -43,4 +43,24 @@ class Scene
   def button_up(id)
     @game_objects.each {|o| o.button_up(id)}
   end
+
+  # Handles the wrap around world stuff
+  def direction_to(a, b)
+    delta_x = a.body.p.x - b.body.p.x
+    delta_y = a.body.p.y - b.body.p.y
+    
+    if (delta_x.abs) > width / 2
+      delta_x = delta_x
+    else 
+      delta_x = -delta_x
+    end
+
+    if (delta_y.abs) > width / 2
+      delta_y = delta_y
+    else
+      delta_y = -delta_y
+    end
+
+    return [delta_x, delta_y]
+  end
 end

@@ -51,10 +51,9 @@ class UFO < GameObject
     @time_alive += @scene.update_interval
     if (@time_alive - @last_ai_update > @ai_interval)
       if @follow
-        x_pos = @follow.shape.body.p.x - @shape.body.p.x
-        y_pos = @follow.shape.body.p.y - @shape.body.p.y
+        (x, y) = @scene.direction_to(self, @follow)
 
-        self.accelerate(x_pos * 100, y_pos * 100)
+        self.accelerate(x * 100, y * 100)
       else
         self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
                         Gosu::random(-@max_acceleration, @max_acceleration))
