@@ -11,7 +11,7 @@ class GameHUD
 
   def _draw_lives
     @scene.lives.times do |i|
-      @lives_icon.draw(10 + 40 * i, 10, 1)
+      @lives_icon.draw(10 + 40 * i, 10, 2)
     end
 
   end

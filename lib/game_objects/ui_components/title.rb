@@ -3,8 +3,8 @@ require 'game_object'
 class Title < GameObject
   def _defaults(params)
     {
-      :x_pos => 10,
-      :y_pos => 50,
+      :x_pos => @scene.width / 2,
+      :y_pos => @scene.height * 1/3,
       :z_index => 10,
       :scale => 1,
       :text => 'PLACEHOLDER',
@@ -24,8 +24,8 @@ class Title < GameObject
   end
 
   def draw
-    @font.draw_rel(@text, @scene.width / 2 + 2, @scene.height * 1/3 + 2, 10, 0.5, 0.5, @scale, @scale, 0x40_000000)
-    @font.draw_rel(@text, @scene.width / 2, @scene.height * 1/3, 10, 0.5, 0.5)
+    @font.draw_rel(@text, @x_pos + 2, @y_pos + 2, @z_index, 0.5, 0.5, @scale, @scale, 0x40_000000)
+    @font.draw_rel(@text, @x_pos, @y_pos, @z_index, 0.5, 0.5)
 
     self
   end

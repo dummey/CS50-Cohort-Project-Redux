@@ -35,12 +35,13 @@ class GameScene < Scene
     mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
     @ufos << mother
     @ufos << mother.spawn_baby
-    @ufos << mother.spawn_baby
+    # @ufos << mother.spawn_baby
     @ufos.each {|ufo|
       @space.add_body(ufo.shape.body)
       @space.add_shape(ufo.shape)
     }
 
+    @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
     self.create_universe_boundary
     @dialog = CharacterDialog.new(self, :duration => 5000) 
   end
@@ -51,27 +52,17 @@ class GameScene < Scene
     up_right = vec2(self.width, 0)
     down_left = vec2(0, self.height)
     down_right = vec2(self.width, self.height)
-    @left = CP::Shape::Segment.new(edge, up_left, down_left, 1)
-    @left.collision_type = :left_edge
-    @left.sensor = true
-    @right = CP::Shape::Segment.new(edge, up_right, down_right, 1)
-    @right.collision_type = :right_edge
-    @right.sensor = true
-    @top = CP::Shape::Segment.new(edge, up_left, up_right, 1)
-    @top.collision_type = :top_edge
-    @top.sensor = true
-    @bottom = CP::Shape::Segment.new(edge, down_left, down_right, 1)
-    @bottom.collision_type = :bottom_edge
-    @bottom.sensor = true
-    @space.add_shape(@left)
-    @space.add_shape(@right)
-    @space.add_shape(@top)
-    @space.add_shape(@bottom)
+    boundaries = {
+      left_edge: CP::Shape::Segment.new(edge, up_left, down_left, 1),
+      right_edge: CP::Shape::Segment.new(edge, up_right, down_right, 1),
+      top_edge: CP::Shape::Segment.new(edge, up_left, up_right, 1),
+      bottom_edge: CP::Shape::Segment.new(edge, down_left, down_right, 1)
+    }
+    boundaries.each_value {|value| value.sensor = true}
+    boundaries.each {|key, value| value.collision_type = key }
+    boundaries.each_value {|value| @space.add_shape(value)} 
     handler = EdgeCollisionHandler.new(@player)
-    @space.add_collision_handler(:player, :left_edge, handler)
-    @space.add_collision_handler(:player, :right_edge, handler)
-    @space.add_collision_handler(:player, :top_edge, handler)
-    @space.add_collision_handler(:player, :bottom_edge, handler)
+    boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, handler)}
   end
 
   class EdgeCollisionHandler
@@ -86,6 +77,14 @@ class GameScene < Scene
     def separate(a, b)
       @player.display_ghost(b.collision_type, false)
     end
+  end
+
+  def decrease_lives
+    @lives -= 1
+    if @lives == 0
+      self.lose
+    end
+    @player.reset
   end
 
   def update

@@ -7,6 +7,7 @@ require 'game_objects/pulsing_star'
 require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
+require 'game_objects/ui_components/subtitle'
 
 class MenuScene < Scene
   def _defaults(params)
@@ -38,6 +39,12 @@ class MenuScene < Scene
     # @title = 
     @title = Title.new(self, text: "ASTEROIDSSS!")
     @game_objects.push(@title)
+
+    @subtitle = Subtitle.new(self)
+    @game_objects.push(@subtitle)
+
+    #@spaceship = Gosu::Image.new("media/PNG/playerShip3_green.png")
+
   end
 
   def update
@@ -60,7 +67,7 @@ class MenuScene < Scene
 
   def draw
     super
-    
+    #@spaceship.draw(800, 325, 1, 0.5, 0.5)
     self
   end
 
