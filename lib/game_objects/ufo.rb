@@ -4,6 +4,7 @@ require 'game_objects/role/draw_helper'
 require 'game_objects/role/defaultable'
 require 'game_objects/role/chipmunk_object'
 require 'game_objects/role/destroyable'
+require 'game_objects/explosion'
 
 class UFO < GameObject
   include DrawHelper
@@ -89,7 +90,7 @@ class UFO < GameObject
     @shape.body.p.x = @shape.body.p.x % @scene.width
     @shape.body.p.y = @shape.body.p.y % @scene.height
 
-    destroyed? ? nil : self
+    destroyed? ? Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25) : self
   end
 
   def draw
