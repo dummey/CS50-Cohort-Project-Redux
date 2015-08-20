@@ -1,11 +1,20 @@
 require 'game_object'
 
 class Asteroid < GameObject
-  def initialize(scene, x_position = nil, y_position = nil)
+  def initialize(scene, x_position = nil, y_position = nil, tier = 1)
     super(scene)
+    if tier == 1 
+      @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png")
 
-    @asteroid_image = Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png", :tileable => true)
-    @baby_asteroids = Gosu::Image.new("media/PNG/Meteors/meteorGrey_small1.png", :tileable => true)
+    elsif tier == 2
+      @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_med1.png")
+
+    elsif tier == 3
+      @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_small1.png")
+    end
+  
+      @tier=tier
+
     @x_velocity = rand(-100...100)
     @y_velocity = rand(-100...100)
     if(x_position)
@@ -34,14 +43,19 @@ class Asteroid < GameObject
   def draw
 #    @asteroid_image.draw(@x_position, @y_position, 1)
     @asteroid_image.draw_rot(@x_position, @y_position, 1, @rotation_angular)
-    @baby_asteroids.draw_rot(@x_position, @y_position, 1, @rotation_angular)
   end
 
+
   def die
+    if @tier == 3
+      return []
+    end
+
     @asteroids_die = []
-    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position)
-    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position)
-    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position)
+    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position, @tier+1)
+    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position, @tier+1)
+    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position, @tier+1)
+
     return @asteroids_die
   end
 end
