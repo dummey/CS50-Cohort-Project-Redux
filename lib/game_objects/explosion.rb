@@ -14,6 +14,7 @@ class Explosion < GameObject
       :direction => rand(-10...10),
       :color => Gosu::Color.argb(0, rand(200..255), rand(200..255), rand(200..255)),
       :scale => 0.25,
+      :sound_effect => "#{$MEDIA_ROOT}/Sound Effects/" + "Depth Charge 2-SoundBible.com-338644910.ogg"
     }
   end
 
@@ -23,6 +24,9 @@ class Explosion < GameObject
 
     @image = Gosu::Image.new(@image_path)
     @time_alive = 0
+
+    @sound_effect = Gosu::Sample.new(@sound_effect)
+    @sound_effect.play
   end
 
   def _pulse_cycle
