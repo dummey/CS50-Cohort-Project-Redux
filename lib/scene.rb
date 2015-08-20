@@ -55,10 +55,10 @@ class Scene
     else 
       # p "x wrap"
       delta_x = -delta_x
-      if delta_x < 0
-        delta_x += width / 2
-      else
+      if delta_x > 0
         delta_x -= width / 2
+      else
+        delta_x += width / 2
       end
     end
 
@@ -68,10 +68,10 @@ class Scene
     else
       # p "y wrap"
       delta_y = -delta_y
-      if delta_y < 0
-        delta_y += height / 2
-      else
+      if delta_y > 0
         delta_y -= height / 2
+      else
+        delta_y += height / 2
       end
     end
 
