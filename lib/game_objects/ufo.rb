@@ -37,7 +37,8 @@ class UFO < GameObject
     setup_defaults(params)
 
     setup_chipmunk
-
+    setup_boundary
+    
     @time_alive = 0
     @last_ai_update = -1 * Float::INFINITY
   end
@@ -89,18 +90,7 @@ class UFO < GameObject
 
   def draw
     #Draw main
-    draw_centered(self.body.p.x, self.body.p.y)
-
-    if (self.body.p.y < image.height / 2)
-      draw_centered(self.body.p.x, @scene.height + self.body.p.y)
-    elsif (self.body.p.y > @scene.height + image.height / 2)
-      draw_centered(self.body.p.x, self.body.p.y - @scene.height)
-    elsif (self.body.p.x < image.width / 2)
-      draw_centered(@scene.width + self.body.p.x, self.body.p.y)
-    elsif (self.body.p.x > @scene.width + image.width / 2)
-      draw_centered(self.body.p.x - @scene.width, self.body.p.y)
-    end
-
+    self.draw_with_boundary
     self
   end
 end

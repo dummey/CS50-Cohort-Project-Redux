@@ -76,6 +76,7 @@ class GameScene < Scene
     boundaries.each_value {|value| @space.add_shape(value)} 
     boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, EdgeCollisionHandler)}
     boundaries.each_key {|key| @space.add_collision_handler(:laser, key, EdgeCollisionHandler)}
+    boundaries.each_key {|key| @space.add_collision_handler(:ufo, key, EdgeCollisionHandler)}
   end
 
   def decrease_lives
