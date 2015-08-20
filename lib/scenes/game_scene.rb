@@ -67,6 +67,8 @@ class GameScene < Scene
     handler = EdgeCollisionHandler.new
     boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, handler)}
     boundaries.each_key {|key| @space.add_collision_handler(:laser, key, handler)}
+    boundaries.each_key {|key| @space.add_collision_handler(:ufo, key, handler)}
+
   end
 
   class EdgeCollisionHandler
