@@ -1,22 +1,39 @@
 require 'game_object'
 require 'game_objects/role/draw_helper'
+require 'game_objects/role/defaultable'
 
 class Player < GameObject
   include DrawHelper
   
-  def initialize(scene)
+  include Defaultable
+  def _defaults
+    {
+      :image_path => "media/PNG/playerShip3_green.png",
+      :init_x_pos => @scene.width/2,
+      :init_y_pos => @scene.height/2,
+      :mass => 10,
+      :max_velocity => 500.0,
+      :moment_of_inertia => 150,
+      :scale => 1,
+      :z_index => 1,
+    }
+  end
+  
+  
+  def initialize(scene, params = {})
     super(scene)
-    @image_path = "media/PNG/playerShip3_green.png"
-    @body = CP::Body.new(10.0, 150.0)
-    @z_index = 1
-    @scale = 1
+    setup_defaults(params)
+    @body = CP::Body.new(@mass, @moment_of_inertia)
+    @body.p.x = @init_x_pos
+    @body.p.y = @init_y_pos
+    @body.v_limit = @max_velocity if @max_velocity
+    @body.a = 0.gosu_to_radians
+
     @shape_boundary = CP::Shape::Circle.new(@body, self.image.width/2, CP::Vec2::ZERO)
     @shape_boundary.sensor = true
     @shape_boundary.collision_type = :player_sensor
     @shape_collide = CP::Shape::Circle.new(@body, self.image.width/4, CP::Vec2::ZERO)
     @shape_collide.collision_type = :player
-    @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-    @body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
     scene.space.add_shape(@shape_boundary)
     scene.space.add_shape(@shape_collide)
