@@ -39,11 +39,15 @@ class Asteroid < GameObject
     @x_position=@x_position.modulo(@scene.width)
     @y_position=@y_position.modulo(@scene.height)
     @rotation_angular = (@rotation_angular + @rotation_momentum * @scene.update_interval / 1000.0)
+
+    self
   end
 
   def draw
 #    @asteroid_image.draw(@x_position, @y_position, 1)
     @asteroid_image.draw_rot(@x_position, @y_position, 1, @rotation_angular)
+
+    self
   end
 
 

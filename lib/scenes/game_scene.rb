@@ -60,10 +60,7 @@ class GameScene < Scene
     })
 
     add_game_object GameHUD.new(self)
-    @asteroids = []
-    @asteroids << Asteroid.new(self)
-    @asteroids << Asteroid.new(self)
-    @asteroids << Asteroid.new(self)
+    4.times { add_game_object Asteroid.new(self) }
     @player = Player.new(self)
 
     @lasers = []
@@ -72,7 +69,7 @@ class GameScene < Scene
 
     @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
     EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser])
-    @dialog = CharacterDialog.new(self, :duration => 5000)
+    add_game_object CharacterDialog.new(self, :duration => 5000)
   end
 
   def _spawn_ufos
@@ -99,6 +96,7 @@ class GameScene < Scene
 
   def update
     super
+    @space.step(1.0/60.0)
 
     if Gosu::button_down? Gosu::KbRight
       @player.rotate(3)
@@ -119,10 +117,6 @@ class GameScene < Scene
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
-    @asteroids.each do |asteroid|
-      asteroid.update
-    end
-
     @player.update
 
     @lasers.each(&:update)
@@ -133,10 +127,6 @@ class GameScene < Scene
       end
     }
 
-    @space.step(1.0/60.0)
-
-    @dialog.update
-
     @lose.update if @lose
 
     self
@@ -145,14 +135,9 @@ class GameScene < Scene
   def draw
     super
 
-    @asteroids.each do |asteroid|
-      asteroid.draw
-    end
     @player.draw
 
     @lasers.each(&:draw)
-
-    @dialog.draw
 
     @lose.draw if @lose
 
