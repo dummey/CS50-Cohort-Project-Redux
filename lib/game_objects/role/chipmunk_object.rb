@@ -22,4 +22,8 @@ module ChipmunkObject
     @shape.body
   end
 
+  def shape
+    @shape
+  end
+
 end
