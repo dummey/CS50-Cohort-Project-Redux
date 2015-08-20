@@ -9,42 +9,33 @@ require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
 require 'game_objects/ui_components/subtitle'
 
+require 'game_objects/role/defaultable'
+
 class MenuScene < Scene
-  def _defaults(params)
+  include Defaultable
+
+  def _defaults
     {
       :max_stars => 100,
-      :scale => 1,
       :background_image_path => $MEDIA_ROOT + "/Backgrounds/purple.png",
       :background_music_path => $MEDIA_ROOT + "/Music/Digital-Fallout_v001.ogg",
       :cursor_image_path => $MEDIA_ROOT + "/PNG/UI/cursor.png",
-    }.merge(params)
+    }
   end
 
   def initialize(window, params={})
     super(window)
-    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+    setup_defaults(params)
 
-    @background = Background.new(self, {
+    add_game_object Background.new(self, {
                                    :image => @background_image_path,
                                    :music => @background_music_path,
     })
-    add_game_object @background
 
-    @cursor = Cursor.new(self, cursor_image_path: @cursor_image_path)
-    add_game_object @cursor
-
-    @start_button = Button.new(self)
-    add_game_object @start_button
-
-    # @title = 
-    @title = Title.new(self, text: "ASTEROIDSSS!")
-    add_game_object @title
-
-    @subtitle = Subtitle.new(self)
-    add_game_object @subtitle
-
-    #@spaceship = Gosu::Image.new("media/PNG/playerShip3_green.png")
-
+    add_game_object Cursor.new(self, cursor_image_path: @cursor_image_path)
+    add_game_object Button.new(self)
+    add_game_object Title.new(self, text: "ASTEROIDSSS!")
+    add_game_object Subtitle.new(self)
   end
 
   def update
@@ -67,7 +58,7 @@ class MenuScene < Scene
 
   def draw
     super
-    #@spaceship.draw(800, 325, 1, 0.5, 0.5)
+    
     self
   end
 
