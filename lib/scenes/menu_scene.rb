@@ -28,20 +28,20 @@ class MenuScene < Scene
                                    :image => @background_image_path,
                                    :music => @background_music_path,
     })
-    @game_objects.push(@background)
+    add_game_object @background
 
     @cursor = Cursor.new(self, cursor_image_path: @cursor_image_path)
-    @game_objects.push(@cursor)
+    add_game_object @cursor
 
     @start_button = Button.new(self)
-    @game_objects.push(@start_button)
+    add_game_object @start_button
 
     # @title = 
     @title = Title.new(self, text: "ASTEROIDSSS!")
-    @game_objects.push(@title)
+    add_game_object @title
 
     @subtitle = Subtitle.new(self)
-    @game_objects.push(@subtitle)
+    add_game_object @subtitle
 
     #@spaceship = Gosu::Image.new("media/PNG/playerShip3_green.png")
 
@@ -58,8 +58,8 @@ class MenuScene < Scene
     end
 
     #spawn up to @max_stars number of stars
-    if (@game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
-      @game_objects.push(PulsingStar.new(self))
+    if (game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
+      add_game_object PulsingStar.new(self)
     end
 
     self

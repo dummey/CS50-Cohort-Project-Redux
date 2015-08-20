@@ -54,12 +54,12 @@ class GameScene < Scene
     @score = $CONFIG[:initialize_score]
     @game_duration = 0.0
 
-    @game_objects << Background.new(self, {
-                                   :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-                                   :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
+    add_game_object Background.new(self, {
+                       :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
+                       :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
-    @game_objects << GameHUD.new(self)
+    add_game_object GameHUD.new(self)
     @asteroids = []
     @asteroids << Asteroid.new(self)
     @asteroids << Asteroid.new(self)
@@ -83,10 +83,10 @@ class GameScene < Scene
     ufos << mother.spawn_baby
 
     ufos.each {|ufo|
+      add_game_object ufo
       @space.add_body(ufo.shape.body)
       @space.add_shape(ufo.shape)
     }
-    @game_objects.push(*ufos)
   end
 
   def decrease_lives
@@ -143,7 +143,7 @@ class GameScene < Scene
   end
 
   def draw
-    super 
+    super
 
     @asteroids.each do |asteroid|
       asteroid.draw

@@ -1,9 +1,10 @@
+require 'game_objects/role/has_game_objects'
+
 class Scene
-  attr_accessor :updatable, :drawable
+  include HasGameObjects
 
   def initialize(window)
     @window = window
-    @game_objects = []
   end
 
   def width
@@ -27,21 +28,19 @@ class Scene
   end
 
   def update
-    @game_objects.map! {|o| o.update}
-    @game_objects.flatten!
-    @game_objects.compact!
+    update_game_objects
   end
 
   def draw
-    @game_objects.each {|o| o.draw}
+    draw_game_objects
   end
 
   def button_down(id)
-    @game_objects.each {|o| o.button_down(id)}
+    button_down_game_objects(id)
   end
 
   def button_up(id)
-    @game_objects.each {|o| o.button_up(id)}
+    button_up_game_objects(id)
   end
 
   # Handles the wrap around world stuff
