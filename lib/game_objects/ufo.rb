@@ -53,7 +53,7 @@ class UFO < GameObject
       if @follow
         (x, y) = @scene.direction_to(self, @follow)
 
-        self.accelerate(x * 100, y * 100)
+        self.accelerate(x * 10, y * 10)
       else
         self.accelerate(Gosu::random(-@max_acceleration, @max_acceleration),
                         Gosu::random(-@max_acceleration, @max_acceleration))
