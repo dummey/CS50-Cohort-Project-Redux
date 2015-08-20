@@ -24,13 +24,12 @@ class UFO < GameObject
       :z_index => 5, #$CONIFG[:z_index_ufo]
       :collision_type => "ufo".to_sym,
       :collision_sensor => false,
-
     }
   end
 
   include ChipmunkObject
 
-  attr_reader :shape
+  attr_reader :shape, :follow
 
   def initialize(scene, params = {})
     super(scene)
@@ -66,13 +65,15 @@ class UFO < GameObject
     end
   end
 
-  def spawn_baby
-    UFO.new(@scene, :scale => @scale / 2,
+  def spawn_baby(args = {})
+    UFO.new(@scene, {:scale => @scale / 2,
             :mase => @mass / 4,
             :init_x_pos => self.body.p.x,
             :init_y_pos => self.body.p.y,
             :follow => self,
-            :max_velocity => @max_velocity * 10)
+            :max_velocity => @max_velocity * 10}
+            .merge(args)
+            )
   end
 
   def update
