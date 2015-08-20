@@ -1,10 +1,11 @@
 require 'game_object'
 require 'game_objects/role/draw_helper'
 require 'game_objects/role/defaultable'
+require 'game_objects/role/chipmunk_object'
 
 class Player < GameObject
   include DrawHelper
-  
+  include ChipmunkObject
   include Defaultable
   def _defaults
     {
@@ -16,6 +17,9 @@ class Player < GameObject
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
+      :collision_type => "player_sensor".to_sym,
+      :collision_sensor => true,
+      :init_rotate => 0
     }
   end
   
@@ -23,25 +27,15 @@ class Player < GameObject
   def initialize(scene, params = {})
     super(scene)
     setup_defaults(params)
-    @body = CP::Body.new(@mass, @moment_of_inertia)
-    @body.p.x = @init_x_pos
-    @body.p.y = @init_y_pos
-    @body.v_limit = @max_velocity if @max_velocity
-    @body.a = 0.gosu_to_radians
+    setup_chipmunk
 
-    @shape_boundary = CP::Shape::Circle.new(@body, self.image.width/2, CP::Vec2::ZERO)
-    @shape_boundary.sensor = true
-    @shape_boundary.collision_type = :player_sensor
-    @shape_collide = CP::Shape::Circle.new(@body, self.image.width/4, CP::Vec2::ZERO)
+
+    @shape_collide = CP::Shape::Circle.new(self.body, self.image.width/4, CP::Vec2::ZERO)
     @shape_collide.collision_type = :player
-    scene.space.add_body(@body)
-    scene.space.add_shape(@shape_boundary)
+    scene.space.add_body(self.body)
+    scene.space.add_shape(@shape)
     scene.space.add_shape(@shape_collide)
     self.setup_boundary
-  end
-
-  def body
-    return @body
   end
 
   def display_ghost(edge, enabled)
@@ -49,29 +43,29 @@ class Player < GameObject
   end
 
   def thrust(scalar)
-    @body.apply_impulse(CP::Vec2.for_angle(@body.a) * scalar, CP::Vec2::ZERO)
+    self.body.apply_impulse(CP::Vec2.for_angle(self.body.a) * scalar, CP::Vec2::ZERO)
   end
   
   def rotate(degrees)
-    @body.a += degrees.degrees_to_radians
+    self.body.a += degrees.degrees_to_radians
   end
   
   def fire(laser)
-    laser.fire(@body.p + (CP::Vec2.for_angle(@body.a) * image.width / 4), CP::Vec2.for_angle(@body.a) * 2 * @max_velocity)
+    laser.fire(self.body.p + (CP::Vec2.for_angle(self.body.a) * image.width / 4), CP::Vec2.for_angle(self.body.a) * 2 * @max_velocity)
   end
 
   def update
     #wrap around the field
-    @body.p.x = @body.p.x % @scene.width
-    @body.p.y = @body.p.y % @scene.height
+    self.body.p.x = self.body.p.x % @scene.width
+    self.body.p.y = self.body.p.y % @scene.height
   end
 
   def reset
-    @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-    @body.a = 0.gosu_to_radians
-    @body.v = CP::Vec2::ZERO
-    @body.w = 0
-    @body.reset_forces
+    self.body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
+    self.body.a = 0.gosu_to_radians
+    self.body.v = CP::Vec2::ZERO
+    self.body.w = 0
+    self.body.reset_forces
     #add invulnerability
   end
 
