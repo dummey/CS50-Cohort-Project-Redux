@@ -61,23 +61,25 @@ class GameScene < Scene
 
     add_game_object GameHUD.new(self)
     4.times { add_game_object Asteroid.new(self) }
-    @player = Player.new(self)
+    self._spawn_ufos
+    add_game_object CharacterDialog.new(self, :duration => 5000)
 
+    @player = Player.new(self)
     @lasers = []
 
-    self._spawn_ufos
+    self._setup_collisions
+  end
 
+  def _setup_collisions
     @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
     EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser])
-    add_game_object CharacterDialog.new(self, :duration => 5000)
   end
 
   def _spawn_ufos
     ufos = []
     mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0], :follow => @player)
     ufos << mother
-    ufos << mother.spawn_baby
-    ufos << mother.spawn_baby
+    3.times { ufos << mother.spawn_baby }
 
     ufos.each {|ufo|
       add_game_object ufo
@@ -96,7 +98,6 @@ class GameScene < Scene
 
   def update
     super
-    @space.step(1.0/60.0)
 
     if Gosu::button_down? Gosu::KbRight
       @player.rotate(3)
@@ -114,6 +115,8 @@ class GameScene < Scene
       @lasers << laser
     end
 
+    @space.step(1.0/60.0)
+
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
@@ -127,27 +130,19 @@ class GameScene < Scene
       end
     }
 
-    @lose.update if @lose
-
     self
   end
 
   def draw
     super
-
     @player.draw
 
     @lasers.each(&:draw)
-
-    @lose.draw if @lose
 
     self
   end
 
   def button_down(id)
-    if id == Gosu::KbA
-      self.lose
-    end
     if id == Gosu::KbF
       dead_asteroids = []
       baby_asteroids = []
@@ -169,7 +164,10 @@ class GameScene < Scene
   end
 
   def lose
-    @lose ||= Title.new(self, text: "YOU LOSE FOOL!")
+    return if @lose
+
+    add_game_object Title.new(self, text: "YOU LOSE FOOL!")
+    @lose = true
   end
 
 end
