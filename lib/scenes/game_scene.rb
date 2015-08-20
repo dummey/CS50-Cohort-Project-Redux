@@ -45,7 +45,7 @@ end
 class GameScene < Scene
   attr_accessor :window, :lives, :score, :space
   def initialize(window)
-    @window = window
+    super
 
     @space = CP::Space.new()
     @space.damping = 0.8
@@ -54,12 +54,12 @@ class GameScene < Scene
     @score = $CONFIG[:initialize_score]
     @game_duration = 0.0
 
-    @background = Background.new(self, {
+    @game_objects << Background.new(self, {
                                    :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
                                    :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
-    @ui = GameHUD.new(self)
+    @game_objects << GameHUD.new(self)
     @asteroids = []
     @asteroids << Asteroid.new(self)
     @asteroids << Asteroid.new(self)
@@ -68,20 +68,25 @@ class GameScene < Scene
 
     @lasers = []
 
-    @ufos = []
-    mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0], :follow => @player)
-    @ufos << mother
-    @ufos << mother.spawn_baby
-    @ufos << mother.spawn_baby
-
-    @ufos.each {|ufo|
-      @space.add_body(ufo.shape.body)
-      @space.add_shape(ufo.shape)
-    }
+    self._spawn_ufos
 
     @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
     EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser])
     @dialog = CharacterDialog.new(self, :duration => 5000)
+  end
+
+  def _spawn_ufos
+    ufos = []
+    mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0], :follow => @player)
+    ufos << mother
+    ufos << mother.spawn_baby
+    ufos << mother.spawn_baby
+
+    ufos.each {|ufo|
+      @space.add_body(ufo.shape.body)
+      @space.add_shape(ufo.shape)
+    }
+    @game_objects.push(*ufos)
   end
 
   def decrease_lives
@@ -93,6 +98,8 @@ class GameScene < Scene
   end
 
   def update
+    super
+
     if Gosu::button_down? Gosu::KbRight
       @player.rotate(3)
     end
@@ -112,8 +119,6 @@ class GameScene < Scene
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
-    @background.update
-    @ui.update
     @asteroids.each do |asteroid|
       asteroid.update
     end
@@ -128,8 +133,6 @@ class GameScene < Scene
       end
     }
 
-    @ufos.each(&:update)
-
     @space.step(1.0/60.0)
 
     @dialog.update
@@ -140,13 +143,12 @@ class GameScene < Scene
   end
 
   def draw
-    @background.draw
-    @ui.draw
+    super 
+
     @asteroids.each do |asteroid|
       asteroid.draw
     end
     @player.draw
-    @ufos.each(&:draw)
 
     @lasers.each(&:draw)
 

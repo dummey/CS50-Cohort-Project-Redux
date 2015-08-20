@@ -92,6 +92,7 @@ class UFO < GameObject
   def draw
     #Draw main
     self.draw_with_boundary
+    
     self
   end
 end
