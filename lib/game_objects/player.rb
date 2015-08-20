@@ -62,8 +62,10 @@ class Player < GameObject
       self.body.v = CP::Vec2::ZERO
       self.body.w = 0
       self.body.reset_forces
-      reset = false 
+      @reset = false 
     end
+
+    self
   end
 
   def reset
@@ -72,6 +74,8 @@ class Player < GameObject
 
   def draw
     self.draw_with_boundary
+
+    self
   end
 
 end
