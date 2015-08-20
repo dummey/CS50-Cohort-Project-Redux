@@ -8,6 +8,16 @@ require 'game_objects/ufo'
 require 'game_objects/game_hud'
 require 'game_objects/ui_components/title'
 
+module EdgeCollisionHandler
+  def self.begin(a, b)
+    a.object.display_ghost(b.collision_type, true)
+  end
+
+  def self.separate(a, b)
+    a.object.display_ghost(b.collision_type, false)
+  end
+end
+
 class GameScene < Scene
   attr_accessor :window, :lives, :score, :space
   def initialize(window)
@@ -64,20 +74,8 @@ class GameScene < Scene
     boundaries.each_value {|value| value.sensor = true}
     boundaries.each {|key, value| value.collision_type = key }
     boundaries.each_value {|value| @space.add_shape(value)} 
-    handler = EdgeCollisionHandler.new
-    boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, handler)}
-    boundaries.each_key {|key| @space.add_collision_handler(:laser, key, handler)}
-  end
-
-  class EdgeCollisionHandler
-    
-    def begin(a, b)
-      a.object.display_ghost(b.collision_type, true)
-    end
-
-    def separate(a, b)
-      a.object.display_ghost(b.collision_type, false)
-    end
+    boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, EdgeCollisionHandler)}
+    boundaries.each_key {|key| @space.add_collision_handler(:laser, key, EdgeCollisionHandler)}
   end
 
   def decrease_lives
