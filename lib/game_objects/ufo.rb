@@ -22,6 +22,9 @@ class UFO < GameObject
       :scale => 0.5,
       :spin_rate => Math::PI/20.0,
       :z_index => 5, #$CONIFG[:z_index_ufo]
+      :collision_type => "ufo".to_sym,
+      :collision_sensor => false,
+
     }
   end
 

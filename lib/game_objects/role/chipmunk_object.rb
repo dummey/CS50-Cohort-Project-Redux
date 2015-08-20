@@ -10,7 +10,8 @@ module ChipmunkObject
 
     @shape = CP::Shape::Circle.new(body, image.width / 2 * @scale, CP::Vec2::ZERO)
     @shape.e = 0.5
-    @shape.collision_type = :ufo
+    @shape.collision_type = @collision_type
+    @shape.sensor = @collision_sensor
   end
 
   def body
