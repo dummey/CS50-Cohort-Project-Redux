@@ -55,15 +55,19 @@ class Player < GameObject
     #wrap around the field
     self.body.p.x = self.body.p.x % @scene.width
     self.body.p.y = self.body.p.y % @scene.height
+
+    if @reset
+      self.body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
+      self.body.a = 0.gosu_to_radians
+      self.body.v = CP::Vec2::ZERO
+      self.body.w = 0
+      self.body.reset_forces
+      reset = false 
+    end
   end
 
   def reset
-    self.body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-    self.body.a = 0.gosu_to_radians
-    self.body.v = CP::Vec2::ZERO
-    self.body.w = 0
-    self.body.reset_forces
-    #add invulnerability
+    @reset = true
   end
 
   def draw
