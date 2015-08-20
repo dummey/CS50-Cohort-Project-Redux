@@ -4,7 +4,8 @@ module ChipmunkObject
     body = CP::Body.new(@mass, @moment_of_inertia)
     body.p.x = @init_x_pos
     body.p.y = @init_y_pos
-
+    
+    body.a = @init_rotate.gosu_to_radians if @init_rotate
     body.v_limit = @max_velocity if @max_velocity
 
 
