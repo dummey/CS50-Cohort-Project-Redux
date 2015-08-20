@@ -3,6 +3,7 @@ require 'scene'
 require 'game_objects/asteroid'
 require 'game_objects/background'
 require 'game_objects/player'
+require 'game_objects/laser_beam'
 require 'game_objects/ufo'
 require 'game_objects/game_hud'
 require 'game_objects/ui_components/title'
@@ -30,6 +31,8 @@ class GameScene < Scene
     @asteroids << Asteroid.new(self)
     @asteroids << Asteroid.new(self)
     @player = Player.new(self)
+
+    @lasers = []
 
     @ufos = []
     mother = UFO.new(self, :image_path => $CONFIG[:sprite_ufo][0])
@@ -98,6 +101,12 @@ class GameScene < Scene
       @player.thrust(50)
     end
     
+    if Gosu::button_down? Gosu::KbSpace
+      laser = Laser_Beam.new(self)
+      @player.fire(laser)
+      @lasers << laser
+    end
+    
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
@@ -108,6 +117,8 @@ class GameScene < Scene
     end
 
     @player.update
+
+    @lasers.each(&:update)
 
     @ufos.each(&:update)
 
@@ -128,6 +139,8 @@ class GameScene < Scene
     end
     @player.draw
     @ufos.each(&:draw)
+    
+    @lasers.each(&:draw)
     
     @dialog.draw
 

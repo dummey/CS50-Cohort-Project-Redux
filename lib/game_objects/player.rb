@@ -55,6 +55,10 @@ class Player < GameObject
   def rotate(degrees)
     @body.a += degrees.degrees_to_radians
   end
+  
+  def fire(laser)
+    laser.fire(@body.p, CP::Vec2.for_angle(@body.a) * 2 * @max_velocity)
+  end
 
   def update
     #wrap around the field
