@@ -46,20 +46,36 @@ class Scene
 
   # Handles the wrap around world stuff
   def direction_to(a, b)
-    delta_x = a.body.p.x - b.body.p.x
-    delta_y = a.body.p.y - b.body.p.y
+    delta_x = b.body.p.x - a.body.p.x
+    delta_y = b.body.p.y - a.body.p.y
     
-    if (delta_x.abs) > width / 2
+    if (delta_x.abs) < width / 2
+      # p "x do not wrap"
       delta_x = delta_x
     else 
+      # p "x wrap"
       delta_x = -delta_x
+      if delta_x < 0
+        delta_x += width / 2
+      else
+        delta_x -= width / 2
+      end
     end
 
-    if (delta_y.abs) > width / 2
+    if (delta_y.abs) < width / 2
+      # p "y do not wrap"
       delta_y = delta_y
     else
+      # p "y wrap"
       delta_y = -delta_y
+      if delta_y < 0
+        delta_y += height / 2
+      else
+        delta_y -= height / 2
+      end
     end
+
+    # p delta_x, delta_y
 
     return [delta_x, delta_y]
   end
