@@ -3,6 +3,7 @@ require 'game_objects/ui_components/character_dialog'
 require 'game_objects/role/draw_helper'
 require 'game_objects/role/defaultable'
 require 'game_objects/role/chipmunk_object'
+require 'game_objects/role/destroyable'
 
 class UFO < GameObject
   include DrawHelper
@@ -28,6 +29,8 @@ class UFO < GameObject
   end
 
   include ChipmunkObject
+
+  include Destroyable
 
   attr_reader :shape, :follow
 
@@ -86,13 +89,13 @@ class UFO < GameObject
     @shape.body.p.x = @shape.body.p.x % @scene.width
     @shape.body.p.y = @shape.body.p.y % @scene.height
 
-    self
+    destroyed? ? nil : self
   end
 
   def draw
     #Draw main
     self.draw_with_boundary
-    
+
     self
   end
 end

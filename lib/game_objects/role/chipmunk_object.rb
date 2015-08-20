@@ -7,6 +7,7 @@ module ChipmunkObject
     
     body.a = @init_rotate.gosu_to_radians if @init_rotate
     body.v_limit = @max_velocity if @max_velocity
+    body.object = self
 
 
     @shape = CP::Shape::Circle.new(body, image.width / 2 * @scale, CP::Vec2::ZERO)

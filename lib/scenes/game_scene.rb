@@ -72,6 +72,7 @@ class GameScene < Scene
 
   def _setup_collisions
     @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
+    @space.add_collision_func(:laser, :ufo) {|laser, ufo| ufo.object.destroy}
     EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser])
   end
 
