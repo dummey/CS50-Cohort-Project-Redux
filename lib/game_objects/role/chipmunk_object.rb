@@ -13,6 +13,8 @@ module ChipmunkObject
     @shape.e = 0.5
     @shape.collision_type = @collision_type
     @shape.sensor = @collision_sensor
+    #object is a place to store refs to be accessable at collisions
+    @shape.object = self
   end
 
   def body

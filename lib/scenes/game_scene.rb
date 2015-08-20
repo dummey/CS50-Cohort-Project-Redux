@@ -64,21 +64,19 @@ class GameScene < Scene
     boundaries.each_value {|value| value.sensor = true}
     boundaries.each {|key, value| value.collision_type = key }
     boundaries.each_value {|value| @space.add_shape(value)} 
-    handler = EdgeCollisionHandler.new(@player)
+    handler = EdgeCollisionHandler.new
     boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, handler)}
+    boundaries.each_key {|key| @space.add_collision_handler(:laser, key, handler)}
   end
 
   class EdgeCollisionHandler
-    def initialize(player)
-      @player = player
-    end
     
     def begin(a, b)
-      @player.display_ghost(b.collision_type, true)
+      a.object.display_ghost(b.collision_type, true)
     end
 
     def separate(a, b)
-      @player.display_ghost(b.collision_type, false)
+      a.object.display_ghost(b.collision_type, false)
     end
   end
 

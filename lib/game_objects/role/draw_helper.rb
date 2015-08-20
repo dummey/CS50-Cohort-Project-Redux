@@ -15,6 +15,10 @@ module DrawHelper
     self.image.draw_rot(x, y, @z_index, self.body.a.radians_to_gosu, 0.5, 0.5, @scale, @scale)
   end
   
+  def display_ghost(edge, enabled)
+    @boundary[edge] = enabled
+  end
+  
   def draw_with_boundary
     # (x, y, z, angle, center_x, center_y, scale_x, scale_y)
     self.draw_centered(self.body.p.x, self.body.p.y)

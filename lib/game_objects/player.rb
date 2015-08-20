@@ -38,9 +38,6 @@ class Player < GameObject
     self.setup_boundary
   end
 
-  def display_ghost(edge, enabled)
-    @boundary[edge] = enabled
-  end
 
   def thrust(scalar)
     self.body.apply_impulse(CP::Vec2.for_angle(self.body.a) * scalar, CP::Vec2::ZERO)
