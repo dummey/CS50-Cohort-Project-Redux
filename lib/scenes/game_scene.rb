@@ -119,6 +119,12 @@ class GameScene < Scene
     @player.update
 
     @lasers.each(&:update)
+    @lasers.each { |laser|
+      if laser.reached_range
+        @lasers.delete(laser)
+        laser.remove_from_game
+      end
+    }
 
     @ufos.each(&:update)
 

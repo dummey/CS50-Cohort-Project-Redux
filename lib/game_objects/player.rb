@@ -57,7 +57,7 @@ class Player < GameObject
   end
   
   def fire(laser)
-    laser.fire(@body.p, CP::Vec2.for_angle(@body.a) * 2 * @max_velocity)
+    laser.fire(@body.p + (CP::Vec2.for_angle(@body.a) * image.width / 4), CP::Vec2.for_angle(@body.a) * 2 * @max_velocity)
   end
 
   def update

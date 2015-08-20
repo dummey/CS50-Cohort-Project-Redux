@@ -13,27 +13,27 @@ class Laser_Beam < GameObject
       :mass => 10,
       :max_velocity => 500.0,
       :moment_of_inertia => 150,
-      :scale => 0.5,
+      :scale => 0.25,
+      :spin_rate => Math::PI/5.0,
       :z_index => 1,
+      :duration => 375,
     }
   end
-  
   
   def initialize(scene, params = {})
     super(scene)
     setup_defaults(params)
-    #haven't updated body numbers
-    @body = CP::Body.new(10.0, 150.0)
-    #double check shape numbers
-    @shape = CP::Shape::Circle.new(@body, self.image.width/2, CP::Vec2::ZERO)
+    @body = CP::Body.new(1.0, 150.0)
+    #overriding velocity function to be constant (no damping)
+    @body.velocity_func{ |b, g, d, dt| }
+    @shape = CP::Shape::Circle.new(@body, self.image.width/2 * @scale, CP::Vec2::ZERO)
     @shape.sensor = true
     @shape.collision_type = :laser
-    #I don't know if i need this at all
-    #@body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-    #@body.a = 0.gosu_to_radians
     scene.space.add_body(@body)
     scene.space.add_shape(@shape)
     self.setup_boundary
+    @time_alive = 0
+    @timed_out = false
   end
   
   def body
@@ -45,9 +45,15 @@ class Laser_Beam < GameObject
   end
   
   def update
+    #spin
+    @shape.body.a += @spin_rate
+    
     #wrap around the field
     @body.p.x = @body.p.x % @scene.width
     @body.p.y = @body.p.y % @scene.height
+    
+    @time_alive += @scene.update_interval
+    @timed_out = (@time_alive.to_i > @duration)
   end
   
   def fire(position, velocity)
@@ -56,4 +62,12 @@ class Laser_Beam < GameObject
     @body.activate    
   end
   
+  def reached_range
+    return @timed_out
+  end
+  
+  def remove_from_game
+    @scene.space.remove_body(@body)
+    @scene.space.remove_shape(@shape)
+  end
 end
