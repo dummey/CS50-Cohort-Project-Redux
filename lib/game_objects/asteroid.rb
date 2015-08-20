@@ -3,6 +3,7 @@ require 'game_object'
 class Asteroid < GameObject
   def initialize(scene, x_position = nil, y_position = nil, tier = 1)
     super(scene)
+
     if tier == 1 
       @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png")
 
