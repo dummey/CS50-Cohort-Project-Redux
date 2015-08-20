@@ -8,13 +8,37 @@ require 'game_objects/ufo'
 require 'game_objects/game_hud'
 require 'game_objects/ui_components/title'
 
-module EdgeCollisionHandler
-  def self.begin(a, b)
-    a.object.display_ghost(b.collision_type, true)
+
+module EdgeCollision
+  module EdgeCollisionHandler
+    def self.begin(a, b)
+      a.object.display_ghost(b.collision_type, true)
+    end
+
+    def self.separate(a, b)
+      a.object.display_ghost(b.collision_type, false)
+    end
   end
 
-  def self.separate(a, b)
-    a.object.display_ghost(b.collision_type, false)
+  def self.create_universe_boundary(width, height, space, collision_types)
+    edge = CP::Body.new_static()
+    up_left = vec2(0, 0)
+    up_right = vec2(width, 0)
+    down_left = vec2(0, height)
+    down_right = vec2(width, height)
+    boundaries = {
+      left_edge: CP::Shape::Segment.new(edge, up_left, down_left, 1),
+      right_edge: CP::Shape::Segment.new(edge, up_right, down_right, 1),
+      top_edge: CP::Shape::Segment.new(edge, up_left, up_right, 1),
+      bottom_edge: CP::Shape::Segment.new(edge, down_left, down_right, 1)
+    }
+    boundaries.each_value {|value| value.sensor = true}
+    boundaries.each {|key, value| value.collision_type = key }
+    boundaries.each_value {|value| space.add_shape(value)}
+
+    collision_types.each {|collision_type|
+      boundaries.each_key {|key| space.add_collision_handler(collision_type, key, EdgeCollisionHandler)}
+    }
   end
 end
 
@@ -22,7 +46,7 @@ class GameScene < Scene
   attr_accessor :window, :lives, :score, :space
   def initialize(window)
     @window = window
-    
+
     @space = CP::Space.new()
     @space.damping = 0.8
 
@@ -31,8 +55,8 @@ class GameScene < Scene
     @game_duration = 0.0
 
     @background = Background.new(self, {
-       :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-       :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
+                                   :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
+                                   :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
     @ui = GameHUD.new(self)
@@ -56,28 +80,8 @@ class GameScene < Scene
     }
 
     @space.add_collision_func(:player, :ufo) {|| self.decrease_lives}
-    self.create_universe_boundary
-    @dialog = CharacterDialog.new(self, :duration => 5000) 
-  end
-  
-  def create_universe_boundary
-    edge = CP::Body.new_static()
-    up_left = vec2(0, 0)
-    up_right = vec2(self.width, 0)
-    down_left = vec2(0, self.height)
-    down_right = vec2(self.width, self.height)
-    boundaries = {
-      left_edge: CP::Shape::Segment.new(edge, up_left, down_left, 1),
-      right_edge: CP::Shape::Segment.new(edge, up_right, down_right, 1),
-      top_edge: CP::Shape::Segment.new(edge, up_left, up_right, 1),
-      bottom_edge: CP::Shape::Segment.new(edge, down_left, down_right, 1)
-    }
-    boundaries.each_value {|value| value.sensor = true}
-    boundaries.each {|key, value| value.collision_type = key }
-    boundaries.each_value {|value| @space.add_shape(value)} 
-    boundaries.each_key {|key| @space.add_collision_handler(:player_sensor, key, EdgeCollisionHandler)}
-    boundaries.each_key {|key| @space.add_collision_handler(:laser, key, EdgeCollisionHandler)}
-    boundaries.each_key {|key| @space.add_collision_handler(:ufo, key, EdgeCollisionHandler)}
+    EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser])
+    @dialog = CharacterDialog.new(self, :duration => 5000)
   end
 
   def decrease_lives
@@ -98,13 +102,13 @@ class GameScene < Scene
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
     end
-    
+
     if Gosu::button_down? Gosu::KbSpace
       laser = Laser_Beam.new(self)
       @player.fire(laser)
       @lasers << laser
     end
-    
+
     @game_duration += self.update_interval
     @score = @game_duration.to_i / 1000
 
@@ -131,7 +135,7 @@ class GameScene < Scene
     @dialog.update
 
     @lose.update if @lose
-    
+
     self
   end
 
@@ -143,9 +147,9 @@ class GameScene < Scene
     end
     @player.draw
     @ufos.each(&:draw)
-    
+
     @lasers.each(&:draw)
-    
+
     @dialog.draw
 
     @lose.draw if @lose
@@ -174,7 +178,7 @@ class GameScene < Scene
   end
 
   def button_up(id)
-  
+
   end
 
   def lose
