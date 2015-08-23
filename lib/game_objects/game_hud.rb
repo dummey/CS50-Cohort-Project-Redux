@@ -13,16 +13,19 @@ class GameHUD
     @scene.lives.times do |i|
       @lives_icon.draw(10 + 40 * i, 10, 2)
     end
-
   end
 
   def update
     @score.score = @scene.score
     @score.update
+
+    self
   end
 
   def draw
     self._draw_lives
     @score.draw
+
+    self
   end
 end

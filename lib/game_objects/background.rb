@@ -25,6 +25,7 @@ class Background < GameObject
 
     if @music
       @music = Gosu::Song.new(@music)
+      @music.volume = 0.25
     end
 
     @x_num = (@scene.width / @background_image.width).to_i

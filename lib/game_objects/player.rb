@@ -1,51 +1,71 @@
 require 'game_object'
-require 'pp'
+require 'game_objects/role/draw_helper'
+require 'game_objects/role/defaultable'
+require 'game_objects/role/chipmunk_object'
 
 class Player < GameObject
-  def initialize(scene)
+  include DrawHelper
+  include ChipmunkObject
+  include Defaultable
+  def _defaults
+    {
+      :image_path => "media/PNG/playerShip3_green.png",
+      :init_x_pos => @scene.width/2,
+      :init_y_pos => @scene.height/2,
+      :mass => 10,
+      :max_velocity => 500.0,
+      :moment_of_inertia => 150,
+      :scale => 1,
+      :z_index => 1,
+      :collision_type => "player_sensor".to_sym,
+      :collision_sensor => true,
+      :init_rotate => 0
+    }
+  end
+  
+  
+  def initialize(scene, params = {})
     super(scene)
-    @image = Gosu::Image.new("media/PNG/playerShip3_green.png")
-    @body = CP::Body.new(10.0, 150.0)
-    @shape_boundary = CP::Shape::Circle.new(@body, @image.width/2, CP::Vec2::ZERO)
-    @shape_boundary.sensor = true
-    @shape_boundary.collision_type = :player_sensor
-    @shape_collide = CP::Shape::Circle.new(@body, @image.width/4, CP::Vec2::ZERO)
+    setup_defaults(params)
+    setup_chipmunk
+
+
+    @shape_collide = CP::Shape::Circle.new(self.body, self.image.width/4, CP::Vec2::ZERO)
     @shape_collide.collision_type = :player
-    @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-    @body.a = 0.gosu_to_radians
-    scene.space.add_body(@body)
-    scene.space.add_shape(@shape_boundary)
+    scene.space.add_body(self.body)
+    scene.space.add_shape(@shape)
     scene.space.add_shape(@shape_collide)
-    @boundary = { left_edge: false, right_edge: false, top_edge: false, bottom_edge: false}
+    self.setup_boundary
   end
 
-  def display_ghost(edge, enabled)
-    @boundary[edge] = enabled
-  end
 
   def thrust(scalar)
-    @body.apply_impulse(CP::Vec2.for_angle(@body.a) * scalar, CP::Vec2::ZERO)
+    self.body.apply_impulse(CP::Vec2.for_angle(self.body.a) * scalar, CP::Vec2::ZERO)
   end
   
   def rotate(degrees)
-    @body.a += degrees.degrees_to_radians
+    self.body.a += degrees.degrees_to_radians
+  end
+  
+  def fire(laser)
+    laser.fire(self.body.p + (CP::Vec2.for_angle(self.body.a) * image.width / 4), CP::Vec2.for_angle(self.body.a) * 2 * @max_velocity)
   end
 
   def update
     #wrap around the field
-    @body.p.x = @body.p.x % @scene.width
-    @body.p.y = @body.p.y % @scene.height
+    self.body.p.x = self.body.p.x % @scene.width
+    self.body.p.y = self.body.p.y % @scene.height
 
     if @reset
-      @body.activate
-      @body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
-      @body.a = 0.gosu_to_radians
-      @body.v = CP::Vec2::ZERO
-      @body.w = 0
-      @body.reset_forces
+      self.body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
+      self.body.a = 0.gosu_to_radians
+      self.body.v = CP::Vec2::ZERO
+      self.body.w = 0
+      self.body.reset_forces
+      @reset = false 
+    end
 
-      @reset = false
-    end 
+    self
   end
 
   def reset
@@ -53,35 +73,9 @@ class Player < GameObject
   end
 
   def draw
-    # (x, y, z, angle, center_x, center_y, scale_x, scale_y)
-    # draw main
-    @image.draw_rot(@body.p.x, @body.p.y, 1, @body.a.radians_to_gosu)
-    
-    # draw ghost
-    if @boundary[:left_edge]
-      @image.draw_rot(@body.p.x + @scene.width, @body.p.y, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:right_edge]
-      @image.draw_rot(@body.p.x - @scene.width, @body.p.y, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:top_edge]
-      @image.draw_rot(@body.p.x, @body.p.y + @scene.height, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:bottom_edge]
-      @image.draw_rot(@body.p.x, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:top_edge] && @boundary[:left_edge]
-      @image.draw_rot(@body.p.x + @scene.width, @body.p.y + @scene.height, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:top_edge] && @boundary[:right_edge]
-      @image.draw_rot(@body.p.x - @scene.width, @body.p.y + @scene.height, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:bottom_edge] && @boundary[:right_edge]
-      @image.draw_rot(@body.p.x - @scene.width, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
-    end
-    if @boundary[:bottom_edge] && @boundary[:left_edge]
-      @image.draw_rot(@body.p.x + @scene.width, @body.p.y - @scene.height, 1, @body.a.radians_to_gosu)
-    end
+    self.draw_with_boundary
+
+    self
   end
 
 end

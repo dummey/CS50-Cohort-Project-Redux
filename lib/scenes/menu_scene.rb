@@ -2,7 +2,6 @@ require 'gosu'
 
 require 'scene'
 require 'scenes/game_scene'
-require 'scenes/credits_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/ui_components/button'
@@ -10,54 +9,38 @@ require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
 require 'game_objects/ui_components/subtitle'
 
+require 'game_objects/role/defaultable'
+
 class MenuScene < Scene
-  def _defaults(params)
+  include Defaultable
+
+  def _defaults
     {
       :max_stars => 100,
-      :scale => 1,
       :background_image_path => $MEDIA_ROOT + "/Backgrounds/purple.png",
       :background_music_path => $MEDIA_ROOT + "/Music/Digital-Fallout_v001.ogg",
       :cursor_image_path => $MEDIA_ROOT + "/PNG/UI/cursor.png",
-    }.merge(params)
+    }
   end
 
   def initialize(window, params={})
     super(window)
-    _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
+    setup_defaults(params)
 
-    @background = Background.new(self, {
+    add_game_object Background.new(self, {
                                    :image => @background_image_path,
                                    :music => @background_music_path,
     })
-    @game_objects.push(@background)
 
-    @cursor = Cursor.new(self, cursor_image_path: @cursor_image_path)
-    @game_objects.push(@cursor)
-
+    add_game_object Cursor.new(self, cursor_image_path: @cursor_image_path)
     @start_button = Button.new(self)
-    @game_objects.push(@start_button)
-
-    # @title = 
-    @title = Title.new(self, text: "ASTEROIDSSS!")
-    @game_objects.push(@title)
-
-    @subtitle = Subtitle.new(self)
-    @game_objects.push(@subtitle)
-
-    @credits_button = Button.new(self, text: "Credits", y_pos: 730)
-    @game_objects.push(@credits_button)
-
+    add_game_object @start_button
+    add_game_object Title.new(self, text: "ASTEROIDSSS!")
+    add_game_object Subtitle.new(self)
   end
 
   def update
     super
-    
-    #enable credits button
-    if (@window.button_down?(Gosu::KbSpace) || 
-       (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
-      )
-      return [self, CreditScreen.new(@window)]
-    end
 
     #check for start game action: spacebar and left click on start
     if (@window.button_down?(Gosu::KbSpace) || 
@@ -67,8 +50,8 @@ class MenuScene < Scene
     end
 
     #spawn up to @max_stars number of stars
-    if (@game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
-      @game_objects.push(PulsingStar.new(self))
+    if (game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
+      add_game_object PulsingStar.new(self)
     end
 
     self
