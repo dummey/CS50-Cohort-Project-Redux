@@ -1,4 +1,8 @@
-require 'scenes'
+require 'gosu'
+require 'scene'
+require 'game_object'
+require 'game_objects/ui_components/cursor'
+require 'game_objects/ui_components/credits_text'
 
 class CreditScreen < Scene
   def _defaults(params)
@@ -14,13 +18,34 @@ class CreditScreen < Scene
     super(window)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
+    @background = Background.new(self, {
+                                   :image => @background_image_path,
+                                   :music => @background_music_path,
+    })
+
+    @cursor = Cursor.new(self, cursor_image_path: @cursor_image_path)
+
+    @title = Title.new(self, text: "Credits", y_pos: 100)
+
+    @credits_text = CreditsText.new(self)
+
+
   end
 
   def update
-
+    super
+    self
   end
 
   def draw
+    super
 
+    @background.draw()
+    @cursor.draw()
+    @title.draw()
+    @credits_text.draw()
+
+
+    self
   end
 end

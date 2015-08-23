@@ -2,6 +2,7 @@ require 'gosu'
 
 require 'scene'
 require 'scenes/game_scene'
+require 'scenes/credits_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/ui_components/button'
@@ -43,12 +44,20 @@ class MenuScene < Scene
     @subtitle = Subtitle.new(self)
     @game_objects.push(@subtitle)
 
-    #@spaceship = Gosu::Image.new("media/PNG/playerShip3_green.png")
+    @credits_button = Button.new(self, text: "Credits", y_pos: 730)
+    @game_objects.push(@credits_button)
 
   end
 
   def update
     super
+    
+    #enable credits button
+    if (@window.button_down?(Gosu::KbSpace) || 
+       (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
+      )
+      return [self, CreditScreen.new(@window)]
+    end
 
     #check for start game action: spacebar and left click on start
     if (@window.button_down?(Gosu::KbSpace) || 
@@ -67,7 +76,7 @@ class MenuScene < Scene
 
   def draw
     super
-    #@spaceship.draw(800, 325, 1, 0.5, 0.5)
+    
     self
   end
 
