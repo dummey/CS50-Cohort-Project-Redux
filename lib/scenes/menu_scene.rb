@@ -2,6 +2,7 @@ require 'gosu'
 
 require 'scene'
 require 'scenes/game_scene'
+require 'scenes/credits_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/ui_components/button'
@@ -37,10 +38,20 @@ class MenuScene < Scene
     add_game_object @start_button
     add_game_object Title.new(self, text: "ASTEROIDSSS!")
     add_game_object Subtitle.new(self)
+    @credits_button = Button.new(self, text: "Credits", y_pos: 730)
+    add_game_object @credits_button
+
   end
 
   def update
     super
+
+    #enable credits button
+    if (@window.button_down?(Gosu::KbSpace) || 
+       (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
+      )
+      return [self, CreditScreen.new(@window)]
+    end
 
     #check for start game action: spacebar and left click on start
     if (@window.button_down?(Gosu::KbSpace) || 
