@@ -23,7 +23,7 @@ class CreditScreen < Scene
     super(window)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    add_game_object = Background.new(self, {
+    add_game_object Background.new(self, {
                                    :image => @background_image_path,
                                    :music => @background_music_path,
     })
@@ -52,8 +52,7 @@ class CreditScreen < Scene
 
   def draw
     super
-
-    Background.draw()
+    
     @cursor.draw()
     @title.draw()
     @credits_text.draw()

@@ -1,5 +1,4 @@
 module ChipmunkObject
-
   def setup_chipmunk
     body = CP::Body.new(@mass, @moment_of_inertia)
     body.p.x = @init_x_pos
