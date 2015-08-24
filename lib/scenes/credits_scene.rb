@@ -1,11 +1,15 @@
 require 'gosu'
 require 'scene'
 require 'game_object'
+require 'game_objects/background'
 require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/credits_text'
+require 'game_objects/role/defaultable'
 
 class CreditScreen < Scene
+  include Defaultable
+  
   def _defaults(params)
     {
       :scale => 1,
@@ -19,7 +23,7 @@ class CreditScreen < Scene
     super(window)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    @background = Background.new(self, {
+    add_game_object Background.new(self, {
                                    :image => @background_image_path,
                                    :music => @background_music_path,
     })
@@ -48,8 +52,7 @@ class CreditScreen < Scene
 
   def draw
     super
-
-    @background.draw()
+    
     @cursor.draw()
     @title.draw()
     @credits_text.draw()
