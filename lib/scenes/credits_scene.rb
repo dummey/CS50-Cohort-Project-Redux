@@ -2,6 +2,7 @@ require 'gosu'
 require 'scene'
 require 'game_object'
 require 'game_objects/ui_components/cursor'
+require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/credits_text'
 
 class CreditScreen < Scene
@@ -28,12 +29,20 @@ class CreditScreen < Scene
     @title = Title.new(self, text: "Credits", y_pos: 100)
 
     @credits_text = CreditsText.new(self)
+    
+    @return_button = Button.new(self, text: "Return", y_pos: 730)
+    add_game_object @return_button
 
 
   end
 
   def update
     super
+    
+    if (@window.button_down?(Gosu::MsLeft) && @return_button.intersect?(@window.mouse_x, @window.mouse_y))
+      return [self, MenuScene.new(@window)]
+    end
+    
     self
   end
 
