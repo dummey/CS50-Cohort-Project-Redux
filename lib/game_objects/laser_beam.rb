@@ -58,12 +58,18 @@ class Laser_Beam < GameObject
     self.body.activate    
   end
   
-  def reached_range
-    return @timed_out
+  def hit_target
+    @hit_target = true
+  end
+  
+  def reached_range?
+    return @timed_out || @hit_target
   end
   
   def remove_from_game
-    @scene.space.remove_body(self.body)
-    @scene.space.remove_shape(@shape)
+    @scene.space.add_post_step_callback(self.object_id.to_s.to_sym) do |space, key|
+      @scene.space.remove_shape(self.shape)
+      @scene.space.remove_body(self.body)
+    end
   end
 end
