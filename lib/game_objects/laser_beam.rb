@@ -21,6 +21,7 @@ class Laser_Beam < GameObject
       :collision_type => "laser".to_sym,
       :collision_sensor => true,
       :init_rotate => rand(0...360),
+      :bit_plane => 0b10,
     }
   end
   

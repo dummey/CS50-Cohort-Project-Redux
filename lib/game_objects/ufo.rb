@@ -26,6 +26,7 @@ class UFO < GameObject
       :z_index => 5, #$CONIFG[:z_index_ufo]
       :collision_type => "ufo".to_sym,
       :collision_sensor => false,
+      :bit_plane => 0b11,
     }
   end
 

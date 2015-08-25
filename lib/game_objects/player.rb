@@ -21,7 +21,8 @@ class Player < GameObject
       :z_index => 1,
       :collision_type => "player_sensor".to_sym,
       :collision_sensor => true,
-      :init_rotate => 0
+      :init_rotate => 0,
+      :bit_plane => 128,
     }
   end
   
@@ -35,6 +36,7 @@ class Player < GameObject
     @shape_collide = CP::Shape::Circle.new(self.body, self.image.width/4, CP::Vec2::ZERO)
     @shape_collide.collision_type = :player
     @shape_collide.object = self
+    @shape_collide.layers = 0b01
     scene.space.add_body(self.body)
     scene.space.add_shape(@shape)
     scene.space.add_shape(@shape_collide)
