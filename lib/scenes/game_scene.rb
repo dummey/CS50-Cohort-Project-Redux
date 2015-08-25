@@ -111,10 +111,15 @@ class GameScene < Scene
       @player.thrust(50)
     end
 
-    if Gosu::button_down? Gosu::KbSpace
+    if (Gosu::button_down? Gosu::KbSpace) && !@space_down
       laser = Laser_Beam.new(self)
       @player.fire(laser)
       @lasers << laser
+      @space_down = true
+    end
+  
+    if !Gosu::button_down? Gosu::KbSpace
+      @space_down = false
     end
 
     @space.step(1.0/60.0)
