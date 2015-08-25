@@ -15,11 +15,12 @@ class Laser_Beam < GameObject
       :max_velocity => 500.0,
       :moment_of_inertia => 150,
       :scale => 0.25,
-      :spin_rate => Math::PI/5.0,
+      :spin_rate => Math::PI/30.0,
       :z_index => 1,
       :duration => 375,
       :collision_type => "laser".to_sym,
       :collision_sensor => true,
+      :init_rotate => rand(0...360),
     }
   end
   
@@ -37,6 +38,7 @@ class Laser_Beam < GameObject
   end
 
   def draw
+    self.draw_with_boundary(45, 128)
     self.draw_with_boundary
   end
   
