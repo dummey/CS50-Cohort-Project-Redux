@@ -2,11 +2,13 @@ require 'game_object'
 require 'game_objects/role/draw_helper'
 require 'game_objects/role/defaultable'
 require 'game_objects/role/chipmunk_object'
+require 'game_objects/explosion'
 
 class Player < GameObject
   include DrawHelper
   include ChipmunkObject
   include Defaultable
+  
   def _defaults
     {
       :image_path => "media/PNG/playerShip3_green.png",
@@ -32,6 +34,7 @@ class Player < GameObject
 
     @shape_collide = CP::Shape::Circle.new(self.body, self.image.width/4, CP::Vec2::ZERO)
     @shape_collide.collision_type = :player
+    @shape_collide.object = self
     scene.space.add_body(self.body)
     scene.space.add_shape(@shape)
     scene.space.add_shape(@shape_collide)
@@ -51,10 +54,25 @@ class Player < GameObject
     laser.fire(self.body.p + (CP::Vec2.for_angle(self.body.a) * image.width / 4), CP::Vec2.for_angle(self.body.a) * 2 * @max_velocity)
   end
 
+  def destroy(space)
+    @destroyed = true
+  end
+
+  def destroyed?
+    @destroyed
+  end
+
   def update
+    update_objects = [self]
+    
     #wrap around the field
     self.body.p.x = self.body.p.x % @scene.width
     self.body.p.y = self.body.p.y % @scene.height
+
+    if destroyed? 
+      explosion = Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25)
+      update_objects << explosion
+    end
 
     if @reset
       self.body.p = CP::Vec2.new(@scene.width/2, @scene.height/2)
@@ -62,10 +80,11 @@ class Player < GameObject
       self.body.v = CP::Vec2::ZERO
       self.body.w = 0
       self.body.reset_forces
-      @reset = false 
+      @reset = false
+      @destroyed = false 
     end
 
-    self
+    update_objects
   end
 
   def reset
