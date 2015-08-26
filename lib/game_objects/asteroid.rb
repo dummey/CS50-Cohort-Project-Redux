@@ -32,6 +32,13 @@ class Asteroid < GameObject
     super(scene)
 
     setup_defaults(params)
+
+    @image_path = {
+      1 => "media/PNG/Meteors/meteorGrey_big1.png",
+      2 => "media/PNG/Meteors/meteorGrey_med1.png",
+      3 => "media/PNG/Meteors/meteorGrey_small1.png",
+    }[@tier]
+
     setup_chipmunk
 
     @shape_collide = CP::Shape::Circle.new(self.body, self.image.width/4, CP::Vec2::ZERO)
