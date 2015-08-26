@@ -74,7 +74,7 @@ class Scene
       end
     end
 
-    # p delta_x, delta_y
+    # p a.object_id, b.object_id, delta_x, delta_y
 
     return [delta_x, delta_y]
   end
