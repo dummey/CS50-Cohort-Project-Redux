@@ -12,11 +12,15 @@ require 'game_objects/ui_components/title'
 module EdgeCollision
   module EdgeCollisionHandler
     def self.begin(a, b)
-      a.object.display_ghost(b.collision_type, true)
+      if a.object
+        a.object.display_ghost(b.collision_type, true)
+      end
     end
 
     def self.separate(a, b)
-      a.object.display_ghost(b.collision_type, false)
+      if a.object
+        a.object.display_ghost(b.collision_type, false)
+      end
     end
   end
 
