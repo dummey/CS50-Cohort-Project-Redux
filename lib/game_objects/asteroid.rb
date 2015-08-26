@@ -44,8 +44,12 @@ class Asteroid < GameObject
   end
 
   def update
+    #Wrap around the field
+    @shape.body.p.x = @shape.body.p.x % @scene.width
+    @shape.body.p.y = @shape.body.p.y % @scene.height
+
     if destroyed?
-      return [] if @tier == 3
+      return nil if @tier == 3
 
       @new_asteroids = []
       3.times do 
