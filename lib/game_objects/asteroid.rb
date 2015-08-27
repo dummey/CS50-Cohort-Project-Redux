@@ -60,13 +60,14 @@ class Asteroid < GameObject
     @shape.body.p.y = @shape.body.p.y % @scene.height
 
     if destroyed?
-      return nil if @tier > @max_tier - 1
+      update_objects = [Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25 / @tier)]
+      
+      return update_objects if @tier > @max_tier - 1
 
-      @new_asteroids = []
       @max_tier.times do 
-        @new_asteroids << Asteroid.new(@scene, init_x_pos: body.p.x, init_y_pos: body.p.y, tier: @tier+1)
+        update_objects << Asteroid.new(@scene, init_x_pos: body.p.x, init_y_pos: body.p.y, tier: @tier+1)
       end
-      @new_asteroids
+      update_objects
     else
       self
     end
