@@ -74,6 +74,7 @@ class Player < GameObject
     if destroyed? 
       explosion = Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25)
       update_objects << explosion
+      @scene.decrease_lives
     end
 
     if @reset
