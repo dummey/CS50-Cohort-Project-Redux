@@ -20,10 +20,10 @@ class Asteroid < GameObject
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
-      :collision_type => :asteroid,
-      :collision_sensor => false,
       :init_rotate => 0,
       :tier => 1,
+      :collision_type => :asteroid,
+      :collision_sensor => true,
       :bit_plane => 0b11,
     }
   end
@@ -40,14 +40,10 @@ class Asteroid < GameObject
     }[@tier]
 
     setup_chipmunk
-
-    # @shape_collide = CP::Shape::Circle.new(self.body, self.image.width/4, CP::Vec2::ZERO)
-    # @shape_collide.collision_type = @collision_type
-    # scene.space.add_body(self.body)
-    # scene.space.add_shape(@shape)
-    # scene.space.add_shape(@shape_collide)
-    
     setup_boundary
+
+    scene.space.add_body(self.body)
+    scene.space.add_shape(self.shape)
   end
 
   def update
