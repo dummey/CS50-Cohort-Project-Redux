@@ -79,7 +79,6 @@ class GameScene < Scene
     @space.add_collision_func(:player, :ufo) {|player, ufo| self.decrease_lives; player.object.destroy(@space); ufo.object.destroy(@space)}
 
     @space.add_collision_func(:laser, :ufo) {|laser, ufo|
-      p "laser and ufo" 
       ufo.object.destroy(@space)
       laser.object.hit_target
       @score += 1000

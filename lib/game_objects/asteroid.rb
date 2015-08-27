@@ -23,7 +23,7 @@ class Asteroid < GameObject
       :init_rotate => 0,
       :tier => 1,
       :collision_type => :asteroid,
-      :collision_sensor => true,
+      :collision_sensor => false,
       :bit_plane => 0b11,
     }
   end
