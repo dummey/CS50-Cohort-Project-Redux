@@ -77,15 +77,19 @@ class GameScene < Scene
 
   def _setup_collisions
     @space.add_collision_func(:player, :ufo) {|player, ufo| self.decrease_lives; player.object.destroy(@space); ufo.object.destroy(@space)}
-    @space.add_collision_func(:laser, :ufo) {|laser, ufo| ufo.object.destroy(@space); laser.object.hit_target; @score += 1000}
+    @space.add_collision_func(:laser, :ufo) {|laser, ufo| 
+      ufo.object.destroy(@space); 
+      laser.object.hit_target; 
+      @score += 1000}
     @space.add_collision_func(:laser, :asteroid) {|laser, asteroid| 
+      p asteroid
       if asteroid.object
+        p "hello"
         asteroid.object.destroy(@space); 
         @score += 100
       end
     }
     EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser, :asteroid])
-    credits_moving_background
   end
 
   def _spawn_ufos
