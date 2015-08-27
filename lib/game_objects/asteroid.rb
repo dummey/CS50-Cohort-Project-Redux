@@ -16,7 +16,7 @@ class Asteroid < GameObject
       :init_x_pos => rand(0...@scene.width),
       :init_y_pos => rand(0...@scene.height),
       :mass => 10,
-      :max_velocity => 500.0,
+      :max_velocity => 250.0,
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
@@ -41,6 +41,10 @@ class Asteroid < GameObject
 
     setup_chipmunk
     setup_boundary
+
+    self.body.velocity_func{ |b, g, d, dt| }
+
+    self.body.v = CP::Vec2.new(rand(-@max_velocity...@max_velocity), rand(-@max_velocity...@max_velocity))
 
     scene.space.add_body(self.body)
     scene.space.add_shape(self.shape)
