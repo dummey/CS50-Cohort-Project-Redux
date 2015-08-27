@@ -86,9 +86,8 @@ class GameScene < Scene
     }
 
     @space.add_collision_func(:laser, :asteroid) {|laser, asteroid| 
-      p "laser and asteroid"
       if asteroid.object
-        p "hello"
+        laser.object.hit_target
         asteroid.object.destroy(@space) 
         @score += 100
       end
