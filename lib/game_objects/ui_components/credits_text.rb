@@ -4,7 +4,8 @@ require 'game_object'
 class CreditsText < GameObject
   def _defaults(params)
     {
-      :text => "dummey\n\nemeraldvision\n\nmuseummile\n\njbtule\n\nLucySchroeder",
+      :text => "programmers\n\ndummey\nemeraldvision\nmuseummile\njbtule\nLucySchroeder
+        \nmusic\n\ndigital fallout, by eric matyas\n80's space game loop, by eric matyas",
       :text_image => nil,
       :font => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf",
       :x_pos => @scene.width/2,
