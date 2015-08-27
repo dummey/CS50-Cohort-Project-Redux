@@ -6,7 +6,7 @@ class Subtitle < GameObject
     {
       :spaceship_image => nil,
       :spaceship_image_path => $MEDIA_ROOT + "/PNG/playerShip3_green.png", 
-      :text => "Use your arrow keys to move your\n\n\nand the space bar to shoot lasers!",
+      :text => "\nspace bar shoots lasers\n\n\nleft + right arrow keys rotate ship\nup arrow key moves ship forward",
       :text_image => nil,
       :font => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf",
       :x_pos => @scene.width/2,

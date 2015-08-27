@@ -24,7 +24,7 @@ class UFO < GameObject
       :scale => 0.5,
       :spin_rate => Math::PI/20.0,
       :z_index => 5, #$CONIFG[:z_index_ufo]
-      :collision_type => "ufo".to_sym,
+      :collision_type => :ufo,
       :collision_sensor => false,
       :bit_plane => 0b11,
     }
@@ -91,7 +91,7 @@ class UFO < GameObject
     @shape.body.p.x = @shape.body.p.x % @scene.width
     @shape.body.p.y = @shape.body.p.y % @scene.height
 
-    destroyed? ? Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25) : self
+    destroyed? ? Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: @scale / 2) : self
   end
 
   def draw

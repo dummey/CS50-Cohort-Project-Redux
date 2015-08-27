@@ -1,66 +1,82 @@
 require 'game_object'
+require 'game_objects/role/draw_helper'
+require 'game_objects/role/defaultable'
+require 'game_objects/role/chipmunk_object'
+require 'game_objects/role/destroyable'
 
 class Asteroid < GameObject
-  def initialize(scene, x_position = nil, y_position = nil, tier = 1)
+  include DrawHelper
+  include ChipmunkObject
+  include Defaultable
+  include Destroyable
+
+  def _defaults
+    {
+      :image_path => "media/PNG/Meteors/meteorGrey_big1.png",
+      :init_x_pos => rand(0...@scene.width),
+      :init_y_pos => rand(0...@scene.height),
+      :mass => 10,
+      :max_velocity => 250.0,
+      :max_rotational_velocity => 10,
+      :moment_of_inertia => 150,
+      :scale => 1,
+      :z_index => 1,
+      :init_rotate => 0,
+      :tier => 1,
+      :max_tier => 3,
+      :collision_type => :asteroid,
+      :collision_sensor => true,
+      :bit_plane => 0b11,
+    }
+  end
+
+  def initialize(scene, params = {})
     super(scene)
 
-    if tier == 1 
-      @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_big1.png")
+    setup_defaults(params)
 
-    elsif tier == 2
-      @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_med1.png")
+    @image_path = {
+      1 => "media/PNG/Meteors/meteorGrey_big1.png",
+      2 => "media/PNG/Meteors/meteorGrey_med1.png",
+      3 => "media/PNG/Meteors/meteorGrey_small1.png",
+      4 => "media/PNG/Meteors/meteorGrey_tiny1.png",
+    }[@tier]
 
-    elsif tier == 3
-      @asteroid_image=Gosu::Image.new("media/PNG/Meteors/meteorGrey_small1.png")
-    end
-  
-      @tier=tier
+    setup_chipmunk
+    setup_boundary
 
-    @x_velocity = rand(-100...100)
-    @y_velocity = rand(-100...100)
-    if(x_position)
-      @x_position = x_position
-    else
-      @x_position = rand(0...@scene.width)
-    end
-    if(y_position)
-      @y_position = y_position
-    else
-      @y_position = rand(0...@scene.height)
-    end
-    @rotation_momentum = rand(-10...10)
-    @rotation_angular = rand(-10...10)
+    self.body.velocity_func{ |b, g, d, dt| }
+
+    self.body.v = CP::Vec2.new(rand(-@max_velocity...@max_velocity), rand(-@max_velocity...@max_velocity))
+    self.body.w = rand(-@max_rotational_velocity...@max_rotational_velocity)
+
+    scene.space.add_body(self.body)
+    scene.space.add_shape(self.shape)
   end
 
   def update
-    update_in_seconds = @scene.update_interval / 1000.0
-    @x_position = @x_position + @x_velocity * update_in_seconds
-    @y_position = @y_position + @y_velocity * update_in_seconds
-    @x_position=@x_position.modulo(@scene.width)
-    @y_position=@y_position.modulo(@scene.height)
-    @rotation_angular = (@rotation_angular + @rotation_momentum * @scene.update_interval / 1000.0)
+    #Wrap around the field
+    @shape.body.p.x = @shape.body.p.x % @scene.width
+    @shape.body.p.y = @shape.body.p.y % @scene.height
 
-    self
+    if destroyed?
+      update_objects = [Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25 / @tier)]
+      
+      return update_objects if @tier > @max_tier - 1
+
+      @max_tier.times do 
+        update_objects << Asteroid.new(@scene, init_x_pos: body.p.x, init_y_pos: body.p.y, tier: @tier+1)
+      end
+      update_objects
+    else
+      self
+    end
   end
 
   def draw
-#    @asteroid_image.draw(@x_position, @y_position, 1)
-    @asteroid_image.draw_rot(@x_position, @y_position, 1, @rotation_angular)
+    draw_with_boundary
 
     self
   end
 
-
-  def die
-    if @tier == 3
-      return []
-    end
-
-    @asteroids_die = []
-    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position, @tier+1)
-    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position, @tier+1)
-    @asteroids_die << Asteroid.new(@scene, @x_position, @y_position, @tier+1)
-
-    return @asteroids_die
-  end
 end

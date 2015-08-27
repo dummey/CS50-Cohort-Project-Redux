@@ -4,12 +4,12 @@ class Button < GameObject
   def _defaults(params)
     {
       :x_pos => @scene.width / 2,
-      :y_pos => @scene.height * 2 / 3,
+      :y_pos => @scene.height / 2,
       :z_index => 100,
       :angle => 0,
       :scale => 1,
 
-      :text => "Start!",
+      :text => "Text",
       :text_color => 0xFF_000000,
       :text_size => 36,
 
