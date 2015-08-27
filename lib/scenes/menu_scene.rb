@@ -34,11 +34,11 @@ class MenuScene < Scene
     })
 
     add_game_object Cursor.new(self, cursor_image_path: @cursor_image_path)
-    @start_button = Button.new(self)
+    @start_button = Button.new(self, text: "Start!", y_pos: self.height * 19 / 24)
     add_game_object @start_button
     add_game_object Title.new(self, text: "ASTEROIDSSS!")
     add_game_object Subtitle.new(self)
-    @credits_button = Button.new(self, text: "Credits", y_pos: 730)
+    @credits_button = Button.new(self, text: "Credits", y_pos: self.height * 11 / 12)
     add_game_object @credits_button
 
   end

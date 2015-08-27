@@ -34,7 +34,7 @@ class CreditScreen < Scene
 
     @credits_text = CreditsText.new(self)
     
-    @return_button = Button.new(self, text: "Return", y_pos: 730)
+    @return_button = Button.new(self, text: "Return", y_pos: self.height * 11 / 12)
     add_game_object @return_button
 
 
