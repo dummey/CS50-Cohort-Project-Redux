@@ -51,8 +51,9 @@ class Player < GameObject
   def jump
     xrand = Random.new
     yrand = Random.new
-    self.body.p.x = xrand.rand(1024)
-    self.body.p.y = yrand.rand(768)
+    self.body.p.x = xrand.rand(@scene.width)
+    self.body.p.y = yrand.rand(@scene.height)
+    self.body.v = CP::Vec2::ZERO
   end
   
   def rotate(degrees)
