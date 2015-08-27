@@ -17,6 +17,7 @@ class Asteroid < GameObject
       :init_y_pos => rand(0...@scene.height),
       :mass => 10,
       :max_velocity => 250.0,
+      :max_rotational_velocity => 10,
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
@@ -47,6 +48,7 @@ class Asteroid < GameObject
     self.body.velocity_func{ |b, g, d, dt| }
 
     self.body.v = CP::Vec2.new(rand(-@max_velocity...@max_velocity), rand(-@max_velocity...@max_velocity))
+    self.body.w = rand(-@max_rotational_velocity...@max_rotational_velocity)
 
     scene.space.add_body(self.body)
     scene.space.add_shape(self.shape)
