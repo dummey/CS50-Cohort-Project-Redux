@@ -12,11 +12,15 @@ require 'game_objects/ui_components/title'
 module EdgeCollision
   module EdgeCollisionHandler
     def self.begin(a, b)
-      a.object.display_ghost(b.collision_type, true)
+      if a.object
+        a.object.display_ghost(b.collision_type, true)
+      end
     end
 
     def self.separate(a, b)
-      a.object.display_ghost(b.collision_type, false)
+      if a.object
+        a.object.display_ghost(b.collision_type, false)
+      end
     end
   end
 
@@ -74,7 +78,14 @@ class GameScene < Scene
   def _setup_collisions
     @space.add_collision_func(:player, :ufo) {|player, ufo| self.decrease_lives; player.object.destroy(@space); ufo.object.destroy(@space)}
     @space.add_collision_func(:laser, :ufo) {|laser, ufo| ufo.object.destroy(@space); laser.object.hit_target; @score += 1000}
-    EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser])
+    @space.add_collision_func(:laser, :asteroid) {|laser, asteroid| 
+      if asteroid.object
+        asteroid.object.destroy(@space); 
+        @score += 100
+      end
+    }
+    EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :ufo, :laser, :asteroid])
+    credits_moving_background
   end
 
   def _spawn_ufos
