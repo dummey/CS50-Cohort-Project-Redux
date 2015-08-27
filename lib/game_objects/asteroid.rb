@@ -22,6 +22,7 @@ class Asteroid < GameObject
       :z_index => 1,
       :init_rotate => 0,
       :tier => 1,
+      :max_tier => 4,
       :collision_type => :asteroid,
       :collision_sensor => false,
       :bit_plane => 0b11,
@@ -37,6 +38,7 @@ class Asteroid < GameObject
       1 => "media/PNG/Meteors/meteorGrey_big1.png",
       2 => "media/PNG/Meteors/meteorGrey_med1.png",
       3 => "media/PNG/Meteors/meteorGrey_small1.png",
+      4 => "media/PNG/Meteors/meteorGrey_tiny1.png",
     }[@tier]
 
     setup_chipmunk
@@ -56,10 +58,10 @@ class Asteroid < GameObject
     @shape.body.p.y = @shape.body.p.y % @scene.height
 
     if destroyed?
-      return nil if @tier == 3
+      return nil if @tier > @max_tier - 1
 
       @new_asteroids = []
-      3.times do 
+      @max_tier.times do 
         @new_asteroids << Asteroid.new(@scene, init_x_pos: body.p.x, init_y_pos: body.p.y, tier: @tier+1)
       end
       @new_asteroids
