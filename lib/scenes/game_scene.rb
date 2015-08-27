@@ -3,6 +3,7 @@ require 'scene'
 require 'game_objects/asteroid'
 require 'game_objects/background'
 require 'game_objects/player'
+#require 'game_objects/thruster'
 require 'game_objects/laser_beam'
 require 'game_objects/ufo'
 require 'game_objects/game_hud'
@@ -68,6 +69,9 @@ class GameScene < Scene
     add_game_object @player
     @lasers = []
 
+    #@thruster = Thruster.new(self)
+    #add_game_object @thruster
+
     self._setup_collisions
   end
 
@@ -110,10 +114,14 @@ class GameScene < Scene
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
     end
+    if (Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)
+      @player.jump
+    end
 
     if (Gosu::button_down? Gosu::KbSpace) && !@space_down
       laser = Laser_Beam.new(self)
       @player.fire(laser)
+      
       @lasers << laser
       @space_down = true
     end
@@ -134,6 +142,12 @@ class GameScene < Scene
         laser.remove_from_game
       end
     }
+
+    #@thruster.update
+    
+    
+
+    
 
     self
   end

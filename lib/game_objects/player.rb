@@ -47,6 +47,13 @@ class Player < GameObject
   def thrust(scalar)
     self.body.apply_impulse(CP::Vec2.for_angle(self.body.a) * scalar, CP::Vec2::ZERO)
   end
+
+  def jump
+    xrand = Random.new
+    yrand = Random.new
+    self.body.p.x = xrand.rand(1024)
+    self.body.p.y = yrand.rand(768)
+  end
   
   def rotate(degrees)
     self.body.a += degrees.degrees_to_radians
