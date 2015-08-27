@@ -91,7 +91,7 @@ class UFO < GameObject
     @shape.body.p.x = @shape.body.p.x % @scene.width
     @shape.body.p.y = @shape.body.p.y % @scene.height
 
-    destroyed? ? Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: 0.25) : self
+    destroyed? ? Explosion.new(@scene, x_pos: @shape.body.p.x, y_pos: @shape.body.p.y, scale: @scale / 2) : self
   end
 
   def draw
