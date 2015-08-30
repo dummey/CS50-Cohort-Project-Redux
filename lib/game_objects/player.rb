@@ -23,6 +23,7 @@ class Player < GameObject
       :collision_sensor => true,
       :init_rotate => 0,
       :bit_plane => 128,
+      :jump_sound_effect => "#{$MEDIA_ROOT}/Sound Effects/digital-sfx-set/" + "phaseJump2.ogg"
     }
   end
   
@@ -41,6 +42,8 @@ class Player < GameObject
     scene.space.add_shape(@shape)
     scene.space.add_shape(@shape_collide)
     self.setup_boundary
+
+    @jump_sound_effect = Gosu::Sample.new(@jump_sound_effect)
   end
 
 
@@ -54,6 +57,8 @@ class Player < GameObject
     self.body.p.x = xrand.rand(@scene.width)
     self.body.p.y = yrand.rand(@scene.height)
     self.body.v = CP::Vec2::ZERO
+
+    @jump_sound_effect.play
   end
   
   def rotate(degrees)
