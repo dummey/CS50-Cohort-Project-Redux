@@ -5,11 +5,12 @@ class CreditsText < GameObject
   def _defaults(params)
     {
       :text => "programmers\n\ndummey\nemeraldvision\nmuseummile\njbtule\nLucySchroeder
-        \nmusic\n\ndigital fallout, by eric matyas\n80's space game loop, by eric matyas",
+        \nmusic\n\ndigital fallout, by eric matyas\n80's space game loop, by eric matyas
+        \ngraphics\n\nspace shooter, by kenney vleugels (www.kenney.nl)",
       :text_image => nil,
       :font => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf",
       :x_pos => @scene.width/2,
-      :y_pos => @scene.height/2,
+      :y_pos => @scene.height/2 + 40,
       :z_index => 10,
       :scale => 1,
       :angle => 0,
@@ -20,7 +21,7 @@ class CreditsText < GameObject
     super(scene)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    @text_image = Gosu::Image.from_text(@text, 40, :font => @font, :align => :center, :width => @scene.width - 250)
+    @text_image = Gosu::Image.from_text(@text, 30, :font => @font, :align => :center, :width => @scene.width - 250)
   end
 
   def update
