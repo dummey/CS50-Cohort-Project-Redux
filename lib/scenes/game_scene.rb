@@ -169,9 +169,14 @@ class GameScene < Scene
     #@thruster.update
     if @lose
       #Add timer delay
-      
+      @timer ||= 5000
+      @timer -= self.update_interval
+
+      if @timer > 0
+        return self
+      end
+
       if @space
-        # puts "Tryign to get rid of space"
         @space.add_post_step_callback(self.object_id.to_s.to_sym) do |space, key|
           game_objects.each {|o|
             begin 
@@ -179,20 +184,16 @@ class GameScene < Scene
               @space.remove_shape(o.sahpe)
               @space.remove_body(o.body)
             rescue
-              # puts "Sad, can't remove: #{o}"
             end
           }
-          # puts "done removing stuff from space"
           @space = nil
         end
-
-        self
+        return self
       else
-        # puts "Removing self now that space is gone"
-        nil
+        return nil
       end
     else
-      self
+      return self
     end
   end
 
