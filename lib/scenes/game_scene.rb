@@ -132,6 +132,7 @@ class GameScene < Scene
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
     end
+    
     if ((Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)) && !@shift_down
       @player.jump
       @shift_down = true

@@ -22,6 +22,7 @@ class Laser_Beam < GameObject
       :collision_sensor => true,
       :init_rotate => rand(0...360),
       :bit_plane => 0b10,
+      :sound_effect => "#{$MEDIA_ROOT}/Sound_Effects/digital-sfx-set/" + "laser4.ogg",
     }
   end
   
@@ -36,6 +37,7 @@ class Laser_Beam < GameObject
     self.setup_boundary
     @time_alive = 0
     @timed_out = false
+    @sound_effect = Gosu::Sample.new(@sound_effect)
   end
 
   def draw
@@ -58,7 +60,9 @@ class Laser_Beam < GameObject
   def fire(position, velocity)
     self.body.p = position
     self.body.v = velocity
-    self.body.activate    
+    self.body.activate
+    
+    @sound_effect.play
   end
   
   def hit_target
