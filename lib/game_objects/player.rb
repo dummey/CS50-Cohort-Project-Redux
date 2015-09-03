@@ -84,16 +84,13 @@ class Player < GameObject
     update_objects = [self]
     
     @time_alive += @scene.update_interval
-    puts @time_alive
     
     if @time_alive < @duration
       @shape_collide.layers = 0b10000 
       @vulnerable = false
-      puts "I am invulnerable!"
     else
       @shape_collide.layers = 0b01
       @vulnerable = true
-      puts "I am vulnerable =("
     end
     
     #wrap around the field
