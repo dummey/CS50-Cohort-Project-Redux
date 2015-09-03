@@ -184,12 +184,15 @@ class GameScene < Scene
       if @space
         @space.add_post_step_callback(self.object_id.to_s.to_sym) do |space, key|
           game_objects.each {|o|
-            begin 
-              o.body.activate
-              @space.remove_shape(o.sahpe)
-              @space.remove_body(o.body)
-            rescue
-            end
+              if o.respond_to?('shapes') && o.respond_to?('bodies') then
+                o.body.activate
+                for s in o.shapes
+                  @space.remove_shape(s)
+                end
+                for b in o.bodies
+                  @space.remove_body(b)
+                end
+              end
           }
           @space = nil
         end

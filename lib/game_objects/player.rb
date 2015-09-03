@@ -80,6 +80,10 @@ class Player < GameObject
     @destroyed
   end
 
+  def shapes
+    return [self.shape, @shape_collide]
+  end
+
   def update
     update_objects = [self]
     

@@ -26,4 +26,10 @@ module ChipmunkObject
     @shape
   end
 
+  def shapes
+    return [@shape]
+  end
+  def bodies
+    return [@body]
+  end
 end
