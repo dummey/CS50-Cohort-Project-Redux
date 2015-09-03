@@ -14,7 +14,7 @@ class Explosion < GameObject
       :direction => rand(-10...10),
       :color => Gosu::Color.argb(0, rand(200..255), rand(200..255), rand(200..255)),
       :scale => 0.25,
-      :sound_effect => "#{$MEDIA_ROOT}/Sound Effects/" + "Depth Charge 2-SoundBible.com-338644910.ogg"
+      :sound_effect => "#{$MEDIA_ROOT}/Sound_Effects/" + "Depth Charge 2-SoundBible.com-338644910.ogg"
     }
   end
 
