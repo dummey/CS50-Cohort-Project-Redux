@@ -24,7 +24,7 @@ class Player < GameObject
       :collision_sensor => true,
       :init_rotate => 0,
       :bit_plane => 128,
-      :jump_sound_effect => "#{$MEDIA_ROOT}/Sound Effects/digital-sfx-set/" + "phaseJump2.ogg"
+      :jump_sound_effect => "#{$MEDIA_ROOT}/Sound_Effects/digital-sfx-set/" + "phaseJump2.ogg",
     }
   end
   
