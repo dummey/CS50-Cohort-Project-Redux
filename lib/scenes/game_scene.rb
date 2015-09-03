@@ -166,6 +166,11 @@ class GameScene < Scene
       end
     }
 
+    if self.win? and not @win
+      self.win unless @win
+      @win = true
+    end
+
     #@thruster.update
     if @lose
       #Add timer delay
@@ -218,6 +223,16 @@ class GameScene < Scene
 
     add_game_object Title.new(self, text: "YOU LOSE FOOL!")
     @lose = true
+  end
+
+  def win?
+    enemies = self.game_objects.select{|o| o.is_a? Asteroid or o.is_a? UFO}
+
+    enemies.empty?
+  end
+
+  def win 
+    add_game_object Title.new(self, text: "YOU WIN? CHEATER")
   end
 
 end
