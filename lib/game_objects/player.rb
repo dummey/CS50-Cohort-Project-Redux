@@ -19,6 +19,7 @@ class Player < GameObject
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
+      :duration => 5000,
       :collision_type => "player_sensor".to_sym,
       :collision_sensor => true,
       :init_rotate => 0,
@@ -42,6 +43,8 @@ class Player < GameObject
     scene.space.add_shape(@shape)
     scene.space.add_shape(@shape_collide)
     self.setup_boundary
+    @time_alive = 0
+    @vulnerable = false
 
     @jump_sound_effect = Gosu::Sample.new(@jump_sound_effect)
   end
@@ -80,6 +83,19 @@ class Player < GameObject
   def update
     update_objects = [self]
     
+    @time_alive += @scene.update_interval
+    puts @time_alive
+    
+    if @time_alive < @duration
+      @shape_collide.layers = 0b10000 
+      @vulnerable = false
+      puts "I am invulnerable!"
+    else
+      @shape_collide.layers = 0b01
+      @vulnerable = true
+      puts "I am vulnerable =("
+    end
+    
     #wrap around the field
     self.body.p.x = self.body.p.x % @scene.width
     self.body.p.y = self.body.p.y % @scene.height
@@ -97,7 +113,9 @@ class Player < GameObject
       self.body.w = 0
       self.body.reset_forces
       @reset = false
-      @destroyed = false 
+      @destroyed = false
+      @time_alive = 0
+      @vulnerable = false 
     end
 
     update_objects
@@ -108,7 +126,11 @@ class Player < GameObject
   end
 
   def draw
-    self.draw_with_boundary
+    if !@vulnerable
+      self.draw_with_boundary(0, 128)
+    else
+      self.draw_with_boundary
+    end
 
     self
   end
