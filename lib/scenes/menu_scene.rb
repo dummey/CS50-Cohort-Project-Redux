@@ -34,7 +34,7 @@ class MenuScene < Scene
     })
 
     add_game_object Cursor.new(self, cursor_image_path: @cursor_image_path)
-    @start_button = Button.new(self, text: "Start!", y_pos: self.height * 19 / 24)
+    @start_button = Button.new(self, text: "Start!", y_pos: self.height * 10 / 12)
     add_game_object @start_button
     add_game_object Title.new(self, text: "ASTEROIDSSS!")
     add_game_object Subtitle.new(self)
@@ -46,16 +46,18 @@ class MenuScene < Scene
   def update
     super
 
-    #enable credits button
-    if (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
-      return [self, CreditScreen.new(@window)]
-    end
-
-    #check for start game action: spacebar and left click on start
-    if (@window.button_down?(Gosu::KbSpace) || 
+    #check for start game action: enter key or left click on start
+    if (@window.button_down?(Gosu::KbEnter) || 
        (@window.button_down?(Gosu::MsLeft) && @start_button.intersect?(@window.mouse_x, @window.mouse_y))
       )
       return [self, GameScene.new(@window)]
+    end
+
+    #enable credits button
+    if (@window.button_down?(Gosu::KbSpace) ||
+       (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
+      )
+      return [self, CreditScreen.new(@window)]
     end
 
     #spawn up to @max_stars number of stars
