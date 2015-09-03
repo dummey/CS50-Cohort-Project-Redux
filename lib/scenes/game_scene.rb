@@ -167,12 +167,33 @@ class GameScene < Scene
     }
 
     #@thruster.update
-    
-    
+    if @lose
+      #Add timer delay
+      
+      if @space
+        # puts "Tryign to get rid of space"
+        @space.add_post_step_callback(self.object_id.to_s.to_sym) do |space, key|
+          game_objects.each {|o|
+            begin 
+              o.body.activate
+              @space.remove_shape(o.sahpe)
+              @space.remove_body(o.body)
+            rescue
+              # puts "Sad, can't remove: #{o}"
+            end
+          }
+          # puts "done removing stuff from space"
+          @space = nil
+        end
 
-    
-
-    self
+        self
+      else
+        # puts "Removing self now that space is gone"
+        nil
+      end
+    else
+      self
+    end
   end
 
   def draw
@@ -184,20 +205,7 @@ class GameScene < Scene
   end
 
   def button_down(id)
-    if id == Gosu::KbF
-      dead_asteroids = []
-      baby_asteroids = []
-      @asteroids.each do |mother_asteroid|
-        new_baby_asteroids = mother_asteroid.die()
-        baby_asteroids.push(*new_baby_asteroids)
-        dead_asteroids << mother_asteroid
-        #remove mother asteroid from @asteroids
-      end
-      @asteroids = @asteroids - dead_asteroids
-      @asteroids.push(*baby_asteroids)
-    end
-    if id == Gosu::KbG
-    end
+
   end
 
   def button_up(id)

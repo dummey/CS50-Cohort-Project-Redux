@@ -17,7 +17,7 @@ class Asteroid < GameObject
       :init_y_pos => rand(0...@scene.height),
       :mass => 10,
       :max_velocity => 250.0,
-      :max_rotational_velocity => 10,
+      :max_rotational_velocity => 2,
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
@@ -67,6 +67,7 @@ class Asteroid < GameObject
       @max_tier.times do 
         update_objects << Asteroid.new(@scene, init_x_pos: body.p.x, init_y_pos: body.p.y, tier: @tier+1)
       end
+      
       update_objects
     else
       self
