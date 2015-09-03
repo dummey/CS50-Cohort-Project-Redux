@@ -48,6 +48,7 @@ class MenuScene < Scene
 
     #check for start game action: enter key or left click on start
     if (@window.button_down?(Gosu::KbEnter) || 
+        @window.button_down?(Gosu::KbReturn) ||
        (@window.button_down?(Gosu::MsLeft) && @start_button.intersect?(@window.mouse_x, @window.mouse_y))
       )
       return [self, GameScene.new(@window)]
