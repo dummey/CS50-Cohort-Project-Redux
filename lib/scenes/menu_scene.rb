@@ -16,6 +16,7 @@ require 'game_objects/role/defaultable'
 
 class MenuScene < Scene
   include Defaultable
+  attr_accessor :space
 
   def _defaults
     {
