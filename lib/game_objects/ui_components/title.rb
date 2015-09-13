@@ -15,7 +15,7 @@ class Title < GameObject
     super(scene)
     _defaults(params).each {|k,v| instance_variable_set("@#{k}", v)}
 
-    @font = Gosu::Font.new(110, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
+    @font = Gosu::Font.new(128, :name => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf")
   end
 
   def update
