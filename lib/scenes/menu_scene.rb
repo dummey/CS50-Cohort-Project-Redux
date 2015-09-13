@@ -5,6 +5,8 @@ require 'scenes/game_scene'
 require 'scenes/credits_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
+require 'game_objects/laser_beam'
+require 'game_objects/ui_components/ship'
 require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
@@ -27,6 +29,9 @@ class MenuScene < Scene
   def initialize(window, params={})
     super(window)
     setup_defaults(params)
+    
+    @space = CP::Space.new()
+    @space.damping = 0.8
 
     add_game_object Background.new(self, {
                                    :image => @background_image_path,
@@ -40,6 +45,10 @@ class MenuScene < Scene
     add_game_object Subtitle.new(self)
     @credits_button = Button.new(self, text: "Credits", y_pos: self.height * 11 / 12)
     add_game_object @credits_button
+    
+    @ship = Ship.new(self)
+    add_game_object @ship
+    @lasers = []
 
   end
 
@@ -55,9 +64,7 @@ class MenuScene < Scene
     end
 
     #enable credits button
-    if (@window.button_down?(Gosu::KbSpace) ||
-       (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
-      )
+    if (@window.button_down?(Gosu::MsLeft) && @credits_button.intersect?(@window.mouse_x, @window.mouse_y))
       return [self, CreditScreen.new(@window)]
     end
 
@@ -66,11 +73,15 @@ class MenuScene < Scene
       add_game_object PulsingStar.new(self)
     end
 
+    @ship.update
+    
     self
   end
 
   def draw
     super
+    
+    @ship.draw
     
     self
   end

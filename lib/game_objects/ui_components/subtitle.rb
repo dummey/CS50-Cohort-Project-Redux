@@ -31,11 +31,8 @@ class Subtitle < GameObject
   end
 
   def draw
-    @angle = Gosu.angle(@x_pos, @y_pos, @scene.mouse_x, @scene.mouse_y)
     @text_image.draw_rot(@x_pos + 2, @y_pos + 2, @z_index, 0.5, 0.5, 0x40_000000)
     @text_image.draw_rot(@x_pos, @y_pos, @z_index, 0.5, 0.5)
-
-    @spaceship_image.draw_rot(@x_pos, @y_pos - 30, @z_index, @angle, 0.5, 0.5, @scale, @scale)
 
     self
   end
