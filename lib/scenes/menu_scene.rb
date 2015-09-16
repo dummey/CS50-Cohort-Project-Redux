@@ -10,7 +10,7 @@ require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
 require 'game_objects/ui_components/subtitle'
-
+require 'game_objects/role/edge_collision'
 require 'game_objects/role/defaultable'
 
 class MenuScene < Scene
