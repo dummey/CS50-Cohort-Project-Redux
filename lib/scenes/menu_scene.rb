@@ -47,8 +47,8 @@ class MenuScene < Scene
     @credits_button = Button.new(self, text: "Credits", y_pos: self.height * 11 / 12)
     add_game_object @credits_button
     
-    @ship = Ship.new(self)
-    add_game_object @ship
+    @player = Player.new(self)
+    add_game_object @player
     @lasers = []
 
   end
