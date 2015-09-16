@@ -6,7 +6,6 @@ require 'scenes/credits_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/laser_beam'
-require 'game_objects/ui_components/ship'
 require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
@@ -73,8 +72,6 @@ class MenuScene < Scene
     if (game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
       add_game_object PulsingStar.new(self)
     end
-
-    @ship.update
     
     self
   end
@@ -82,7 +79,7 @@ class MenuScene < Scene
   def draw
     super
     
-    @ship.draw
+    @player.draw
     
     self
   end
