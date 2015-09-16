@@ -46,7 +46,7 @@ class MenuScene < Scene
     @credits_button = Button.new(self, text: "Credits", y_pos: self.height * 11 / 12)
     add_game_object @credits_button
     
-    @player = Player.new(self)
+    @player = Player.new(self, :init_x_pos => self.width / 2, :init_y_pos => self.height / 2 - 50, :invulnerability_duration => 0)
     add_game_object @player
     @lasers = []
 
@@ -72,6 +72,48 @@ class MenuScene < Scene
     if (game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
       add_game_object PulsingStar.new(self)
     end
+    
+    if Gosu::button_down? Gosu::KbRight
+      @player.rotate(3)
+    end
+    if Gosu::button_down? Gosu::KbLeft
+      @player.rotate(-3)
+    end
+    if Gosu::button_down? Gosu::KbUp
+      @player.thrust(50)
+    end
+    
+    if ((Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)) && !@shift_down
+      @player.jump
+      @shift_down = true
+    end
+
+    if !(Gosu::button_down? Gosu::KbRightShift) && !(Gosu::button_down? Gosu::KbLeftShift)
+      @shift_down = false
+    end
+
+    if (Gosu::button_down? Gosu::KbSpace) && !@space_down
+      laser = Laser_Beam.new(self)
+      @player.fire(laser)
+      
+      @lasers << laser
+      @space_down = true
+    end
+  
+    if !Gosu::button_down? Gosu::KbSpace
+      @space_down = false
+    end
+
+    @space.step(1.0/60.0)
+
+    @lasers.each(&:update)
+    @lasers.each { |laser|
+      if laser.reached_range?
+        @lasers.delete(laser)
+        laser.remove_from_game
+      end
+    }
+
     
     self
   end
