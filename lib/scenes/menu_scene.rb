@@ -49,6 +49,8 @@ class MenuScene < Scene
     @player = Player.new(self, :init_x_pos => self.width / 2, :init_y_pos => self.height / 2 - 50, :invulnerability_duration => 0)
     add_game_object @player
     @lasers = []
+    
+    EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :laser])
 
   end
 
