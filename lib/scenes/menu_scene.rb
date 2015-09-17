@@ -122,6 +122,7 @@ class MenuScene < Scene
     super
     
     @player.draw
+    @lasers.each(&:draw)
     
     self
   end
