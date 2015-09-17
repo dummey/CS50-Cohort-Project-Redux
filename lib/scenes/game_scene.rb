@@ -60,8 +60,8 @@ class GameScene < Scene
     @game_duration = 0.0
 
     add_game_object Background.new(self, {
-                       :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
-                       :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
+                                     :image => $MEDIA_ROOT + "/Backgrounds/purple.png",
+                                     :music => $MEDIA_ROOT + "/Music/80s-Space-Game-Loop_v001.ogg"
     })
 
     add_game_object GameHUD.new(self)
@@ -72,6 +72,11 @@ class GameScene < Scene
     @player = Player.new(self)
     add_game_object @player
     @lasers = []
+
+    @thruster_image = Gosu::Image.new($MEDIA_ROOT + "/PNG/Effects/fire03.png")
+
+
+    # @thruster = Thruster.new(self)
 
     self._setup_collisions
   end
@@ -85,10 +90,10 @@ class GameScene < Scene
       @score += 1000
     }
 
-    @space.add_collision_func(:laser, :asteroid) {|laser, asteroid| 
+    @space.add_collision_func(:laser, :asteroid) {|laser, asteroid|
       if asteroid.object
         laser.object.hit_target
-        asteroid.object.destroy(@space) 
+        asteroid.object.destroy(@space)
         @score += 100
       end
     }
@@ -119,6 +124,7 @@ class GameScene < Scene
 
   def update
     super
+    @thrust = false
 
     if Gosu::button_down? Gosu::KbRight
       @player.rotate(3)
@@ -128,10 +134,9 @@ class GameScene < Scene
     end
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
-      thruster = Thruster.new(self)
-      thruster.draw(100,100,100,1)
+      @thrust = true
     end
-    
+
     if ((Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)) && !@shift_down
       @player.jump
       @shift_down = true
@@ -144,11 +149,11 @@ class GameScene < Scene
     if (Gosu::button_down? Gosu::KbSpace) && !@space_down
       laser = Laser_Beam.new(self)
       @player.fire(laser)
-      
+
       @lasers << laser
       @space_down = true
     end
-  
+
     if !Gosu::button_down? Gosu::KbSpace
       @space_down = false
     end
@@ -183,15 +188,15 @@ class GameScene < Scene
       if @space
         @space.add_post_step_callback(self.object_id.to_s.to_sym) do |space, key|
           game_objects.each {|o|
-              if o.respond_to?('shapes') && o.respond_to?('bodies') then
-                o.body.activate
-                for s in o.shapes
-                  @space.remove_shape(s)
-                end
-                for b in o.bodies
-                  @space.remove_body(b)
-                end
+            if o.respond_to?('shapes') && o.respond_to?('bodies') then
+              o.body.activate
+              for s in o.shapes
+                @space.remove_shape(s)
               end
+              for b in o.bodies
+                @space.remove_body(b)
+              end
+            end
           }
           @space = nil
         end
@@ -206,7 +211,14 @@ class GameScene < Scene
 
   def draw
     super
-    
+
+    if (@thrust)
+      @thruster_image.draw(@player.body.p.x,
+                           @player.body.p.y,
+                           @player.z_index,
+                           @player.body.a)
+    end
+
     @lasers.each(&:draw)
 
     self
@@ -233,7 +245,7 @@ class GameScene < Scene
     enemies.empty?
   end
 
-  def win 
+  def win
     add_game_object Title.new(self, text: "YOU WIN? CHEATER")
   end
 

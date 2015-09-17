@@ -29,6 +29,7 @@ class Player < GameObject
     }
   end
   
+  attr_accessor :z_index
   
   def initialize(scene, params = {})
     super(scene)
