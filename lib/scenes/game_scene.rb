@@ -3,7 +3,7 @@ require 'scene'
 require 'game_objects/asteroid'
 require 'game_objects/background'
 require 'game_objects/player'
-#require 'game_objects/thruster'
+require 'game_objects/thruster'
 require 'game_objects/laser_beam'
 require 'game_objects/ufo'
 require 'game_objects/game_hud'
@@ -73,6 +73,8 @@ class GameScene < Scene
     add_game_object @player
     @lasers = []
 
+    @thrusters = []
+
     #@thruster = Thruster.new(self)
     #add_game_object @thruster
 
@@ -131,6 +133,8 @@ class GameScene < Scene
     end
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
+      thruster = Thruster.new(self)
+      @player.thrust_animation(thruster)
     end
     
     if ((Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)) && !@shift_down

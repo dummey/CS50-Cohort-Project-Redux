@@ -54,6 +54,10 @@ class Player < GameObject
     self.body.apply_impulse(CP::Vec2.for_angle(self.body.a) * scalar, CP::Vec2::ZERO)
   end
 
+  def thrust_animation(thruster)
+    thruster.animate(self.body.p + (CP::Vec2.for_angle(self.body.a) * image.width / 4), (CP::Vec2.for_angle(self.body.a) * 1.5 * @max_velocity) + self.body.v)
+  end
+
   def jump
     xrand = Random.new
     yrand = Random.new
