@@ -137,7 +137,7 @@ class GameScene < Scene
     end
 
     #@thruster.update
-    if @lose
+    if @lose || @win
       #Add timer delay
       @timer ||= 5000
       @timer -= self.update_interval
@@ -200,7 +200,10 @@ class GameScene < Scene
   end
 
   def win 
+    return if @win
+
     add_game_object Title.new(self, text: "YOU WIN? CHEATER")
+    @win = true
   end
 
 end
