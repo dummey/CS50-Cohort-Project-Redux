@@ -49,14 +49,14 @@ class GameScene < Scene
     @space.add_collision_func(:laser, :ufo) {|laser, ufo|
       ufo.object.destroy(@space)
       laser.object.hit_target
-      @score += 1000
+      @score += 10000
     }
 
     @space.add_collision_func(:laser, :asteroid) {|laser, asteroid| 
       if asteroid.object
         laser.object.hit_target
         asteroid.object.destroy(@space) 
-        @score += 100
+        @score += 1000
       end
     }
 
@@ -121,7 +121,7 @@ class GameScene < Scene
     @space.step(1.0/60.0)
 
     @game_duration += self.update_interval
-    @score += self.update_interval / 1000.0
+    @score -= self.update_interval / 100.0
 
     @lasers.each(&:update)
     @lasers.each { |laser|
