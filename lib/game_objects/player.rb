@@ -3,6 +3,7 @@ require 'game_objects/role/draw_helper'
 require 'game_objects/role/defaultable'
 require 'game_objects/role/chipmunk_object'
 require 'game_objects/explosion'
+require 'game_objects/thruster'
 
 class Player < GameObject
   include DrawHelper
@@ -55,7 +56,7 @@ class Player < GameObject
   end
 
   def thrust_animation(thruster)
-    thruster.animate(self.body.p + (CP::Vec2.for_angle(self.body.a) * image.width / 4), (CP::Vec2.for_angle(self.body.a) * 1.5 * @max_velocity) + self.body.v)
+    thruster.draw(self.body.p.x, self.body.p.y, @z_index, self.body.a)
   end
 
   def jump

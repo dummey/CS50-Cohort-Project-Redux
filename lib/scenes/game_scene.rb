@@ -73,11 +73,6 @@ class GameScene < Scene
     add_game_object @player
     @lasers = []
 
-    @thrusters = []
-
-    #@thruster = Thruster.new(self)
-    #add_game_object @thruster
-
     self._setup_collisions
   end
 
@@ -134,7 +129,7 @@ class GameScene < Scene
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
       thruster = Thruster.new(self)
-      @player.thrust_animation(thruster)
+      thruster.draw(100,100,100,1)
     end
     
     if ((Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)) && !@shift_down
@@ -176,7 +171,6 @@ class GameScene < Scene
       @win = true
     end
 
-    #@thruster.update
     if @lose
       #Add timer delay
       @timer ||= 5000
