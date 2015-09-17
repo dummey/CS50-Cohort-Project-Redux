@@ -11,7 +11,7 @@ class Subtitle < GameObject
       :font => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf",
       :x_pos => @scene.width/2,
       :y_pos => @scene.height/2 + 100,
-      :z_index => 1,
+      :z_index => 10,
       :scale => 1,
       :angle => 0,
     }.merge(params)
