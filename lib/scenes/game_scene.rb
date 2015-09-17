@@ -73,8 +73,7 @@ class GameScene < Scene
     add_game_object @player
     @lasers = []
 
-    @thruster_image = Gosu::Image.new($MEDIA_ROOT + "/PNG/Effects/fire03.png")
-
+    @thruster=Thruster.new(self)
 
     # @thruster = Thruster.new(self)
 
@@ -213,10 +212,7 @@ class GameScene < Scene
     super
 
     if (@thrust)
-      @thruster_image.draw(@player.body.p.x,
-                           @player.body.p.y,
-                           @player.z_index,
-                           @player.body.a)
+      @player.thrust_animation(@thruster)
     end
 
     @lasers.each(&:draw)

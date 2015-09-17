@@ -24,7 +24,7 @@ class Thruster < GameObject
   end
 
   def draw(x,y,z, angle)
-    @thruster_image.draw_rot(x, y, z, angle)
+    @thruster_image.draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.15)
   end
   
 
