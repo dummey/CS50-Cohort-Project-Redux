@@ -1,8 +1,8 @@
 $MEDIA_ROOT = File.dirname(__FILE__) + '/../media'
 
 $CONFIG = {
-  window_size_x: 1024,
-  window_size_y: 768,
+  window_size_x: 1280,
+  window_size_y: 960,
   window_full_screen: false,
   window_show_cursor: false,
 
