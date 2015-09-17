@@ -78,6 +78,9 @@ class GameScene < Scene
 
   def decrease_lives
     @lives -= 1
+
+    @score = (@score < 10000) ? 0 : score - 10000
+
     if @lives == 0
       self.lose
     end
@@ -121,7 +124,9 @@ class GameScene < Scene
     @space.step(1.0/60.0)
 
     @game_duration += self.update_interval
-    @score -= self.update_interval / 100.0
+    if @score > 0
+      @score -= self.update_interval / 100.0
+    end
 
     @lasers.each(&:update)
     @lasers.each { |laser|

@@ -23,7 +23,7 @@ class Asteroid < GameObject
       :z_index => 1,
       :init_rotate => 0,
       :tier => 1,
-      :max_tier => 3,
+      :max_tier => 4,
       :collision_type => :asteroid,
       :collision_sensor => true,
       :bit_plane => 0b11,
