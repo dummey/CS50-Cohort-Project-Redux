@@ -12,7 +12,7 @@ class CharacterDialog < GameObject
       :text_box_bg => nil,
       :text_box_bg_path => $MEDIA_ROOT + "/custom/portrait_bg.png",
       :duration => 0.0,
-      :text => ["Blast those astroids!"].join(" "),
+      :text => ["Blast those asteroids!"].join(" "),
       :text_image => nil,
       :font => $MEDIA_ROOT + "/ext/uipack-space/Fonts/kenvector_future_thin.ttf",
       :x_pos => @scene.width / 2,
