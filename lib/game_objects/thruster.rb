@@ -23,8 +23,8 @@ class Thruster < GameObject
     @thruster_image = Gosu::Image.new(@image_path)
   end
 
-  def draw(x,y,z, angle)
-    @thruster_image.draw_rot(x, y, z, angle, center_x = 0.5, center_y = 0.15)
+  def draw(x,y,z,angle)
+    @thruster_image.draw_rot(x, y, z, angle, center_x = 0.5, center_y = -1)
   end
   
 

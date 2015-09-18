@@ -57,7 +57,8 @@ class Player < GameObject
   end
 
   def thrust_animation(thruster)
-    thruster.draw(self.body.p.x, self.body.p.y + self.image.height/2, @z_index, self.body.a)
+    p self.body.a
+    thruster.draw(self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_degrees+90)
   end
 
   def jump
