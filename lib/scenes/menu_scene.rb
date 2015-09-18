@@ -6,6 +6,8 @@ require 'scenes/credits_scene'
 require 'game_objects/background'
 require 'game_objects/pulsing_star'
 require 'game_objects/laser_beam'
+require 'game_objects/player'
+require 'game_objects/thruster'
 require 'game_objects/ui_components/button'
 require 'game_objects/ui_components/cursor'
 require 'game_objects/ui_components/title'
@@ -49,6 +51,8 @@ class MenuScene < Scene
     @player = Player.new(self, :init_x_pos => self.width / 2, :init_y_pos => self.height / 2 - 50, :invulnerability_duration => 0)
     add_game_object @player
     @lasers = []
+
+    @thruster = Thruster.new(self)
     
     EdgeCollision.create_universe_boundary(self.width, self.height, @space, [:player_sensor, :laser])
 
@@ -57,6 +61,7 @@ class MenuScene < Scene
   def update
     super
 
+    @thrust = false
     #check for start game action: enter key or left click on start
     if (@window.button_down?(Gosu::KbEnter) || 
         @window.button_down?(Gosu::KbReturn) ||
@@ -83,6 +88,7 @@ class MenuScene < Scene
     end
     if Gosu::button_down? Gosu::KbUp
       @player.thrust(50)
+      @thrust = true
     end
     
     if ((Gosu::button_down? Gosu::KbRightShift) || (Gosu::button_down? Gosu::KbLeftShift)) && !@shift_down
@@ -125,6 +131,9 @@ class MenuScene < Scene
     
     @player.draw
     @lasers.each(&:draw)
+    if (@thrust)
+      @player.thrust_animation(@thruster)
+    end
     
     self
   end
