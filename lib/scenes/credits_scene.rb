@@ -44,7 +44,7 @@ class CreditScreen < Scene
     super
     
     if (@window.button_down?(Gosu::MsLeft) && @return_button.intersect?(@window.mouse_x, @window.mouse_y))
-      return [self, MenuScene.new(@window)]
+      return nil
     end
     
     self

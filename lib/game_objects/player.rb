@@ -20,7 +20,7 @@ class Player < GameObject
       :moment_of_inertia => 150,
       :scale => 1,
       :z_index => 1,
-      :duration => 5000,
+      :invulnerability_duration => 5000,
       :collision_type => "player_sensor".to_sym,
       :collision_sensor => true,
       :init_rotate => 0,
@@ -96,7 +96,7 @@ class Player < GameObject
     
     @time_alive += @scene.update_interval
     
-    if @time_alive < @duration
+    if @time_alive < @invulnerability_duration
       @shape_collide.layers = 0b10000 
       @vulnerable = false
     else
