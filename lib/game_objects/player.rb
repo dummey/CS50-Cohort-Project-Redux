@@ -57,7 +57,6 @@ class Player < GameObject
   end
 
   def thrust_animation(thruster)
-    p self.body.a
     thruster.draw(self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_degrees+90)
   end
 
