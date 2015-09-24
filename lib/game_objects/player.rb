@@ -19,7 +19,7 @@ class Player < GameObject
       :max_velocity => 500.0,
       :moment_of_inertia => 150,
       :scale => 1,
-      :z_index => 1,
+      :z_index => 10,
       :invulnerability_duration => 5000,
       :collision_type => "player_sensor".to_sym,
       :collision_sensor => true,
@@ -57,7 +57,7 @@ class Player < GameObject
   end
 
   def thrust_animation(thruster)
-    thruster.draw(self.body.p.x, self.body.p.y, @z_index, self.body.a.radians_to_degrees+90)
+    thruster.draw(self.body.p.x, self.body.p.y, @z_index - 1, self.body.a.radians_to_degrees+90)
   end
 
   def jump
