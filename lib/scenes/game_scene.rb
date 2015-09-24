@@ -13,8 +13,8 @@ require 'game_objects/role/edge_collision'
 
 class GameScene < Scene
   attr_accessor :window, :lives, :score, :space
-  def initialize(window)
-    super
+  def initialize(window, super_hard=false)
+    super(window)
 
     @space = CP::Space.new()
     @space.damping = 0.8
@@ -29,8 +29,15 @@ class GameScene < Scene
     })
 
     add_game_object GameHUD.new(self)
-    4.times { add_game_object Asteroid.new(self) }
-    self._spawn_ufos
+
+    if super_hard
+      10.times { add_game_object Asteroid.new(self, :max_tier => 4) }
+      4.times { self._spawn_ufos }
+    else
+      4.times { add_game_object Asteroid.new(self) }
+      self._spawn_ufos
+    end
+
     add_game_object CharacterDialog.new(self, :duration => 5000)
 
     @player = Player.new(self)

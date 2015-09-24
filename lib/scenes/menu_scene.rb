@@ -75,6 +75,10 @@ class MenuScene < Scene
       return [self, CreditScreen.new(@window)]
     end
 
+    if (@window.button_down?(Gosu::MsLeft) && @player.intersect?(@window.mouse_x, @window.mouse_y))
+      return [self, GameScene.new(@window, true)]
+    end    
+
     #spawn up to @max_stars number of stars
     if (game_objects.count{|o| o.is_a?(PulsingStar)} < @max_stars)
       add_game_object PulsingStar.new(self)

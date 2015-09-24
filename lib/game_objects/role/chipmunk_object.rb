@@ -32,4 +32,20 @@ module ChipmunkObject
   def bodies
     return [@body]
   end
+
+  def intersect?(x, y)
+    if (x < (@body.p.x - image.width / 2))
+      return false
+    elsif (x > (@body.p.x + image.width / 2))
+      return false
+    end
+
+    if (y < (@body.p.y - image.height / 2))
+      return false
+    elsif (y > (@body.p.y + image.height / 2))
+      return false
+    end
+
+    return true
+  end
 end

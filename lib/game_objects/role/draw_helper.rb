@@ -6,7 +6,7 @@ module DrawHelper
 
     @image
   end
-  
+
   def setup_boundary
     @boundary = { left_edge: false, right_edge: false, top_edge: false, bottom_edge: false}
   end
