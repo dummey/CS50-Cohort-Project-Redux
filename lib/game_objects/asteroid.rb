@@ -23,7 +23,7 @@ class Asteroid < GameObject
       :z_index => 1,
       :init_rotate => 0,
       :tier => 1,
-      :max_tier => 4,
+      :max_tier => 3,
       :collision_type => :asteroid,
       :collision_sensor => true,
       :bit_plane => 0b11,
@@ -39,7 +39,6 @@ class Asteroid < GameObject
       1 => ["media/PNG/Meteors/meteorGrey_big1.png", "media/PNG/Meteors/meteorGrey_big2.png", "media/PNG/Meteors/meteorGrey_big3.png", "media/PNG/Meteors/meteorGrey_big4.png"],
       2 => ["media/PNG/Meteors/meteorGrey_med1.png", "media/PNG/Meteors/meteorGrey_med2.png"],
       3 => ["media/PNG/Meteors/meteorGrey_small1.png", "media/PNG/Meteors/meteorGrey_small2.png"],
-      4 => ["media/PNG/Meteors/meteorGrey_tiny1.png", "media/PNG/Meteors/meteorGrey_tiny1.png"],
     }[@tier].sample
 
     setup_chipmunk
