@@ -21,31 +21,34 @@ module DrawHelper
   
   def draw_with_boundary(offset_angle = 0, alpha = 255)
     # (x, y, z, angle, center_x, center_y, scale_x, scale_y, color)
-    self.draw_centered(self.body.p.x, self.body.p.y, offset_angle, alpha)
+    x = self.body.p.x
+    y = self.body.p.y
+
+    self.draw_centered(x, y, offset_angle, alpha)
     
     if @boundary[:left_edge]
-      self.draw_centered(self.body.p.x + @scene.width, self.body.p.y, offset_angle, alpha)
+      self.draw_centered(x + @scene.width, y, offset_angle, alpha)
     end
     if @boundary[:right_edge]
-      self.draw_centered(self.body.p.x - @scene.width, self.body.p.y, offset_angle, alpha)
+      self.draw_centered(x - @scene.width, y, offset_angle, alpha)
     end
     if @boundary[:top_edge]
-      self.draw_centered(self.body.p.x, self.body.p.y + @scene.height, offset_angle, alpha)
+      self.draw_centered(x, y + @scene.height, offset_angle, alpha)
     end
     if @boundary[:bottom_edge]
-      self.draw_centered(self.body.p.x, self.body.p.y - @scene.height, offset_angle, alpha)
+      self.draw_centered(x, y - @scene.height, offset_angle, alpha)
     end
     if @boundary[:top_edge] && @boundary[:left_edge]
-      self.draw_centered(self.body.p.x + @scene.width, self.body.p.y + @scene.height, offset_angle, alpha)
+      self.draw_centered(x + @scene.width, y + @scene.height, offset_angle, alpha)
     end
     if @boundary[:top_edge] && @boundary[:right_edge]
-      self.draw_centered(self.body.p.x - @scene.width, self.body.p.y + @scene.height, offset_angle, alpha)
+      self.draw_centered(x - @scene.width, y + @scene.height, offset_angle, alpha)
     end
     if @boundary[:bottom_edge] && @boundary[:right_edge]
-      self.draw_centered(self.body.p.x - @scene.width, self.body.p.y - @scene.height, offset_angle, alpha)
+      self.draw_centered(x - @scene.width, y - @scene.height, offset_angle, alpha)
     end
     if @boundary[:bottom_edge] && @boundary[:left_edge]
-      self.draw_centered(self.body.p.x + @scene.width, self.body.p.y - @scene.height, offset_angle, alpha)
+      self.draw_centered(x + @scene.width, y - @scene.height, offset_angle, alpha)
     end
   end
   
