@@ -1,3 +1,6 @@
+[![Join the chat at https://gitter.im/dummey/CS50-Cohort-Project](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/dummey/CS50-Cohort-Project?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+
 About
 ----------
 This game is a modern remake of asteroids for the Coder Girl projects. For those unfamiliar with the game Asteroids, Wikipedia describes it as:
