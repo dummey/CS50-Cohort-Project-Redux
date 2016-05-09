@@ -1,5 +1,6 @@
 require 'gosu'
 require 'scene'
+require 'scenes/menu_scene'
 require 'game_object'
 require 'game_objects/background'
 require 'game_objects/ui_components/cursor'
@@ -44,7 +45,7 @@ class CreditScreen < Scene
     super
     
     if (@window.button_down?(Gosu::MsLeft) && @return_button.intersect?(@window.mouse_x, @window.mouse_y))
-      return nil
+      return [self, MenuScene.new(@window)]
     end
     
     self
